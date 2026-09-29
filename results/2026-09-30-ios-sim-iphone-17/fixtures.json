@@ -1,0 +1,180 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios-sim",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 14,
+    "model": "iPhone18,3",
+    "name": "iPhone 17",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 51539607552,
+    "simulator": true
+  },
+  "finished_at_ms": 1790723140178.977,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "app_bytes": 54334205,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 7.1851019859313965
+  },
+  "metrics": {
+    "footprint_bytes": 45665136,
+    "resident_bytes": 344064000,
+    "resident_peak_bytes": 344784896,
+    "system_cpu_ms": 247.051,
+    "threads": null,
+    "user_cpu_ms": 5836.767,
+    "virtual_bytes": 423361511424
+  },
+  "passed": true,
+  "platform": "ios",
+  "profile": "local",
+  "result": {
+    "checks": [
+      {
+        "actual": "L6XoNSaQyAjgsEbFcUEps3YB3cMh6m1XHfvgtFixk52",
+        "expected": "L6XoNSaQyAjgsEbFcUEps3YB3cMh6m1XHfvgtFixk52",
+        "name": "key.instance_id",
+        "passed": true
+      },
+      {
+        "actual": "DBiNj1xXdefNvh8poJSP4GMPqesDF7sECcCiwZDyhoe6",
+        "expected": "DBiNj1xXdefNvh8poJSP4GMPqesDF7sECcCiwZDyhoe6",
+        "name": "key.code_hash",
+        "passed": true
+      },
+      {
+        "actual": "010000000000000000000000000000001e000000000000000061736d01000000667265656e65742d6d6f62696c652d66697874757265b50ad564d7dbf08f5bf72e3fd2180941d6b5f81d89d89ea8cf6ff6ada737541f030000000000000001020304e44a11101ba3fb12dcc7ab8124e13fd2fd9fcc463fa707baa910f3e8dd541db50ad564d7dbf08f5bf72e3fd2180941d6b5f81d89d89ea8cf6ff6ada737541f030000000000000004050600000000000000000000",
+        "expected": "010000000000000000000000000000001e000000000000000061736d01000000667265656e65742d6d6f62696c652d66697874757265b50ad564d7dbf08f5bf72e3fd2180941d6b5f81d89d89ea8cf6ff6ada737541f030000000000000001020304e44a11101ba3fb12dcc7ab8124e13fd2fd9fcc463fa707baa910f3e8dd541db50ad564d7dbf08f5bf72e3fd2180941d6b5f81d89d89ea8cf6ff6ada737541f030000000000000004050600000000000000000000",
+        "name": "request.put",
+        "passed": true
+      },
+      {
+        "actual": "010000000200000004e44a11101ba3fb12dcc7ab8124e13fd2fd9fcc463fa707baa910f3e8dd541d010000",
+        "expected": "010000000200000004e44a11101ba3fb12dcc7ab8124e13fd2fd9fcc463fa707baa910f3e8dd541d010000",
+        "name": "request.get",
+        "passed": true
+      },
+      {
+        "actual": "010000000100000004e44a11101ba3fb12dcc7ab8124e13fd2fd9fcc463fa707baa910f3e8dd541db50ad564d7dbf08f5bf72e3fd2180941d6b5f81d89d89ea8cf6ff6ada737541f0100000002000000000000000708",
+        "expected": "010000000100000004e44a11101ba3fb12dcc7ab8124e13fd2fd9fcc463fa707baa910f3e8dd541db50ad564d7dbf08f5bf72e3fd2180941d6b5f81d89d89ea8cf6ff6ada737541f0100000002000000000000000708",
+        "name": "request.update_delta",
+        "passed": true
+      },
+      {
+        "actual": "010000000300000004e44a11101ba3fb12dcc7ab8124e13fd2fd9fcc463fa707baa910f3e8dd541d01010000000000000009",
+        "expected": "010000000300000004e44a11101ba3fb12dcc7ab8124e13fd2fd9fcc463fa707baa910f3e8dd541d01010000000000000009",
+        "name": "request.subscribe",
+        "passed": true
+      },
+      {
+        "actual": "0400000000000000",
+        "expected": "0400000000000000",
+        "name": "request.connected_peers",
+        "passed": true
+      },
+      {
+        "actual": "0200000001070000000000000066697874757265",
+        "expected": "0200000001070000000000000066697874757265",
+        "name": "request.disconnect",
+        "passed": true
+      },
+      {
+        "actual": "00000000000000000000000004e44a11101ba3fb12dcc7ab8124e13fd2fd9fcc463fa707baa910f3e8dd541db50ad564d7dbf08f5bf72e3fd2180941d6b5f81d89d89ea8cf6ff6ada737541f000300000000000000040506",
+        "expected": "00000000000000000000000004e44a11101ba3fb12dcc7ab8124e13fd2fd9fcc463fa707baa910f3e8dd541db50ad564d7dbf08f5bf72e3fd2180941d6b5f81d89d89ea8cf6ff6ada737541f000300000000000000040506",
+        "name": "reply.get",
+        "passed": true
+      },
+      {
+        "actual": "0102030405060708",
+        "expected": "0102030405060708",
+        "name": "op.cancel.read_after",
+        "passed": true
+      },
+      {
+        "actual": "Timeout",
+        "expected": "Timeout",
+        "name": "op.cancel.timed_out",
+        "passed": true
+      },
+      {
+        "actual": "NotFound",
+        "expected": "NotFound",
+        "name": "op.error.get_unknown",
+        "passed": true
+      },
+      {
+        "actual": "OperationFailed",
+        "expected": "OperationFailed",
+        "name": "op.error.put_invalid_state",
+        "passed": true
+      },
+      {
+        "actual": "OperationFailed",
+        "expected": "OperationFailed",
+        "name": "op.error.put_trapping_state",
+        "passed": true
+      },
+      {
+        "actual": "010203",
+        "expected": "010203",
+        "name": "op.get.state",
+        "passed": true
+      },
+      {
+        "actual": "0102030405",
+        "expected": "0102030405",
+        "name": "op.get_after_update.state",
+        "passed": true
+      },
+      {
+        "actual": "Dtz9r4ijggx6km8HB3XfuPDQsLEHxywGX6m64GLEpCKB",
+        "expected": "Dtz9r4ijggx6km8HB3XfuPDQsLEHxywGX6m64GLEpCKB",
+        "name": "op.put.code_hash",
+        "passed": true
+      },
+      {
+        "actual": "BPYaKE6yzE9hjLf53TufRVdf2zQYqKgPSbn5bUEDzZP8",
+        "expected": "BPYaKE6yzE9hjLf53TufRVdf2zQYqKgPSbn5bUEDzZP8",
+        "name": "op.put.instance_id",
+        "passed": true
+      },
+      {
+        "actual": "State:010203040506,State:01020304050607,State:0102030405060708",
+        "expected": "State:010203040506,State:01020304050607,State:0102030405060708",
+        "name": "op.subscribe.callbacks",
+        "passed": true
+      },
+      {
+        "actual": "05000000887d6b4fbfdc660f",
+        "expected": "05000000887d6b4fbfdc660f",
+        "name": "op.update.summary",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "target": "aarch64-apple-ios-sim"
+  },
+  "scenario": "fixtures",
+  "started_at_ms": 1790723134792.9602
+}

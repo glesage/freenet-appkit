@@ -1,0 +1,194 @@
+{
+  "build": {
+    "available_backends": [
+      "cranelift",
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "cranelift",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-linux-android",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "abis": [
+      "arm64-v8a"
+    ],
+    "cpu_count": 4,
+    "model": "Google sdk_gphone16k_arm64",
+    "name": "emu64a16k",
+    "os": "Android 17 (API 37)",
+    "page_size": 16384,
+    "physical_memory_bytes": 4159471616,
+    "simulator": true
+  },
+  "finished_at_ms": 1790717967822,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": "resume",
+    "fresh_install": false,
+    "package": {
+      "apk_bytes": {
+        "base.apk": 42892167
+      },
+      "apk_file_bytes": 42892167,
+      "config": "Release"
+    },
+    "profile": "public"
+  },
+  "host": {
+    "actions": [
+      {
+        "action": "home: the demo moves to the background",
+        "at_ms": 1790717946223.035
+      },
+      {
+        "action": "open the demo again",
+        "at_ms": 1790717966274.83
+      }
+    ],
+    "am_start": {
+      "TotalTime": "108",
+      "WaitTime": "108"
+    },
+    "wall_s": 52.42916297912598
+  },
+  "metrics": {
+    "footprint_bytes": 122874880,
+    "resident_bytes": 295845888,
+    "resident_peak_bytes": 329990144,
+    "system_cpu_ms": 821.219,
+    "threads": 67,
+    "user_cpu_ms": 998.73,
+    "virtual_bytes": 42001530880
+  },
+  "platform": "android",
+  "profile": "public",
+  "result": {
+    "after_resume": [
+      {
+        "event": "prepare",
+        "ms": 1
+      },
+      {
+        "event": "node_running",
+        "ms": 4
+      },
+      {
+        "event": "first_peer",
+        "ms": 512
+      },
+      {
+        "event": "load_start",
+        "ms": 512
+      },
+      {
+        "event": "shell_dom",
+        "ms": 567
+      },
+      {
+        "event": "app_frame_request",
+        "ms": 567
+      },
+      {
+        "event": "title:Freenet",
+        "ms": 567
+      },
+      {
+        "event": "shell_loaded",
+        "ms": 567
+      },
+      {
+        "event": "app_frame_dom",
+        "ms": 573
+      },
+      {
+        "event": "title:River",
+        "ms": 576
+      }
+    ],
+    "backgrounded_at_ms": 1790717947328,
+    "first_load": {
+      "load_traffic": {
+        "download_bytes": 386,
+        "upload_bytes": 1035
+      },
+      "loaded": true,
+      "memory_samples": [],
+      "session_traffic": {
+        "download_bytes": 386,
+        "upload_bytes": 1035
+      },
+      "status": {
+        "connected_peers": 0,
+        "last_error": null,
+        "session": 1,
+        "state": "running",
+        "ws_port": 35815
+      },
+      "timeline": [
+        {
+          "event": "prepare",
+          "ms": 0
+        },
+        {
+          "event": "node_running",
+          "ms": 1
+        },
+        {
+          "event": "first_peer",
+          "ms": 507
+        },
+        {
+          "event": "load_start",
+          "ms": 507
+        },
+        {
+          "event": "first_peer",
+          "ms": 568
+        },
+        {
+          "event": "load_start",
+          "ms": 568
+        },
+        {
+          "event": "shell_dom",
+          "ms": 699
+        },
+        {
+          "event": "title:Freenet",
+          "ms": 699
+        },
+        {
+          "event": "app_frame_request",
+          "ms": 703
+        },
+        {
+          "event": "shell_loaded",
+          "ms": 703
+        },
+        {
+          "event": "app_frame_dom",
+          "ms": 714
+        },
+        {
+          "event": "title:River",
+          "ms": 714
+        },
+        {
+          "event": "shell_loaded",
+          "ms": 716
+        }
+      ]
+    },
+    "resumed_at_ms": 1790717967246,
+    "session": 2
+  },
+  "scenario": "resume",
+  "started_at_ms": 1790717916182
+}

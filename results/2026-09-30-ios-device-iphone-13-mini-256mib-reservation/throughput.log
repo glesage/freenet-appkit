@@ -1,0 +1,8 @@
+Launched application with org.freenet.appkit.demo bundle identifier.
+Waiting for the application to terminate…
+APPKIT_RESULT {"build":{"available_backends":["pulley"],"core_revision":"1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty","core_version":"0.2.139","default_backend":"pulley","mobile_version":"0.1.0","profile":"release","stdlib_version":"0.12.1","target":"aarch64-apple-ios","uniffi_version":"0.32.2","wasmtime_version":"47.0.3"},"device":{"cpu_count":6,"model":"iPhone14,4","name":"iPhone","os":"iOS 27.0","physical_memory_bytes":3853336576,"simulator":false},"error":"Client(kind: FreenetAppKit.ClientErrorKind.operationFailed, detail: \"client error: error while executing operation in the network: UPDATE failed: update error for contract 9CXgV6zhtesphk9BjDrEtbsguoTbT6FrPdDHVRC3qPqf, reason: execution error: instantiation: mmap failed to reserve 0x10020000 bytes\")","finished_at_ms":1790721206854.928,"metrics":{"footprint_bytes":144902152,"resident_bytes":173359104,"resident_peak_bytes":218251264,"system_cpu_ms":260.02999999999997,"threads":null,"user_cpu_ms":350.02699999999999,"virtual_bytes":475949875200},"passed":false,"platform":"ios","profile":"local","scenario":"throughput","started_at_ms":1790721206010.7388}
+The app terminated with the exit code 0.
+2026-09-30 08:33:26.074 AppKitDemo[66844:4625680] AppKitDemo: started session 1 on port 61847 in 66 ms
+sandbox_extension_issue_file failed for /var/containers/Bundle/Application/A1F217DF-31B2-4C6B-AE85-9F7C146C3EAA/AppKitDemo.app: 1 (Operation not permitted)
+2026-09-30 08:33:26.174 AppKitDemo[66844:4625680] AppKitDemo: started session 1 on port 61847 in 66 ms
+CRITICAL: Network event listener exited: Graceful shutdown

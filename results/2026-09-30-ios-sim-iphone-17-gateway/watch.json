@@ -1,0 +1,482 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios-sim",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 14,
+    "model": "iPhone18,3",
+    "name": "iPhone 17",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 51539607552,
+    "simulator": true
+  },
+  "finished_at_ms": 1790719420370.748,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": true,
+    "package": {
+      "app_bytes": 54250797,
+      "config": "Release"
+    },
+    "profile": "gateway"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 65.18886208534241
+  },
+  "metrics": {
+    "footprint_bytes": 53596168,
+    "resident_bytes": 337494016,
+    "resident_peak_bytes": 337707008,
+    "system_cpu_ms": 536.148,
+    "threads": null,
+    "user_cpu_ms": 1334.0059999999999,
+    "virtual_bytes": 437299019776
+  },
+  "platform": "ios",
+  "profile": "gateway",
+  "result": {
+    "samples": [
+      {
+        "download_bytes": 0,
+        "ms": 0.002197265625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 0
+      },
+      {
+        "download_bytes": 559,
+        "ms": 1066.298095703125,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 842
+      },
+      {
+        "download_bytes": 1049,
+        "ms": 2137.383056640625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 1675
+      },
+      {
+        "download_bytes": 1637,
+        "ms": 3198.60302734375,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 2459
+      },
+      {
+        "download_bytes": 2225,
+        "ms": 4265.3671875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 3194
+      },
+      {
+        "download_bytes": 2976,
+        "ms": 5330.197265625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 4100
+      },
+      {
+        "download_bytes": 3613,
+        "ms": 6396.760009765625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 5080
+      },
+      {
+        "download_bytes": 4152,
+        "ms": 7410.13330078125,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 5717
+      },
+      {
+        "download_bytes": 4740,
+        "ms": 8410.64013671875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 6648
+      },
+      {
+        "download_bytes": 5377,
+        "ms": 9476.364013671875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 7432
+      },
+      {
+        "download_bytes": 6079,
+        "ms": 10542.101318359375,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 8534
+      },
+      {
+        "download_bytes": 6667,
+        "ms": 11607.972900390625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 9563
+      },
+      {
+        "download_bytes": 7304,
+        "ms": 12672.205078125,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 10494
+      },
+      {
+        "download_bytes": 7892,
+        "ms": 13737.72998046875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 11180
+      },
+      {
+        "download_bytes": 8480,
+        "ms": 14804.262939453125,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 12111
+      },
+      {
+        "download_bytes": 9280,
+        "ms": 15864.10302734375,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 13262
+      },
+      {
+        "download_bytes": 9770,
+        "ms": 16924.680908203125,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 14095
+      },
+      {
+        "download_bytes": 10456,
+        "ms": 17991.406982421875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 15026
+      },
+      {
+        "download_bytes": 11142,
+        "ms": 19058.067138671875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 15810
+      },
+      {
+        "download_bytes": 11852,
+        "ms": 20124.73095703125,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 16757
+      },
+      {
+        "download_bytes": 12587,
+        "ms": 21188.467041015625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 17545
+      },
+      {
+        "download_bytes": 13175,
+        "ms": 22254.434814453125,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 18623
+      },
+      {
+        "download_bytes": 13714,
+        "ms": 23316.9638671875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 19456
+      },
+      {
+        "download_bytes": 14351,
+        "ms": 24382.979248046875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 20485
+      },
+      {
+        "download_bytes": 15102,
+        "ms": 25410.43408203125,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 21391
+      },
+      {
+        "download_bytes": 15641,
+        "ms": 26474.778076171875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 22175
+      },
+      {
+        "download_bytes": 16278,
+        "ms": 27537.783935546875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 23008
+      },
+      {
+        "download_bytes": 16866,
+        "ms": 28603.494873046875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 23841
+      },
+      {
+        "download_bytes": 17503,
+        "ms": 29669.636962890625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 24576
+      },
+      {
+        "download_bytes": 18262,
+        "ms": 30733.43701171875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 25580
+      },
+      {
+        "download_bytes": 18899,
+        "ms": 31799.0458984375,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 26315
+      },
+      {
+        "download_bytes": 19536,
+        "ms": 32865.67724609375,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 27393
+      },
+      {
+        "download_bytes": 20124,
+        "ms": 33932.6259765625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 27981
+      },
+      {
+        "download_bytes": 20712,
+        "ms": 34977.6298828125,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 28765
+      },
+      {
+        "download_bytes": 21512,
+        "ms": 36042.613037109375,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 29818
+      },
+      {
+        "download_bytes": 22342,
+        "ms": 37106.653076171875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 30463
+      },
+      {
+        "download_bytes": 22881,
+        "ms": 38167.69921875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 31100
+      },
+      {
+        "download_bytes": 23469,
+        "ms": 39232.423095703125,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 31737
+      },
+      {
+        "download_bytes": 24334,
+        "ms": 40289.35595703125,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 32684
+      },
+      {
+        "download_bytes": 25109,
+        "ms": 41348.5830078125,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 33441
+      },
+      {
+        "download_bytes": 25697,
+        "ms": 42410.248046875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 34176
+      },
+      {
+        "download_bytes": 26285,
+        "ms": 43468.974853515625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 34764
+      },
+      {
+        "download_bytes": 27020,
+        "ms": 44531.006103515625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 35352
+      },
+      {
+        "download_bytes": 28024,
+        "ms": 45595.987060546875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 36446
+      },
+      {
+        "download_bytes": 28857,
+        "ms": 46657.60009765625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 37336
+      },
+      {
+        "download_bytes": 29543,
+        "ms": 47724.037109375,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 37973
+      },
+      {
+        "download_bytes": 30082,
+        "ms": 48790.677978515625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 38610
+      },
+      {
+        "download_bytes": 30719,
+        "ms": 49857.297119140625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 39296
+      },
+      {
+        "download_bytes": 31911,
+        "ms": 50883.609130859375,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 40496
+      },
+      {
+        "download_bytes": 32744,
+        "ms": 51948.611083984375,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 41288
+      },
+      {
+        "download_bytes": 33332,
+        "ms": 53014.452880859375,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 42023
+      },
+      {
+        "download_bytes": 33920,
+        "ms": 54078.76904296875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 42660
+      },
+      {
+        "download_bytes": 34826,
+        "ms": 55137.839111328125,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 43509
+      },
+      {
+        "download_bytes": 35512,
+        "ms": 56205.321044921875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 44203
+      },
+      {
+        "download_bytes": 36100,
+        "ms": 57268.14697265625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 44840
+      },
+      {
+        "download_bytes": 36737,
+        "ms": 58334.336181640625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 45526
+      },
+      {
+        "download_bytes": 37472,
+        "ms": 59398.53515625,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 46114
+      },
+      {
+        "download_bytes": 38419,
+        "ms": 60404.39404296875,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 47020
+      },
+      {
+        "download_bytes": 39635,
+        "ms": 61411.0849609375,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 48222
+      },
+      {
+        "download_bytes": 40174,
+        "ms": 62476.2880859375,
+        "peers": 1,
+        "state": "running",
+        "upload_bytes": 48859
+      }
+    ],
+    "seconds": 60,
+    "traffic": {
+      "download_bytes": 40811,
+      "upload_bytes": 49447
+    }
+  },
+  "scenario": "watch",
+  "started_at_ms": 1790719356788.783
+}

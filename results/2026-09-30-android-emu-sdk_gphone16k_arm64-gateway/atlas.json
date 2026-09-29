@@ -1,0 +1,311 @@
+{
+  "build": {
+    "available_backends": [
+      "cranelift",
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "cranelift",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-linux-android",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "abis": [
+      "arm64-v8a"
+    ],
+    "cpu_count": 4,
+    "model": "Google sdk_gphone16k_arm64",
+    "name": "emu64a16k",
+    "os": "Android 17 (API 37)",
+    "page_size": 16384,
+    "physical_memory_bytes": 4159471616,
+    "simulator": true
+  },
+  "finished_at_ms": 1790719241803,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": true,
+    "package": {
+      "apk_bytes": {
+        "base.apk": 42892167
+      },
+      "apk_file_bytes": 42892167,
+      "config": "Release"
+    },
+    "profile": "gateway"
+  },
+  "host": {
+    "actions": [],
+    "am_start": {
+      "TotalTime": "983",
+      "WaitTime": "1005"
+    },
+    "wall_s": 23.935178995132446
+  },
+  "metrics": {
+    "footprint_bytes": 134231040,
+    "resident_bytes": 305348608,
+    "resident_peak_bytes": 309886976,
+    "system_cpu_ms": 1830.7240000000002,
+    "threads": 69,
+    "user_cpu_ms": 2269.743,
+    "virtual_bytes": 58862944256
+  },
+  "platform": "android",
+  "profile": "gateway",
+  "result": {
+    "load_traffic": {
+      "download_bytes": 1172485,
+      "upload_bytes": 499711
+    },
+    "loaded": true,
+    "memory_samples": [
+      {
+        "footprint_bytes": 122023936,
+        "resident_bytes": 288079872,
+        "resident_peak_bytes": 288079872,
+        "system_cpu_ms": 983.12,
+        "threads": 69,
+        "user_cpu_ms": 1726.856,
+        "virtual_bytes": 43688624128
+      },
+      {
+        "footprint_bytes": 137869312,
+        "resident_bytes": 308641792,
+        "resident_peak_bytes": 308641792,
+        "system_cpu_ms": 1285.142,
+        "threads": 70,
+        "user_cpu_ms": 1918.1779999999999,
+        "virtual_bytes": 44253708288
+      },
+      {
+        "footprint_bytes": 138399744,
+        "resident_bytes": 309723136,
+        "resident_peak_bytes": 309723136,
+        "system_cpu_ms": 1314.2359999999999,
+        "threads": 70,
+        "user_cpu_ms": 1934.642,
+        "virtual_bytes": 44253708288
+      },
+      {
+        "footprint_bytes": 138354688,
+        "resident_bytes": 309772288,
+        "resident_peak_bytes": 309772288,
+        "system_cpu_ms": 1346.699,
+        "threads": 70,
+        "user_cpu_ms": 1943.182,
+        "virtual_bytes": 44251480064
+      },
+      {
+        "footprint_bytes": 138371072,
+        "resident_bytes": 309788672,
+        "resident_peak_bytes": 309788672,
+        "system_cpu_ms": 1367.885,
+        "threads": 70,
+        "user_cpu_ms": 1952.895,
+        "virtual_bytes": 44251480064
+      },
+      {
+        "footprint_bytes": 137830400,
+        "resident_bytes": 309248000,
+        "resident_peak_bytes": 309248000,
+        "system_cpu_ms": 1397.492,
+        "threads": 70,
+        "user_cpu_ms": 1964.701,
+        "virtual_bytes": 44251480064
+      },
+      {
+        "footprint_bytes": 137889792,
+        "resident_bytes": 309395456,
+        "resident_peak_bytes": 309395456,
+        "system_cpu_ms": 1416.252,
+        "threads": 70,
+        "user_cpu_ms": 1981.5729999999999,
+        "virtual_bytes": 44251480064
+      },
+      {
+        "footprint_bytes": 137884672,
+        "resident_bytes": 309411840,
+        "resident_peak_bytes": 309411840,
+        "system_cpu_ms": 1424.221,
+        "threads": 70,
+        "user_cpu_ms": 1997.4389999999999,
+        "virtual_bytes": 44251480064
+      },
+      {
+        "footprint_bytes": 137917440,
+        "resident_bytes": 309444608,
+        "resident_peak_bytes": 309444608,
+        "system_cpu_ms": 1462.0439999999999,
+        "threads": 70,
+        "user_cpu_ms": 1999.65,
+        "virtual_bytes": 44251480064
+      },
+      {
+        "footprint_bytes": 122825728,
+        "resident_bytes": 293765120,
+        "resident_peak_bytes": 309886976,
+        "system_cpu_ms": 1496.185,
+        "threads": 70,
+        "user_cpu_ms": 2041.179,
+        "virtual_bytes": 43838455808
+      },
+      {
+        "footprint_bytes": 122814464,
+        "resident_bytes": 293765120,
+        "resident_peak_bytes": 309886976,
+        "system_cpu_ms": 1506.444,
+        "threads": 69,
+        "user_cpu_ms": 2058.191,
+        "virtual_bytes": 43820498944
+      },
+      {
+        "footprint_bytes": 126984192,
+        "resident_bytes": 297943040,
+        "resident_peak_bytes": 309886976,
+        "system_cpu_ms": 1567.547,
+        "threads": 69,
+        "user_cpu_ms": 2108.218,
+        "virtual_bytes": 49462837248
+      },
+      {
+        "footprint_bytes": 133969920,
+        "resident_bytes": 305020928,
+        "resident_peak_bytes": 309886976,
+        "system_cpu_ms": 1653.5149999999999,
+        "threads": 69,
+        "user_cpu_ms": 2188.227,
+        "virtual_bytes": 58862944256
+      },
+      {
+        "footprint_bytes": 134051840,
+        "resident_bytes": 305102848,
+        "resident_peak_bytes": 309886976,
+        "system_cpu_ms": 1676.213,
+        "threads": 69,
+        "user_cpu_ms": 2196.066,
+        "virtual_bytes": 58862944256
+      },
+      {
+        "footprint_bytes": 134119424,
+        "resident_bytes": 305184768,
+        "resident_peak_bytes": 309886976,
+        "system_cpu_ms": 1702.3519999999999,
+        "threads": 69,
+        "user_cpu_ms": 2208.387,
+        "virtual_bytes": 58862944256
+      },
+      {
+        "footprint_bytes": 134135808,
+        "resident_bytes": 305201152,
+        "resident_peak_bytes": 309886976,
+        "system_cpu_ms": 1729.865,
+        "threads": 69,
+        "user_cpu_ms": 2208.387,
+        "virtual_bytes": 58862944256
+      },
+      {
+        "footprint_bytes": 134152192,
+        "resident_bytes": 305217536,
+        "resident_peak_bytes": 309886976,
+        "system_cpu_ms": 1753.557,
+        "threads": 69,
+        "user_cpu_ms": 2214.546,
+        "virtual_bytes": 58862944256
+      },
+      {
+        "footprint_bytes": 134201344,
+        "resident_bytes": 305266688,
+        "resident_peak_bytes": 309886976,
+        "system_cpu_ms": 1765.806,
+        "threads": 69,
+        "user_cpu_ms": 2234.844,
+        "virtual_bytes": 58862944256
+      },
+      {
+        "footprint_bytes": 134168576,
+        "resident_bytes": 305233920,
+        "resident_peak_bytes": 309886976,
+        "system_cpu_ms": 1781.277,
+        "threads": 69,
+        "user_cpu_ms": 2254.361,
+        "virtual_bytes": 58862944256
+      },
+      {
+        "footprint_bytes": 134184960,
+        "resident_bytes": 305250304,
+        "resident_peak_bytes": 309886976,
+        "system_cpu_ms": 1801.085,
+        "threads": 69,
+        "user_cpu_ms": 2261.946,
+        "virtual_bytes": 58862944256
+      }
+    ],
+    "session_traffic": {
+      "download_bytes": 1195081,
+      "upload_bytes": 551988
+    },
+    "status": {
+      "connected_peers": 1,
+      "last_error": null,
+      "session": 1,
+      "state": "running",
+      "ws_port": 40139
+    },
+    "timeline": [
+      {
+        "event": "prepare",
+        "ms": 0
+      },
+      {
+        "event": "node_running",
+        "ms": 18
+      },
+      {
+        "event": "first_peer",
+        "ms": 653
+      },
+      {
+        "event": "load_start",
+        "ms": 655
+      },
+      {
+        "event": "shell_dom",
+        "ms": 1616
+      },
+      {
+        "event": "title:Freenet",
+        "ms": 1616
+      },
+      {
+        "event": "app_frame_request",
+        "ms": 1636
+      },
+      {
+        "event": "shell_loaded",
+        "ms": 1640
+      },
+      {
+        "event": "app_frame_dom",
+        "ms": 1714
+      },
+      {
+        "event": "title:Atlas",
+        "ms": 1719
+      },
+      {
+        "event": "shell_loaded",
+        "ms": 1729
+      }
+    ]
+  },
+  "scenario": "atlas",
+  "started_at_ms": 1790719219705
+}

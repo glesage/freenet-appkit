@@ -1,0 +1,98 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 6,
+    "model": "iPhone14,4",
+    "name": "iPhone",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 3853336576,
+    "simulator": false
+  },
+  "finished_at_ms": 1790721159415.4402,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "app_bytes": 54270831,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 0.8607020378112793
+  },
+  "metrics": {
+    "footprint_bytes": 22972160,
+    "resident_bytes": 73121792,
+    "resident_peak_bytes": 73121792,
+    "system_cpu_ms": 109.281,
+    "threads": null,
+    "user_cpu_ms": 149.069,
+    "virtual_bytes": 474915241984
+  },
+  "platform": "ios",
+  "profile": "local",
+  "result": {
+    "node_first_start": {
+      "data_dir": "/var/mobile/Containers/Data/Application/6E8F5251-C427-4536-B145-1562728C2A07/Library/Application Support/freenet/data/local",
+      "discarded_config": false,
+      "http_base": "http://127.0.0.1:61847",
+      "mode": "local",
+      "session": 2,
+      "timings": {
+        "api_ready_ms": 0.3785,
+        "attempts": 2,
+        "client_api_ms": 0.589416,
+        "config_ms": 3.7195840000000002,
+        "layout_ms": 2.3961249999999996,
+        "node_build_ms": 10.18,
+        "total_ms": 51.234125
+      },
+      "wasm_backend": "pulley",
+      "ws_port": 61847,
+      "ws_url": "ws://127.0.0.1:61847/v1/contract/command?encodingProtocol=native"
+    },
+    "node_first_start_ms": 52.26004123687744,
+    "node_restart": {
+      "data_dir": "/var/mobile/Containers/Data/Application/6E8F5251-C427-4536-B145-1562728C2A07/Library/Application Support/freenet/data/local",
+      "discarded_config": false,
+      "http_base": "http://127.0.0.1:61847",
+      "mode": "local",
+      "session": 3,
+      "timings": {
+        "api_ready_ms": 0.6457499999999999,
+        "attempts": 1,
+        "client_api_ms": 0.547625,
+        "config_ms": 8.004249999999999,
+        "layout_ms": 1.09925,
+        "node_build_ms": 9.774875,
+        "total_ms": 20.098125000000003
+      },
+      "wasm_backend": "pulley",
+      "ws_port": 61847,
+      "ws_url": "ws://127.0.0.1:61847/v1/contract/command?encodingProtocol=native"
+    },
+    "node_restart_ms": 21.469950675964355,
+    "node_stop_ms": 0.7489919662475586,
+    "process_to_app_init_ms": 14.39013671875,
+    "process_to_first_frame_ms": 138.923095703125
+  },
+  "scenario": "startup",
+  "started_at_ms": 1790721159300.491
+}

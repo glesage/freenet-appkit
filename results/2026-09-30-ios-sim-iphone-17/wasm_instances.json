@@ -1,0 +1,120 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios-sim",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 14,
+    "model": "iPhone18,3",
+    "name": "iPhone 17",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 51539607552,
+    "simulator": true
+  },
+  "finished_at_ms": 1790723228567.986,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "app_bytes": 54334205,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 15.185580968856812
+  },
+  "metrics": {
+    "footprint_bytes": 157584192,
+    "resident_bytes": 448954368,
+    "resident_peak_bytes": 449576960,
+    "system_cpu_ms": 1185.169,
+    "threads": null,
+    "user_cpu_ms": 1850.771,
+    "virtual_bytes": 422322044928
+  },
+  "passed": true,
+  "platform": "ios",
+  "profile": "local",
+  "result": {
+    "samples": [
+      {
+        "contracts": 25,
+        "footprint_bytes": 157911896,
+        "virtual_bytes": 422607126528
+      },
+      {
+        "contracts": 50,
+        "footprint_bytes": 157420400,
+        "virtual_bytes": 422875693056
+      },
+      {
+        "contracts": 75,
+        "footprint_bytes": 157551496,
+        "virtual_bytes": 423144226816
+      },
+      {
+        "contracts": 100,
+        "footprint_bytes": 157272896,
+        "virtual_bytes": 422325927936
+      },
+      {
+        "contracts": 125,
+        "footprint_bytes": 157191000,
+        "virtual_bytes": 422605553664
+      },
+      {
+        "contracts": 150,
+        "footprint_bytes": 157322096,
+        "virtual_bytes": 422873546752
+      },
+      {
+        "contracts": 175,
+        "footprint_bytes": 157600648,
+        "virtual_bytes": 423142113280
+      },
+      {
+        "contracts": 200,
+        "footprint_bytes": 157256512,
+        "virtual_bytes": 422319620096
+      },
+      {
+        "contracts": 225,
+        "footprint_bytes": 157485912,
+        "virtual_bytes": 422604980224
+      },
+      {
+        "contracts": 250,
+        "footprint_bytes": 157502320,
+        "virtual_bytes": 422873546752
+      },
+      {
+        "contracts": 275,
+        "footprint_bytes": 158157752,
+        "virtual_bytes": 423413104640
+      },
+      {
+        "contracts": 300,
+        "footprint_bytes": 157649728,
+        "virtual_bytes": 422322044928
+      }
+    ],
+    "stored": 300,
+    "virtual_bytes_per_contract": 2227623.2533333334
+  },
+  "scenario": "wasm_instances",
+  "started_at_ms": 1790723215353.9062
+}

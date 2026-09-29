@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- The embedded node serves web apps and its client API over plain HTTP
+	     and WebSocket on 127.0.0.1 only. -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<!-- Shown when the node reaches a test gateway on the local network. -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>AppKit Demo connects to a Freenet test gateway on your local network when you choose the test gateway profile.</string>
+	<!-- Harness results in Documents are visible in the Files app and Finder,
+	     so real-device runs can be collected. -->
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+</dict>
+</plist>

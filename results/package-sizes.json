@@ -1,0 +1,13 @@
+{
+  "measured": "2026-09-30",
+  "note": "iOS: Release build for devices, unsigned; stripped with strip -x; the zip approximates an IPA before App Store thinning. Android: release APK per ABI from ABI splits (native libraries stored uncompressed and page-aligned).",
+  "ios_device_release_app_bytes": 54133177,
+  "ios_device_release_stripped_app_bytes": 43878097,
+  "ios_device_release_stripped_binary_bytes": 40696424,
+  "ios_device_release_zipped_ipa_estimate_bytes": 17622870,
+  "ios_resources_bytes": 3180036,
+  "android_release_apk_arm64-v8a_bytes": 42892167,
+  "android_release_apk_x86_64_bytes": 49576897,
+  "android_release_apk_armeabi-v7a_bytes": 29096347,
+  "android_release_apk_universal_bytes": 116915455
+}

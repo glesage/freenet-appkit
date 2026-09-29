@@ -1,0 +1,303 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios-sim",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 14,
+    "model": "iPhone18,3",
+    "name": "iPhone 17",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 51539607552,
+    "simulator": true
+  },
+  "finished_at_ms": 1790719354952.516,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": true,
+    "package": {
+      "app_bytes": 54250797,
+      "config": "Release"
+    },
+    "profile": "gateway"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 24.169275760650635
+  },
+  "metrics": {
+    "footprint_bytes": 42437272,
+    "resident_bytes": 321912832,
+    "resident_peak_bytes": 322568192,
+    "system_cpu_ms": 278.687,
+    "threads": null,
+    "user_cpu_ms": 954.488,
+    "virtual_bytes": 421968396288
+  },
+  "platform": "ios",
+  "profile": "gateway",
+  "result": {
+    "load_traffic": {
+      "download_bytes": 684293,
+      "upload_bytes": 5653
+    },
+    "loaded": true,
+    "memory_samples": [
+      {
+        "footprint_bytes": 43993752,
+        "resident_bytes": 322469888,
+        "resident_peak_bytes": 322486272,
+        "system_cpu_ms": 149.178,
+        "threads": null,
+        "user_cpu_ms": 785.999,
+        "virtual_bytes": 421979553792
+      },
+      {
+        "footprint_bytes": 43256472,
+        "resident_bytes": 322568192,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 157.61,
+        "threads": null,
+        "user_cpu_ms": 797.386,
+        "virtual_bytes": 421979553792
+      },
+      {
+        "footprint_bytes": 43190936,
+        "resident_bytes": 322568192,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 164.798,
+        "threads": null,
+        "user_cpu_ms": 806.766,
+        "virtual_bytes": 421979553792
+      },
+      {
+        "footprint_bytes": 43190936,
+        "resident_bytes": 322568192,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 171.481,
+        "threads": null,
+        "user_cpu_ms": 815.44,
+        "virtual_bytes": 421979553792
+      },
+      {
+        "footprint_bytes": 42846872,
+        "resident_bytes": 322207744,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 178.154,
+        "threads": null,
+        "user_cpu_ms": 822.85,
+        "virtual_bytes": 421974392832
+      },
+      {
+        "footprint_bytes": 42781336,
+        "resident_bytes": 322142208,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 184.896,
+        "threads": null,
+        "user_cpu_ms": 831.859,
+        "virtual_bytes": 421973819392
+      },
+      {
+        "footprint_bytes": 42715800,
+        "resident_bytes": 322076672,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 191.577,
+        "threads": null,
+        "user_cpu_ms": 841.043,
+        "virtual_bytes": 421973245952
+      },
+      {
+        "footprint_bytes": 42732184,
+        "resident_bytes": 322093056,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 196.927,
+        "threads": null,
+        "user_cpu_ms": 847.534,
+        "virtual_bytes": 421973245952
+      },
+      {
+        "footprint_bytes": 42732184,
+        "resident_bytes": 322093056,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 199.759,
+        "threads": null,
+        "user_cpu_ms": 850.57,
+        "virtual_bytes": 421973245952
+      },
+      {
+        "footprint_bytes": 42732184,
+        "resident_bytes": 322076672,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 206.792,
+        "threads": null,
+        "user_cpu_ms": 862.066,
+        "virtual_bytes": 421973213184
+      },
+      {
+        "footprint_bytes": 42420888,
+        "resident_bytes": 321880064,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 213.713,
+        "threads": null,
+        "user_cpu_ms": 871.772,
+        "virtual_bytes": 421968396288
+      },
+      {
+        "footprint_bytes": 42420888,
+        "resident_bytes": 321880064,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 220.786,
+        "threads": null,
+        "user_cpu_ms": 881.358,
+        "virtual_bytes": 421968396288
+      },
+      {
+        "footprint_bytes": 42420888,
+        "resident_bytes": 321880064,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 227.083,
+        "threads": null,
+        "user_cpu_ms": 889.837,
+        "virtual_bytes": 421968396288
+      },
+      {
+        "footprint_bytes": 42437272,
+        "resident_bytes": 321896448,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 232.746,
+        "threads": null,
+        "user_cpu_ms": 896.949,
+        "virtual_bytes": 421968396288
+      },
+      {
+        "footprint_bytes": 42437272,
+        "resident_bytes": 321896448,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 240.195,
+        "threads": null,
+        "user_cpu_ms": 905.921,
+        "virtual_bytes": 421968396288
+      },
+      {
+        "footprint_bytes": 42437272,
+        "resident_bytes": 321896448,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 248.043,
+        "threads": null,
+        "user_cpu_ms": 916.42,
+        "virtual_bytes": 421968396288
+      },
+      {
+        "footprint_bytes": 42437272,
+        "resident_bytes": 321896448,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 255.305,
+        "threads": null,
+        "user_cpu_ms": 925.516,
+        "virtual_bytes": 421968396288
+      },
+      {
+        "footprint_bytes": 42437272,
+        "resident_bytes": 321896448,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 258.778,
+        "threads": null,
+        "user_cpu_ms": 929.598,
+        "virtual_bytes": 421968396288
+      },
+      {
+        "footprint_bytes": 42437272,
+        "resident_bytes": 321896448,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 263.063,
+        "threads": null,
+        "user_cpu_ms": 935.439,
+        "virtual_bytes": 421968396288
+      },
+      {
+        "footprint_bytes": 42437272,
+        "resident_bytes": 321896448,
+        "resident_peak_bytes": 322568192,
+        "system_cpu_ms": 270.889,
+        "threads": null,
+        "user_cpu_ms": 944.808,
+        "virtual_bytes": 421968396288
+      }
+    ],
+    "session_traffic": {
+      "download_bytes": 700367,
+      "upload_bytes": 21617
+    },
+    "status": {
+      "connected_peers": 1,
+      "last_error": null,
+      "session": 1,
+      "state": "running",
+      "ws_port": 59803
+    },
+    "timeline": [
+      {
+        "event": "prepare",
+        "ms": 0
+      },
+      {
+        "event": "first_peer",
+        "ms": 1.492919921875
+      },
+      {
+        "event": "load_start",
+        "ms": 1.507080078125
+      },
+      {
+        "event": "node_running",
+        "ms": 1.764892578125
+      },
+      {
+        "event": "first_peer",
+        "ms": 131.1240234375
+      },
+      {
+        "event": "load_start",
+        "ms": 131.41796875
+      },
+      {
+        "event": "app_frame_dom",
+        "ms": 1117.7939453125
+      },
+      {
+        "event": "shell_dom",
+        "ms": 1120.47998046875
+      },
+      {
+        "event": "shell_loaded",
+        "ms": 1121.196044921875
+      },
+      {
+        "event": "title:Freenet",
+        "ms": 1122.48583984375
+      },
+      {
+        "event": "app_frame_dom",
+        "ms": 1131.566162109375
+      },
+      {
+        "event": "title:Atlas",
+        "ms": 1132.138916015625
+      }
+    ]
+  },
+  "scenario": "atlas",
+  "started_at_ms": 1790719332452.028
+}

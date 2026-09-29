@@ -1,0 +1,25 @@
+# Build outputs
+/build/
+.DS_Store
+*.xcuserstate
+xcuserdata/
+DerivedData/
+
+# Android
+android/.gradle/
+android/**/build/
+android/local.properties
+android/.idea/
+android/appkit/src/main/jniLibs/
+
+# Fetched website containers (pinned by fixtures/webapps.json)
+fixtures/webapps/*.wasm
+fixtures/webapps/*.params
+fixtures/webapps/*.state
+
+# Harness scratch
+harness/.run/
+
+# Generated resources (scripts/prepare-resources.sh)
+ios/AppKitResources/
+android/demo/src/main/assets/AppKitResources/

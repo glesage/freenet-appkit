@@ -1,0 +1,783 @@
+{
+  "build": {
+    "available_backends": [
+      "cranelift",
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "cranelift",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-linux-android",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "abis": [
+      "arm64-v8a"
+    ],
+    "cpu_count": 4,
+    "model": "Google sdk_gphone16k_arm64",
+    "name": "emu64a16k",
+    "os": "Android 17 (API 37)",
+    "page_size": 16384,
+    "physical_memory_bytes": 4159471616,
+    "simulator": true
+  },
+  "finished_at_ms": 1790718133276,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": "wifi-toggle",
+    "fresh_install": false,
+    "package": {
+      "apk_bytes": {
+        "base.apk": 42892167
+      },
+      "apk_file_bytes": 42892167,
+      "config": "Release"
+    },
+    "profile": "public"
+  },
+  "host": {
+    "actions": [
+      {
+        "action": "wifi off: traffic moves to the emulated cellular network",
+        "at_ms": 1790718057427.5962
+      },
+      {
+        "action": "wifi on",
+        "at_ms": 1790718087466.6108
+      }
+    ],
+    "am_start": {
+      "TotalTime": "115",
+      "WaitTime": "115"
+    },
+    "wall_s": 102.16801595687866
+  },
+  "metrics": {
+    "footprint_bytes": 158030848,
+    "resident_bytes": 328466432,
+    "resident_peak_bytes": 328712192,
+    "system_cpu_ms": 1638.327,
+    "threads": 64,
+    "user_cpu_ms": 1948.7150000000001,
+    "virtual_bytes": 60153528320
+  },
+  "platform": "android",
+  "profile": "public",
+  "result": {
+    "samples": [
+      {
+        "download_bytes": 0,
+        "ms": 0,
+        "peers": 0,
+        "state": "running",
+        "upload_bytes": 0
+      },
+      {
+        "download_bytes": 636,
+        "ms": 1002,
+        "peers": 2,
+        "state": "running",
+        "upload_bytes": 548
+      },
+      {
+        "download_bytes": 1133,
+        "ms": 2005,
+        "peers": 2,
+        "state": "running",
+        "upload_bytes": 964
+      },
+      {
+        "download_bytes": 23594,
+        "ms": 3006,
+        "peers": 3,
+        "state": "running",
+        "upload_bytes": 2373
+      },
+      {
+        "download_bytes": 24623,
+        "ms": 4009,
+        "peers": 3,
+        "state": "running",
+        "upload_bytes": 3451
+      },
+      {
+        "download_bytes": 25652,
+        "ms": 5010,
+        "peers": 3,
+        "state": "running",
+        "upload_bytes": 4586
+      },
+      {
+        "download_bytes": 27199,
+        "ms": 6013,
+        "peers": 3,
+        "state": "running",
+        "upload_bytes": 6121
+      },
+      {
+        "download_bytes": 28281,
+        "ms": 7018,
+        "peers": 3,
+        "state": "running",
+        "upload_bytes": 7109
+      },
+      {
+        "download_bytes": 29622,
+        "ms": 8020,
+        "peers": 3,
+        "state": "running",
+        "upload_bytes": 8727
+      },
+      {
+        "download_bytes": 82657,
+        "ms": 9022,
+        "peers": 4,
+        "state": "running",
+        "upload_bytes": 10898
+      },
+      {
+        "download_bytes": 83686,
+        "ms": 10023,
+        "peers": 4,
+        "state": "running",
+        "upload_bytes": 12849
+      },
+      {
+        "download_bytes": 111532,
+        "ms": 11024,
+        "peers": 5,
+        "state": "running",
+        "upload_bytes": 14866
+      },
+      {
+        "download_bytes": 113202,
+        "ms": 12031,
+        "peers": 5,
+        "state": "running",
+        "upload_bytes": 16140
+      },
+      {
+        "download_bytes": 115747,
+        "ms": 13034,
+        "peers": 5,
+        "state": "running",
+        "upload_bytes": 19376
+      },
+      {
+        "download_bytes": 117808,
+        "ms": 14036,
+        "peers": 5,
+        "state": "running",
+        "upload_bytes": 21124
+      },
+      {
+        "download_bytes": 172807,
+        "ms": 15036,
+        "peers": 6,
+        "state": "running",
+        "upload_bytes": 25083
+      },
+      {
+        "download_bytes": 210820,
+        "ms": 16038,
+        "peers": 8,
+        "state": "running",
+        "upload_bytes": 29316
+      },
+      {
+        "download_bytes": 214580,
+        "ms": 17040,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 32012
+      },
+      {
+        "download_bytes": 236992,
+        "ms": 18042,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 35081
+      },
+      {
+        "download_bytes": 242143,
+        "ms": 19045,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 38053
+      },
+      {
+        "download_bytes": 244837,
+        "ms": 20047,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 40898
+      },
+      {
+        "download_bytes": 248229,
+        "ms": 21050,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 44119
+      },
+      {
+        "download_bytes": 251128,
+        "ms": 22051,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 47022
+      },
+      {
+        "download_bytes": 253851,
+        "ms": 23054,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 49737
+      },
+      {
+        "download_bytes": 257128,
+        "ms": 24057,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 52870
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 25058,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 55652
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 26060,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 56715
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 27061,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 57579
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 28065,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 58050
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 29067,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 58768
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 30070,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 59131
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 31072,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 59233
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 32075,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 59492
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 33077,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 59990
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 34079,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 60202
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 35082,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 60565
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 36089,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 60667
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 37092,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 60667
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 38102,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 60773
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 39108,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 60773
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 40119,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 61136
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 41122,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 61585
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 42126,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 61785
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 43129,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 61887
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 44131,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 62099
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 45135,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 62413
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 46137,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 62466
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 47139,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 62519
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 48141,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 62572
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 49143,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 62572
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 50147,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 62837
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 51158,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 62890
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 52160,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 62943
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 53161,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 62996
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 54164,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 62996
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 55166,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 62996
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 56169,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 63192
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 57171,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 63457
+      },
+      {
+        "download_bytes": 258454,
+        "ms": 58172,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 63555
+      },
+      {
+        "download_bytes": 258682,
+        "ms": 59174,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 63761
+      },
+      {
+        "download_bytes": 259670,
+        "ms": 60174,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 65046
+      },
+      {
+        "download_bytes": 264609,
+        "ms": 61175,
+        "peers": 9,
+        "state": "running",
+        "upload_bytes": 71682
+      },
+      {
+        "download_bytes": 358459,
+        "ms": 62176,
+        "peers": 11,
+        "state": "running",
+        "upload_bytes": 610991
+      },
+      {
+        "download_bytes": 369772,
+        "ms": 63180,
+        "peers": 14,
+        "state": "running",
+        "upload_bytes": 1230437
+      },
+      {
+        "download_bytes": 406119,
+        "ms": 64181,
+        "peers": 14,
+        "state": "running",
+        "upload_bytes": 1248811
+      },
+      {
+        "download_bytes": 1385185,
+        "ms": 65183,
+        "peers": 14,
+        "state": "running",
+        "upload_bytes": 1775269
+      },
+      {
+        "download_bytes": 1592271,
+        "ms": 66191,
+        "peers": 14,
+        "state": "running",
+        "upload_bytes": 1846076
+      },
+      {
+        "download_bytes": 1597646,
+        "ms": 67193,
+        "peers": 14,
+        "state": "running",
+        "upload_bytes": 1872349
+      },
+      {
+        "download_bytes": 1603077,
+        "ms": 68193,
+        "peers": 14,
+        "state": "running",
+        "upload_bytes": 1902105
+      },
+      {
+        "download_bytes": 1614960,
+        "ms": 69195,
+        "peers": 14,
+        "state": "running",
+        "upload_bytes": 1933092
+      },
+      {
+        "download_bytes": 1706994,
+        "ms": 70196,
+        "peers": 16,
+        "state": "running",
+        "upload_bytes": 1970496
+      },
+      {
+        "download_bytes": 1729097,
+        "ms": 71197,
+        "peers": 17,
+        "state": "running",
+        "upload_bytes": 2006177
+      },
+      {
+        "download_bytes": 1754481,
+        "ms": 72199,
+        "peers": 18,
+        "state": "running",
+        "upload_bytes": 2036315
+      },
+      {
+        "download_bytes": 1759922,
+        "ms": 73200,
+        "peers": 18,
+        "state": "running",
+        "upload_bytes": 2053489
+      },
+      {
+        "download_bytes": 1765477,
+        "ms": 74201,
+        "peers": 18,
+        "state": "running",
+        "upload_bytes": 2077220
+      },
+      {
+        "download_bytes": 1770756,
+        "ms": 75202,
+        "peers": 18,
+        "state": "running",
+        "upload_bytes": 2097060
+      },
+      {
+        "download_bytes": 1775744,
+        "ms": 76202,
+        "peers": 18,
+        "state": "running",
+        "upload_bytes": 2119751
+      },
+      {
+        "download_bytes": 1780433,
+        "ms": 77204,
+        "peers": 18,
+        "state": "running",
+        "upload_bytes": 2124024
+      },
+      {
+        "download_bytes": 1784320,
+        "ms": 78205,
+        "peers": 18,
+        "state": "running",
+        "upload_bytes": 2127670
+      },
+      {
+        "download_bytes": 1788269,
+        "ms": 79206,
+        "peers": 18,
+        "state": "running",
+        "upload_bytes": 2131960
+      },
+      {
+        "download_bytes": 1793268,
+        "ms": 80208,
+        "peers": 18,
+        "state": "running",
+        "upload_bytes": 2137812
+      },
+      {
+        "download_bytes": 1798167,
+        "ms": 81211,
+        "peers": 18,
+        "state": "running",
+        "upload_bytes": 2142984
+      },
+      {
+        "download_bytes": 1865737,
+        "ms": 82212,
+        "peers": 19,
+        "state": "running",
+        "upload_bytes": 2149085
+      },
+      {
+        "download_bytes": 1872100,
+        "ms": 83215,
+        "peers": 19,
+        "state": "running",
+        "upload_bytes": 2154460
+      },
+      {
+        "download_bytes": 1876417,
+        "ms": 84221,
+        "peers": 19,
+        "state": "running",
+        "upload_bytes": 2158750
+      },
+      {
+        "download_bytes": 1881209,
+        "ms": 85222,
+        "peers": 19,
+        "state": "running",
+        "upload_bytes": 2163449
+      },
+      {
+        "download_bytes": 1886299,
+        "ms": 86223,
+        "peers": 19,
+        "state": "running",
+        "upload_bytes": 2167895
+      },
+      {
+        "download_bytes": 1890340,
+        "ms": 87224,
+        "peers": 19,
+        "state": "running",
+        "upload_bytes": 2172259
+      },
+      {
+        "download_bytes": 1895574,
+        "ms": 88226,
+        "peers": 19,
+        "state": "running",
+        "upload_bytes": 2177501
+      },
+      {
+        "download_bytes": 1899969,
+        "ms": 89227,
+        "peers": 19,
+        "state": "running",
+        "upload_bytes": 2182037
+      },
+      {
+        "download_bytes": 1904794,
+        "ms": 90228,
+        "peers": 19,
+        "state": "running",
+        "upload_bytes": 2187090
+      },
+      {
+        "download_bytes": 1909772,
+        "ms": 91230,
+        "peers": 19,
+        "state": "running",
+        "upload_bytes": 2192940
+      },
+      {
+        "download_bytes": 2229582,
+        "ms": 92231,
+        "peers": 21,
+        "state": "running",
+        "upload_bytes": 2201180
+      },
+      {
+        "download_bytes": 2285361,
+        "ms": 93234,
+        "peers": 21,
+        "state": "running",
+        "upload_bytes": 2207369
+      },
+      {
+        "download_bytes": 2290956,
+        "ms": 94235,
+        "peers": 22,
+        "state": "running",
+        "upload_bytes": 2212448
+      },
+      {
+        "download_bytes": 2297361,
+        "ms": 95235,
+        "peers": 22,
+        "state": "running",
+        "upload_bytes": 2219305
+      },
+      {
+        "download_bytes": 2303319,
+        "ms": 96238,
+        "peers": 22,
+        "state": "running",
+        "upload_bytes": 2225963
+      },
+      {
+        "download_bytes": 2309986,
+        "ms": 97239,
+        "peers": 22,
+        "state": "running",
+        "upload_bytes": 2233497
+      },
+      {
+        "download_bytes": 2315587,
+        "ms": 98240,
+        "peers": 22,
+        "state": "running",
+        "upload_bytes": 2239543
+      },
+      {
+        "download_bytes": 2322520,
+        "ms": 99241,
+        "peers": 22,
+        "state": "running",
+        "upload_bytes": 2246447
+      }
+    ],
+    "seconds": 100,
+    "traffic": {
+      "download_bytes": 2328445,
+      "upload_bytes": 2252728
+    }
+  },
+  "scenario": "watch",
+  "started_at_ms": 1790718032476
+}

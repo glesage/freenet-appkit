@@ -1,0 +1,149 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios-sim",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 14,
+    "model": "iPhone18,3",
+    "name": "iPhone 17",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 51539607552,
+    "simulator": true
+  },
+  "finished_at_ms": 1790723132698.125,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "app_bytes": 54334205,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 8.866571187973022
+  },
+  "metrics": {
+    "footprint_bytes": 46992216,
+    "resident_bytes": 390463488,
+    "resident_peak_bytes": 412614656,
+    "system_cpu_ms": 486.269,
+    "threads": null,
+    "user_cpu_ms": 8033.135,
+    "virtual_bytes": 422034456576
+  },
+  "passed": true,
+  "platform": "ios",
+  "profile": "local",
+  "result": {
+    "available_backends": [
+      "pulley"
+    ],
+    "cases": [
+      {
+        "backend": "pulley",
+        "detail": "fixture compiled",
+        "elapsed_ms": 129.083167,
+        "name": "compile",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "0102030405 05000000887d6b4fbfdc660f 03000000abf52c671862aad0 0405",
+        "elapsed_ms": 60.07825,
+        "name": "round_trip",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "trapped with \"out of bounds memory access\", next call ran",
+        "elapsed_ms": 25.395333,
+        "name": "trap_out_of_bounds",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "trapped with \"integer divide by zero\", next call ran",
+        "elapsed_ms": 24.647084,
+        "name": "trap_divide_by_zero",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "trapped with \"unreachable\", next call ran",
+        "elapsed_ms": 25.213666999999997,
+        "name": "trap_unreachable",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "hashed 64 bytes 20000 times",
+        "elapsed_ms": 36.215834,
+        "name": "compute",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "allocated 16 MiB",
+        "elapsed_ms": 12.660584,
+        "name": "memory_16_mib",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "interrupted: The operation exceeded the maximum allowed compute time",
+        "elapsed_ms": 5022.440459,
+        "name": "execution_limit",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "794190 bytes compiled",
+        "elapsed_ms": 172.805959,
+        "name": "compile_river_room_contract",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "523857 bytes compiled",
+        "elapsed_ms": 122.745,
+        "name": "compile_atlas_index_contract",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "168310 bytes compiled",
+        "elapsed_ms": 101.354625,
+        "name": "compile_web_container_contract",
+        "passed": true
+      },
+      {
+        "backend": "cranelift",
+        "detail": "could not build the contract runtime: the cranelift Wasm backend is not available on this target; use pulley",
+        "elapsed_ms": 70.411459,
+        "name": "refuse_unavailable",
+        "passed": true
+      }
+    ],
+    "default_backend": "pulley",
+    "fixture_sha256": "17793dbc301a396c121e048f0f40c42c291bda664b888073ac05c2527ab1a009",
+    "passed": true,
+    "target": "aarch64-apple-ios-sim"
+  },
+  "scenario": "conformance",
+  "started_at_ms": 1790723126870.041
+}

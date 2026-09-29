@@ -1,0 +1,246 @@
+{
+  "build": {
+    "available_backends": [
+      "cranelift",
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "cranelift",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-linux-android",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "abis": [
+      "arm64-v8a"
+    ],
+    "cpu_count": 4,
+    "model": "Google sdk_gphone16k_arm64",
+    "name": "emu64a16k",
+    "os": "Android 17 (API 37)",
+    "page_size": 16384,
+    "physical_memory_bytes": 4159471616,
+    "simulator": true
+  },
+  "finished_at_ms": 1790719089636,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "apk_bytes": {
+        "base.apk": 42892167
+      },
+      "apk_file_bytes": 42892167,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "am_start": {
+      "TotalTime": "914",
+      "WaitTime": "916"
+    },
+    "wall_s": 19.575517177581787
+  },
+  "metrics": {
+    "footprint_bytes": 149265408,
+    "resident_bytes": 318406656,
+    "resident_peak_bytes": 361594880,
+    "system_cpu_ms": 2316.667,
+    "threads": 75,
+    "user_cpu_ms": 28256.875,
+    "virtual_bytes": 57616416768
+  },
+  "passed": true,
+  "platform": "android",
+  "profile": "local",
+  "result": {
+    "available_backends": [
+      "cranelift",
+      "pulley"
+    ],
+    "cases": [
+      {
+        "backend": "cranelift",
+        "detail": "fixture compiled",
+        "elapsed_ms": 705.647626,
+        "name": "compile",
+        "passed": true
+      },
+      {
+        "backend": "cranelift",
+        "detail": "0102030405 05000000887d6b4fbfdc660f 03000000abf52c671862aad0 0405",
+        "elapsed_ms": 46.215125,
+        "name": "round_trip",
+        "passed": true
+      },
+      {
+        "backend": "cranelift",
+        "detail": "trapped with \"out of bounds memory access\", next call ran",
+        "elapsed_ms": 22.943084,
+        "name": "trap_out_of_bounds",
+        "passed": true
+      },
+      {
+        "backend": "cranelift",
+        "detail": "trapped with \"integer divide by zero\", next call ran",
+        "elapsed_ms": 30.139083,
+        "name": "trap_divide_by_zero",
+        "passed": true
+      },
+      {
+        "backend": "cranelift",
+        "detail": "trapped with \"unreachable\", next call ran",
+        "elapsed_ms": 0.610125,
+        "name": "trap_unreachable",
+        "passed": true
+      },
+      {
+        "backend": "cranelift",
+        "detail": "hashed 64 bytes 20000 times",
+        "elapsed_ms": 10.282375,
+        "name": "compute",
+        "passed": true
+      },
+      {
+        "backend": "cranelift",
+        "detail": "allocated 16 MiB",
+        "elapsed_ms": 11.988666,
+        "name": "memory_16_mib",
+        "passed": true
+      },
+      {
+        "backend": "cranelift",
+        "detail": "interrupted: The operation exceeded the maximum allowed compute time",
+        "elapsed_ms": 5020.434544000001,
+        "name": "execution_limit",
+        "passed": true
+      },
+      {
+        "backend": "cranelift",
+        "detail": "794190 bytes compiled",
+        "elapsed_ms": 2141.705168,
+        "name": "compile_river_room_contract",
+        "passed": true
+      },
+      {
+        "backend": "cranelift",
+        "detail": "523857 bytes compiled",
+        "elapsed_ms": 1601.8043340000002,
+        "name": "compile_atlas_index_contract",
+        "passed": true
+      },
+      {
+        "backend": "cranelift",
+        "detail": "168310 bytes compiled",
+        "elapsed_ms": 485.144917,
+        "name": "compile_web_container_contract",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "fixture compiled",
+        "elapsed_ms": 158.285959,
+        "name": "compile",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "0102030405 05000000887d6b4fbfdc660f 03000000abf52c671862aad0 0405",
+        "elapsed_ms": 56.451166,
+        "name": "round_trip",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "trapped with \"out of bounds memory access\", next call ran",
+        "elapsed_ms": 22.1465,
+        "name": "trap_out_of_bounds",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "trapped with \"integer divide by zero\", next call ran",
+        "elapsed_ms": 24.046667,
+        "name": "trap_divide_by_zero",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "trapped with \"unreachable\", next call ran",
+        "elapsed_ms": 23.209125,
+        "name": "trap_unreachable",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "hashed 64 bytes 20000 times",
+        "elapsed_ms": 162.079542,
+        "name": "compute",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "allocated 16 MiB",
+        "elapsed_ms": 11.737417,
+        "name": "memory_16_mib",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "interrupted: The operation exceeded the maximum allowed compute time",
+        "elapsed_ms": 5021.841627,
+        "name": "execution_limit",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "794190 bytes compiled",
+        "elapsed_ms": 1015.1262089999999,
+        "name": "compile_river_room_contract",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "523857 bytes compiled",
+        "elapsed_ms": 560.252542,
+        "name": "compile_atlas_index_contract",
+        "passed": true
+      },
+      {
+        "backend": "pulley",
+        "detail": "168310 bytes compiled",
+        "elapsed_ms": 261.880875,
+        "name": "compile_web_container_contract",
+        "passed": true
+      },
+      {
+        "backend": "all",
+        "detail": "identical bytes on every backend",
+        "elapsed_ms": 0.002208,
+        "name": "same_bytes",
+        "passed": true
+      },
+      {
+        "backend": "all",
+        "detail": "each backend refused the others' artifacts",
+        "elapsed_ms": 373.256584,
+        "name": "artifact_refusal",
+        "passed": true
+      }
+    ],
+    "default_backend": "cranelift",
+    "fixture_sha256": "17793dbc301a396c121e048f0f40c42c291bda664b888073ac05c2527ab1a009",
+    "passed": true,
+    "target": "aarch64-linux-android"
+  },
+  "scenario": "conformance",
+  "started_at_ms": 1790719071798
+}

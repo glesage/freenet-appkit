@@ -1,0 +1,60 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 6,
+    "model": "iPhone14,4",
+    "name": "iPhone",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 3853336576,
+    "simulator": false
+  },
+  "finished_at_ms": 1790721209825.6787,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "app_bytes": 54270831,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 1.6230380535125732
+  },
+  "metrics": {
+    "footprint_bytes": 143837240,
+    "resident_bytes": 220659712,
+    "resident_peak_bytes": 223068160,
+    "system_cpu_ms": 244.315,
+    "threads": null,
+    "user_cpu_ms": 354.867,
+    "virtual_bytes": 476546367488
+  },
+  "passed": false,
+  "platform": "ios",
+  "profile": "local",
+  "result": {
+    "error": "Client(kind: FreenetAppKit.ClientErrorKind.operationFailed, detail: \"client error: error while executing operation in the network: update error for contract 4e646dnwWhZhwqTeWdMDPYZXivcg6sgzz6M94vJAyDnL, reason: execution error: instantiation: mmap failed to reserve 0x10020000 bytes\")",
+    "samples": [],
+    "stored": 22,
+    "virtual_bytes_per_contract": 30380404.363636363
+  },
+  "scenario": "wasm_instances",
+  "started_at_ms": 1790721208914.628
+}

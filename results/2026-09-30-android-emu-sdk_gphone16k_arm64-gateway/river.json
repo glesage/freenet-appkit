@@ -1,0 +1,307 @@
+{
+  "build": {
+    "available_backends": [
+      "cranelift",
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "cranelift",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-linux-android",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "abis": [
+      "arm64-v8a"
+    ],
+    "cpu_count": 4,
+    "model": "Google sdk_gphone16k_arm64",
+    "name": "emu64a16k",
+    "os": "Android 17 (API 37)",
+    "page_size": 16384,
+    "physical_memory_bytes": 4159471616,
+    "simulator": true
+  },
+  "finished_at_ms": 1790719217009,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": true,
+    "package": {
+      "apk_bytes": {
+        "base.apk": 42892167
+      },
+      "apk_file_bytes": 42892167,
+      "config": "Release"
+    },
+    "profile": "gateway"
+  },
+  "host": {
+    "actions": [],
+    "am_start": {
+      "TotalTime": "1469",
+      "WaitTime": "1473"
+    },
+    "wall_s": 27.66878581047058
+  },
+  "metrics": {
+    "footprint_bytes": 158620672,
+    "resident_bytes": 330235904,
+    "resident_peak_bytes": 369410048,
+    "system_cpu_ms": 4371.808,
+    "threads": 75,
+    "user_cpu_ms": 10814.387,
+    "virtual_bytes": 58813644800
+  },
+  "platform": "android",
+  "profile": "gateway",
+  "result": {
+    "load_traffic": {
+      "download_bytes": 3845534,
+      "upload_bytes": 1164313
+    },
+    "loaded": true,
+    "memory_samples": [
+      {
+        "footprint_bytes": 149856256,
+        "resident_bytes": 318390272,
+        "resident_peak_bytes": 318390272,
+        "system_cpu_ms": 1482.355,
+        "threads": 74,
+        "user_cpu_ms": 3080.494,
+        "virtual_bytes": 43352457216
+      },
+      {
+        "footprint_bytes": 158394368,
+        "resident_bytes": 329793536,
+        "resident_peak_bytes": 330219520,
+        "system_cpu_ms": 1930.446,
+        "threads": 74,
+        "user_cpu_ms": 4135.621,
+        "virtual_bytes": 43627511808
+      },
+      {
+        "footprint_bytes": 168547328,
+        "resident_bytes": 339935232,
+        "resident_peak_bytes": 339935232,
+        "system_cpu_ms": 2284.634,
+        "threads": 74,
+        "user_cpu_ms": 6235.819,
+        "virtual_bytes": 43626594304
+      },
+      {
+        "footprint_bytes": 180096000,
+        "resident_bytes": 351453184,
+        "resident_peak_bytes": 351453184,
+        "system_cpu_ms": 2534.451,
+        "threads": 74,
+        "user_cpu_ms": 8086.326,
+        "virtual_bytes": 43625988096
+      },
+      {
+        "footprint_bytes": 193104896,
+        "resident_bytes": 364658688,
+        "resident_peak_bytes": 367345664,
+        "system_cpu_ms": 2848.7129999999997,
+        "threads": 75,
+        "user_cpu_ms": 9598.325,
+        "virtual_bytes": 43647205376
+      },
+      {
+        "footprint_bytes": 146666496,
+        "resident_bytes": 324452352,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 3249.068,
+        "threads": 75,
+        "user_cpu_ms": 10212.269,
+        "virtual_bytes": 43769348096
+      },
+      {
+        "footprint_bytes": 147081216,
+        "resident_bytes": 318259200,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 3619.469,
+        "threads": 75,
+        "user_cpu_ms": 10435.737,
+        "virtual_bytes": 43769348096
+      },
+      {
+        "footprint_bytes": 148031488,
+        "resident_bytes": 319553536,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 3987.898,
+        "threads": 75,
+        "user_cpu_ms": 10579.841,
+        "virtual_bytes": 43771838464
+      },
+      {
+        "footprint_bytes": 148047872,
+        "resident_bytes": 319569920,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 4002.999,
+        "threads": 75,
+        "user_cpu_ms": 10591.826000000001,
+        "virtual_bytes": 43771838464
+      },
+      {
+        "footprint_bytes": 148031488,
+        "resident_bytes": 319520768,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 4033.85,
+        "threads": 75,
+        "user_cpu_ms": 10592.545,
+        "virtual_bytes": 43769610240
+      },
+      {
+        "footprint_bytes": 147048448,
+        "resident_bytes": 318537728,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 4060.238,
+        "threads": 74,
+        "user_cpu_ms": 10594.555,
+        "virtual_bytes": 43751653376
+      },
+      {
+        "footprint_bytes": 147064832,
+        "resident_bytes": 318554112,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 4074.881,
+        "threads": 74,
+        "user_cpu_ms": 10607.757,
+        "virtual_bytes": 43751653376
+      },
+      {
+        "footprint_bytes": 147165184,
+        "resident_bytes": 318668800,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 4089.3559999999998,
+        "threads": 74,
+        "user_cpu_ms": 10631.030999999999,
+        "virtual_bytes": 43751653376
+      },
+      {
+        "footprint_bytes": 147181568,
+        "resident_bytes": 318685184,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 4111.213,
+        "threads": 74,
+        "user_cpu_ms": 10636.622,
+        "virtual_bytes": 43751653376
+      },
+      {
+        "footprint_bytes": 147197952,
+        "resident_bytes": 318701568,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 4130.553,
+        "threads": 74,
+        "user_cpu_ms": 10645.575,
+        "virtual_bytes": 43751653376
+      },
+      {
+        "footprint_bytes": 149753856,
+        "resident_bytes": 321257472,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 4194.188,
+        "threads": 75,
+        "user_cpu_ms": 10655.929,
+        "virtual_bytes": 46996439040
+      },
+      {
+        "footprint_bytes": 157195264,
+        "resident_bytes": 328810496,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 4275.934,
+        "threads": 75,
+        "user_cpu_ms": 10748.274,
+        "virtual_bytes": 57202245632
+      },
+      {
+        "footprint_bytes": 158571520,
+        "resident_bytes": 330186752,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 4312.846,
+        "threads": 75,
+        "user_cpu_ms": 10774.096,
+        "virtual_bytes": 58813644800
+      },
+      {
+        "footprint_bytes": 158587904,
+        "resident_bytes": 330203136,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 4340.588,
+        "threads": 75,
+        "user_cpu_ms": 10775.732,
+        "virtual_bytes": 58813644800
+      },
+      {
+        "footprint_bytes": 158587904,
+        "resident_bytes": 330203136,
+        "resident_peak_bytes": 369410048,
+        "system_cpu_ms": 4360.394,
+        "threads": 75,
+        "user_cpu_ms": 10785.808,
+        "virtual_bytes": 58813644800
+      }
+    ],
+    "session_traffic": {
+      "download_bytes": 3868826,
+      "upload_bytes": 1193348
+    },
+    "status": {
+      "connected_peers": 1,
+      "last_error": null,
+      "session": 1,
+      "state": "running",
+      "ws_port": 40139
+    },
+    "timeline": [
+      {
+        "event": "prepare",
+        "ms": 0
+      },
+      {
+        "event": "node_running",
+        "ms": 136
+      },
+      {
+        "event": "first_peer",
+        "ms": 169
+      },
+      {
+        "event": "load_start",
+        "ms": 170
+      },
+      {
+        "event": "shell_dom",
+        "ms": 2997
+      },
+      {
+        "event": "title:Freenet",
+        "ms": 3001
+      },
+      {
+        "event": "app_frame_request",
+        "ms": 3069
+      },
+      {
+        "event": "shell_loaded",
+        "ms": 3133
+      },
+      {
+        "event": "app_frame_dom",
+        "ms": 3177
+      },
+      {
+        "event": "title:River",
+        "ms": 3179
+      }
+    ]
+  },
+  "scenario": "river",
+  "started_at_ms": 1790719193089
+}

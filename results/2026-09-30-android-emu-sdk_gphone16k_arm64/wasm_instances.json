@@ -1,0 +1,132 @@
+{
+  "build": {
+    "available_backends": [
+      "cranelift",
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "cranelift",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-linux-android",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "abis": [
+      "arm64-v8a"
+    ],
+    "cpu_count": 4,
+    "model": "Google sdk_gphone16k_arm64",
+    "name": "emu64a16k",
+    "os": "Android 17 (API 37)",
+    "page_size": 16384,
+    "physical_memory_bytes": 4159471616,
+    "simulator": true
+  },
+  "finished_at_ms": 1790718496718,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "apk_bytes": {
+        "base.apk": 42892167
+      },
+      "apk_file_bytes": 42892167,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "am_start": {
+      "TotalTime": "1691",
+      "WaitTime": "1695"
+    },
+    "wall_s": 18.28174591064453
+  },
+  "metrics": {
+    "footprint_bytes": 141900800,
+    "resident_bytes": 311033856,
+    "resident_peak_bytes": 359989248,
+    "system_cpu_ms": 4752.1939999999995,
+    "threads": 74,
+    "user_cpu_ms": 12703.203,
+    "virtual_bytes": 42942922752
+  },
+  "passed": true,
+  "platform": "android",
+  "profile": "local",
+  "result": {
+    "samples": [
+      {
+        "contracts": 25,
+        "footprint_bytes": 132074496,
+        "virtual_bytes": 49521688576
+      },
+      {
+        "contracts": 50,
+        "footprint_bytes": 184852480,
+        "virtual_bytes": 56281694208
+      },
+      {
+        "contracts": 75,
+        "footprint_bytes": 163331072,
+        "virtual_bytes": 63121768448
+      },
+      {
+        "contracts": 100,
+        "footprint_bytes": 152858624,
+        "virtual_bytes": 69839060992
+      },
+      {
+        "contracts": 125,
+        "footprint_bytes": 156741632,
+        "virtual_bytes": 76553224192
+      },
+      {
+        "contracts": 150,
+        "footprint_bytes": 143749120,
+        "virtual_bytes": 43785879552
+      },
+      {
+        "contracts": 175,
+        "footprint_bytes": 144877568,
+        "virtual_bytes": 50500042752
+      },
+      {
+        "contracts": 200,
+        "footprint_bytes": 148594688,
+        "virtual_bytes": 57196249088
+      },
+      {
+        "contracts": 225,
+        "footprint_bytes": 152463360,
+        "virtual_bytes": 63910412288
+      },
+      {
+        "contracts": 250,
+        "footprint_bytes": 152610816,
+        "virtual_bytes": 70624575488
+      },
+      {
+        "contracts": 275,
+        "footprint_bytes": 156323840,
+        "virtual_bytes": 77338738688
+      },
+      {
+        "contracts": 300,
+        "footprint_bytes": 142703616,
+        "virtual_bytes": 44573622272
+      }
+    ],
+    "stored": 300,
+    "virtual_bytes_per_contract": 95032552.10666667
+  },
+  "scenario": "wasm_instances",
+  "started_at_ms": 1790718481600
+}

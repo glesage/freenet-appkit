@@ -1,0 +1,7 @@
+2026-09-30 09:06:42.715 AppKitDemo[5290:24376955] AppKitDemo: started session 1 on port 59803 in 68 ms
+2026-09-30 09:06:42.715 AppKitDemo[5290:24376955] AppKitDemo: started session 1 on port 59803 in 68 ms
+2026-09-30 09:06:42.716 AppKitDemo[5290:24376955] AppKitDemo: resumed with a fresh session
+2026-09-30 09:06:42.720 AppKitDemo[5290:24376955] AppKitDemo: started session 1 on port 59803 in 68 ms
+CRITICAL: Network event listener exited: Graceful shutdown
+APPKIT_RESULT {"build":{"available_backends":["pulley"],"core_revision":"1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty","core_version":"0.2.139","default_backend":"pulley","mobile_version":"0.1.0","profile":"release","stdlib_version":"0.12.1","target":"aarch64-apple-ios-sim","uniffi_version":"0.32.2","wasmtime_version":"47.0.3"},"device":{"cpu_count":14,"model":"iPhone18,3","name":"iPhone 17","os":"iOS 27.0","physical_memory_bytes":51539607552,"simulator":true},"finished_at_ms":1790723211587.665,"metrics":{"footprint_bytes":156240752,"resident_bytes":447381504,"resident_peak_bytes":447741952,"system_cpu_ms":613.83500000000004,"threads":null,"user_cpu_ms":1341.8199999999999,"virtual_bytes":422638649344},"passed":true,"platform":"ios","profile":"local","result":{"delta_bytes":64,"final_state_bytes":12801,"notification_bytes":1286600,"receive_seconds":8.7058010101318359,"received":200,"send_seconds":8.7058000564575195,"updates":200,"updates_per_second":22.973187621361831},"scenario":"throughput","started_at_ms":1790723202658.4492}
+org.freenet.appkit.demo: 5290

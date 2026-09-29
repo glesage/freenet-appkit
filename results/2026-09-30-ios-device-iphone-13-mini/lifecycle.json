@@ -1,0 +1,84 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 6,
+    "model": "iPhone14,4",
+    "name": "iPhone",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 3853336576,
+    "simulator": false
+  },
+  "finished_at_ms": 1790721984681.956,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "app_bytes": 54270975,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 0.8706560134887695
+  },
+  "metrics": {
+    "footprint_bytes": 24413952,
+    "resident_bytes": 79790080,
+    "resident_peak_bytes": 79790080,
+    "system_cpu_ms": 122.631,
+    "threads": null,
+    "user_cpu_ms": 273.282,
+    "virtual_bytes": 474901512192
+  },
+  "platform": "ios",
+  "profile": "local",
+  "result": {
+    "cycles": [
+      {
+        "fresh_session": true,
+        "previous_session": 1,
+        "same_port": true,
+        "session": 2,
+        "start_ms": 50.099968910217285,
+        "state_after_stop": "stopped",
+        "stop_ms": 1.7859935760498047
+      },
+      {
+        "fresh_session": true,
+        "previous_session": 2,
+        "same_port": true,
+        "session": 3,
+        "start_ms": 55.87506294250488,
+        "state_after_stop": "stopped",
+        "stop_ms": 0.7630586624145508
+      },
+      {
+        "fresh_session": true,
+        "previous_session": 3,
+        "same_port": true,
+        "session": 4,
+        "start_ms": 48.41303825378418,
+        "state_after_stop": "stopped",
+        "stop_ms": 0.8220672607421875
+      }
+    ]
+  },
+  "scenario": "lifecycle",
+  "started_at_ms": 1790721984488.491
+}

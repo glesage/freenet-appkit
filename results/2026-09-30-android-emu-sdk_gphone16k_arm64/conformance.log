@@ -1,0 +1,16 @@
+Stopping: org.freenet.appkit.demo
+Starting: Intent { cmp=org.freenet.appkit.demo/.MainActivity (has extras) }
+Status: ok
+LaunchState: COLD
+Activity: org.freenet.appkit.demo/.MainActivity
+TotalTime: 914
+WaitTime: 916
+Complete
+
+--------- beginning of main
+09-30 07:57:51.678 17424 17424 I AppKitDemo: started session 1 on port 35815 in 82 ms
+09-30 07:57:51.684 17424 17424 I AppKitDemo: resumed with a fresh session
+09-30 07:57:51.783 17424 17424 I AppKitDemo: started session 1 on port 35815 in 82 ms
+09-30 07:57:51.790 17424 17424 I AppKitDemo: started session 1 on port 35815 in 82 ms
+09-30 07:58:09.647 17424 17424 I AppKitHarness: APPKIT_RESULT scenario=conformance passed=true bytes=4368
+09-30 07:58:09.657 17424 17424 I AppKitDemo: stopped

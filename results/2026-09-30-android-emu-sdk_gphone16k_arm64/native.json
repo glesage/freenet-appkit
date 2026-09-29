@@ -1,0 +1,186 @@
+{
+  "build": {
+    "available_backends": [
+      "cranelift",
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "cranelift",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-linux-android",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "abis": [
+      "arm64-v8a"
+    ],
+    "cpu_count": 4,
+    "model": "Google sdk_gphone16k_arm64",
+    "name": "emu64a16k",
+    "os": "Android 17 (API 37)",
+    "page_size": 16384,
+    "physical_memory_bytes": 4159471616,
+    "simulator": true
+  },
+  "finished_at_ms": 1790719109137,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "apk_bytes": {
+        "base.apk": 42892167
+      },
+      "apk_file_bytes": 42892167,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "am_start": {
+      "TotalTime": "1326",
+      "WaitTime": "1330"
+    },
+    "wall_s": 11.643819093704224
+  },
+  "metrics": {
+    "footprint_bytes": 293911552,
+    "resident_bytes": 507461632,
+    "resident_peak_bytes": 927252480,
+    "system_cpu_ms": 3156.435,
+    "threads": 71,
+    "user_cpu_ms": 8096.856,
+    "virtual_bytes": 42688020480
+  },
+  "passed": true,
+  "platform": "android",
+  "profile": "local",
+  "result": {
+    "checks": [
+      {
+        "actual": "0102030405060708",
+        "expected": "0102030405060708",
+        "name": "op.cancel.read_after",
+        "passed": true
+      },
+      {
+        "actual": "Timeout",
+        "expected": "Timeout",
+        "name": "op.cancel.timed_out",
+        "passed": true
+      },
+      {
+        "actual": "NotFound",
+        "expected": "NotFound",
+        "name": "op.error.get_unknown",
+        "passed": true
+      },
+      {
+        "actual": "OperationFailed",
+        "expected": "OperationFailed",
+        "name": "op.error.put_invalid_state",
+        "passed": true
+      },
+      {
+        "actual": "010203",
+        "expected": "010203",
+        "name": "op.get.state",
+        "passed": true
+      },
+      {
+        "actual": "0102030405",
+        "expected": "0102030405",
+        "name": "op.get_after_update.state",
+        "passed": true
+      },
+      {
+        "actual": "Dtz9r4ijggx6km8HB3XfuPDQsLEHxywGX6m64GLEpCKB",
+        "expected": "Dtz9r4ijggx6km8HB3XfuPDQsLEHxywGX6m64GLEpCKB",
+        "name": "op.put.code_hash",
+        "passed": true
+      },
+      {
+        "actual": "BPYaKE6yzE9hjLf53TufRVdf2zQYqKgPSbn5bUEDzZP8",
+        "expected": "BPYaKE6yzE9hjLf53TufRVdf2zQYqKgPSbn5bUEDzZP8",
+        "name": "op.put.instance_id",
+        "passed": true
+      },
+      {
+        "actual": "State:010203040506,State:01020304050607,State:0102030405060708",
+        "expected": "State:010203040506,State:01020304050607,State:0102030405060708",
+        "name": "op.subscribe.callbacks",
+        "passed": true
+      },
+      {
+        "actual": "05000000887d6b4fbfdc660f",
+        "expected": "05000000887d6b4fbfdc660f",
+        "name": "op.update.summary",
+        "passed": true
+      }
+    ],
+    "large_records": [
+      {
+        "bytes": 16384,
+        "echoMs": 0.548625,
+        "getMs": 1.196791,
+        "getNodeMs": 0.449459,
+        "intact": true,
+        "putMs": 34.92025,
+        "putNodeMs": 32.646415999999995
+      },
+      {
+        "bytes": 262144,
+        "echoMs": 1.715375,
+        "getMs": 2.907959,
+        "getNodeMs": 1.000375,
+        "intact": true,
+        "putMs": 34.092625,
+        "putNodeMs": 29.301583
+      },
+      {
+        "bytes": 1048576,
+        "echoMs": 10.482958,
+        "getMs": 10.393417,
+        "getNodeMs": 4.553,
+        "intact": true,
+        "putMs": 47.112708,
+        "putNodeMs": 36.284499999999994
+      },
+      {
+        "bytes": 4194304,
+        "echoMs": 44.6725,
+        "getMs": 73.109917,
+        "getNodeMs": 57.741375,
+        "intact": true,
+        "putMs": 114.109083,
+        "putNodeMs": 73.91054199999999
+      },
+      {
+        "bytes": 16777216,
+        "echoMs": 218.668375,
+        "getMs": 171.283542,
+        "getNodeMs": 108.77499999999999,
+        "intact": true,
+        "putMs": 383.839251,
+        "putNodeMs": 258.542459
+      },
+      {
+        "bytes": 33554432,
+        "echoMs": 302.648709,
+        "getMs": 276.154542,
+        "getNodeMs": 156.48825,
+        "intact": true,
+        "putMs": 717.099667,
+        "putNodeMs": 445.714334
+      }
+    ]
+  },
+  "scenario": "native",
+  "started_at_ms": 1790719100165
+}

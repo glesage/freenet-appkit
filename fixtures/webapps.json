@@ -1,0 +1,52 @@
+{
+  "format": 1,
+  "note": "Website containers read from the public Freenet network on 2026-09-30 with freenet-core examples/fetch_contract. The .code.wasm, .params and .state files are fetched, not committed; these hashes pin them.",
+  "containers": {
+    "river": {
+      "instance_id": "raAqMhMG7KUpXBU2SxgCQ3Vh4PYjttxdSWd9ftV7RLv",
+      "code_hash": "9PSqkYp7g7uYmm8YecPoVgsYdf3BytngeCuaBSuhCzmu",
+      "code_wasm": {
+        "bytes": 168310,
+        "sha256": "541880ec50b8d9403c476b40fcc326c2f18baaade7ae25f9010ae37cec3bccab"
+      },
+      "params": {
+        "bytes": 32,
+        "sha256": "c5d3d486a8d7b94fdae2cc94ae0eb982943e52b1c41bfa09d5a63f61fb216708"
+      },
+      "state": {
+        "bytes": 1058661,
+        "sha256": "a925be93fb319999661f1591f33e21e8e1c7339c046a715c073c0c744d62db5c"
+      },
+      "web_archive_bytes": 1058496,
+      "fetch": {
+        "node_ready_ms": 1467.727042,
+        "first_peer_ms": 1999.876417,
+        "read_ms": 1308.766458,
+        "read_attempts": 1
+      }
+    },
+    "atlas": {
+      "instance_id": "771DvtPMwt2PumPyrFvsz7fpvU1gogcmb5qtS1yYEEH9",
+      "code_hash": "9PSqkYp7g7uYmm8YecPoVgsYdf3BytngeCuaBSuhCzmu",
+      "code_wasm": {
+        "bytes": 168310,
+        "sha256": "541880ec50b8d9403c476b40fcc326c2f18baaade7ae25f9010ae37cec3bccab"
+      },
+      "params": {
+        "bytes": 32,
+        "sha256": "69b69adbebe430722bd28442e931e385117838e41e365ab9cadbe1952ea9ee26"
+      },
+      "state": {
+        "bytes": 454866,
+        "sha256": "0593f9fb2093fe3ee66cea57e77b71705f5bffff8e9fc362a473867c403cfd66"
+      },
+      "web_archive_bytes": 454708,
+      "fetch": {
+        "node_ready_ms": 109.759208,
+        "first_peer_ms": 630.239708,
+        "read_ms": 803.8462499999999,
+        "read_attempts": 1
+      }
+    }
+  }
+}

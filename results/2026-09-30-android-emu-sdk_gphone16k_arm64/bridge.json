@@ -1,0 +1,108 @@
+{
+  "build": {
+    "available_backends": [
+      "cranelift",
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "cranelift",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-linux-android",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "abis": [
+      "arm64-v8a"
+    ],
+    "cpu_count": 4,
+    "model": "Google sdk_gphone16k_arm64",
+    "name": "emu64a16k",
+    "os": "Android 17 (API 37)",
+    "page_size": 16384,
+    "physical_memory_bytes": 4159471616,
+    "simulator": true
+  },
+  "finished_at_ms": 1790719118877,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "apk_bytes": {
+        "base.apk": 42892167
+      },
+      "apk_file_bytes": 42892167,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "am_start": {
+      "TotalTime": "865",
+      "WaitTime": "870"
+    },
+    "wall_s": 2.669834852218628
+  },
+  "metrics": {
+    "footprint_bytes": 111966208,
+    "resident_bytes": 279658496,
+    "resident_peak_bytes": 281313280,
+    "system_cpu_ms": 808.308,
+    "threads": 65,
+    "user_cpu_ms": 1099.952,
+    "virtual_bytes": 42287775744
+  },
+  "passed": true,
+  "platform": "android",
+  "profile": "local",
+  "result": {
+    "checks": [
+      {
+        "detail": "protocol 1, node running",
+        "ms": 10.600000000093132,
+        "name": "hello",
+        "passed": true
+      },
+      {
+        "detail": "20 round trips, median 4.70 ms, p95 15.80 ms",
+        "ms": 7.889999999990687,
+        "name": "ping",
+        "passed": true
+      },
+      {
+        "detail": "code unknown_command",
+        "name": "typed error",
+        "passed": true
+      },
+      {
+        "detail": "20 byte reply to the connected-peers query",
+        "ms": 14.5,
+        "name": "node websocket",
+        "passed": true
+      },
+      {
+        "detail": "unlisted file answered 404",
+        "name": "manifest only",
+        "passed": true
+      }
+    ],
+    "events": [],
+    "passed": true,
+    "peersReplyBytes": 20,
+    "pingMs": {
+      "max": 60.60000000009313,
+      "mean": 7.889999999990687,
+      "p50": 4.7000000001862645,
+      "p95": 15.799999999813735
+    },
+    "userAgent": "Mozilla/5.0 (Linux; Android 17; sdk_gphone16k_arm64 Build/CP41.260828.004.A7; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/149.0.7827.5 Mobile Safari/537.36"
+  },
+  "scenario": "bridge",
+  "started_at_ms": 1790719117730
+}

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bridge test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Bridge test</h1>
+    <p class="lead">This page comes from the app's own files, checked against a SHA-256 manifest.
+      It talks to the host over the JSON bridge and to the node over its own WebSocket.</p>
+    <section>
+      <h2>Host</h2>
+      <pre id="hello">Waiting for the host…</pre>
+    </section>
+    <section>
+      <h2>Checks</h2>
+      <button id="run" type="button">Run checks</button>
+      <ul id="checks"></ul>
+    </section>
+    <section>
+      <h2>Events</h2>
+      <ul id="events"></ul>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

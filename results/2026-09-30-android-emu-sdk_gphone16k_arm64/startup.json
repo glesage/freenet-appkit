@@ -1,0 +1,110 @@
+{
+  "build": {
+    "available_backends": [
+      "cranelift",
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "cranelift",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-linux-android",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "abis": [
+      "arm64-v8a"
+    ],
+    "cpu_count": 4,
+    "model": "Google sdk_gphone16k_arm64",
+    "name": "emu64a16k",
+    "os": "Android 17 (API 37)",
+    "page_size": 16384,
+    "physical_memory_bytes": 4159471616,
+    "simulator": true
+  },
+  "finished_at_ms": 1790719112214,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "apk_bytes": {
+        "base.apk": 42892167
+      },
+      "apk_file_bytes": 42892167,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "am_start": {
+      "TotalTime": "858",
+      "WaitTime": "862"
+    },
+    "wall_s": 2.8086512088775635
+  },
+  "metrics": {
+    "footprint_bytes": 72049664,
+    "resident_bytes": 188891136,
+    "resident_peak_bytes": 192741376,
+    "system_cpu_ms": 482.585,
+    "threads": 37,
+    "user_cpu_ms": 506.927,
+    "virtual_bytes": 15952904192
+  },
+  "platform": "android",
+  "profile": "local",
+  "result": {
+    "node_first_start": {
+      "data_dir": "/data/user/0/org.freenet.appkit.demo/files/freenet/data/local",
+      "discarded_config": false,
+      "http_base": "http://127.0.0.1:35815",
+      "mode": "local",
+      "session": 2,
+      "timings": {
+        "api_ready_ms": 9.18225,
+        "attempts": 1,
+        "client_api_ms": 12.300375,
+        "config_ms": 31.086792,
+        "layout_ms": 0.940167,
+        "node_build_ms": 47.10525,
+        "total_ms": 100.854917
+      },
+      "wasm_backend": "cranelift",
+      "ws_port": 35815,
+      "ws_url": "ws://127.0.0.1:35815/v1/contract/command?encodingProtocol=native"
+    },
+    "node_first_start_ms": 175.577125,
+    "node_restart": {
+      "data_dir": "/data/user/0/org.freenet.appkit.demo/files/freenet/data/local",
+      "discarded_config": false,
+      "http_base": "http://127.0.0.1:35815",
+      "mode": "local",
+      "session": 3,
+      "timings": {
+        "api_ready_ms": 4.928708,
+        "attempts": 1,
+        "client_api_ms": 4.285291999999999,
+        "config_ms": 35.923209,
+        "layout_ms": 2.551292,
+        "node_build_ms": 20.360875,
+        "total_ms": 68.16725
+      },
+      "wasm_backend": "cranelift",
+      "ws_port": 35815,
+      "ws_url": "ws://127.0.0.1:35815/v1/contract/command?encodingProtocol=native"
+    },
+    "node_restart_ms": 75.942416,
+    "node_stop_ms": 210.497583,
+    "process_to_app_init_ms": 147,
+    "process_to_first_frame_ms": 685
+  },
+  "scenario": "startup",
+  "started_at_ms": 1790719111583
+}

@@ -1,0 +1,8 @@
+Launched application with org.freenet.appkit.demo bundle identifier.
+Waiting for the application to terminate…
+APPKIT_RESULT {"build":{"available_backends":["pulley"],"core_revision":"1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty","core_version":"0.2.139","default_backend":"pulley","mobile_version":"0.1.0","profile":"release","stdlib_version":"0.12.1","target":"aarch64-apple-ios","uniffi_version":"0.32.2","wasmtime_version":"47.0.3"},"device":{"cpu_count":6,"model":"iPhone14,4","name":"iPhone","os":"iOS 27.0","physical_memory_bytes":3853336576,"simulator":false},"finished_at_ms":1790722039585.77,"metrics":{"footprint_bytes":148244680,"resident_bytes":206503936,"resident_peak_bytes":221249536,"system_cpu_ms":1172.923,"threads":null,"user_cpu_ms":1344.068,"virtual_bytes":477314973696},"passed":true,"platform":"ios","profile":"local","result":{"delta_bytes":64,"final_state_bytes":12801,"notification_bytes":1286600,"receive_seconds":9.1807239055633545,"received":200,"send_seconds":9.1807209253311157,"updates":200,"updates_per_second":21.784774496791432},"scenario":"throughput","started_at_ms":1790722030232.28}
+The app terminated with the exit code 0.
+2026-09-30 08:47:10.274 AppKitDemo[67189:4638797] AppKitDemo: started session 1 on port 61847 in 43 ms
+sandbox_extension_issue_file failed for /var/containers/Bundle/Application/D401B816-A415-4087-A92E-0AD7864B5AF6/AppKitDemo.app: 1 (Operation not permitted)
+2026-09-30 08:47:10.399 AppKitDemo[67189:4638797] AppKitDemo: started session 1 on port 61847 in 43 ms
+CRITICAL: Network event listener exited: Graceful shutdown

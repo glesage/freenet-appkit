@@ -1,0 +1,174 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios-sim",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 14,
+    "model": "iPhone18,3",
+    "name": "iPhone 17",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 51539607552,
+    "simulator": true
+  },
+  "finished_at_ms": 1790723148203.408,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "app_bytes": 54334205,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 7.1895811557769775
+  },
+  "metrics": {
+    "footprint_bytes": 210553832,
+    "resident_bytes": 534544384,
+    "resident_peak_bytes": 753287168,
+    "system_cpu_ms": 660.669,
+    "threads": null,
+    "user_cpu_ms": 6711.97,
+    "virtual_bytes": 422428442624
+  },
+  "passed": true,
+  "platform": "ios",
+  "profile": "local",
+  "result": {
+    "checks": [
+      {
+        "actual": "0102030405060708",
+        "expected": "0102030405060708",
+        "name": "op.cancel.read_after",
+        "passed": true
+      },
+      {
+        "actual": "Timeout",
+        "expected": "Timeout",
+        "name": "op.cancel.timed_out",
+        "passed": true
+      },
+      {
+        "actual": "NotFound",
+        "expected": "NotFound",
+        "name": "op.error.get_unknown",
+        "passed": true
+      },
+      {
+        "actual": "OperationFailed",
+        "expected": "OperationFailed",
+        "name": "op.error.put_invalid_state",
+        "passed": true
+      },
+      {
+        "actual": "010203",
+        "expected": "010203",
+        "name": "op.get.state",
+        "passed": true
+      },
+      {
+        "actual": "0102030405",
+        "expected": "0102030405",
+        "name": "op.get_after_update.state",
+        "passed": true
+      },
+      {
+        "actual": "Dtz9r4ijggx6km8HB3XfuPDQsLEHxywGX6m64GLEpCKB",
+        "expected": "Dtz9r4ijggx6km8HB3XfuPDQsLEHxywGX6m64GLEpCKB",
+        "name": "op.put.code_hash",
+        "passed": true
+      },
+      {
+        "actual": "BPYaKE6yzE9hjLf53TufRVdf2zQYqKgPSbn5bUEDzZP8",
+        "expected": "BPYaKE6yzE9hjLf53TufRVdf2zQYqKgPSbn5bUEDzZP8",
+        "name": "op.put.instance_id",
+        "passed": true
+      },
+      {
+        "actual": "State:010203040506,State:01020304050607,State:0102030405060708",
+        "expected": "State:010203040506,State:01020304050607,State:0102030405060708",
+        "name": "op.subscribe.callbacks",
+        "passed": true
+      },
+      {
+        "actual": "05000000887d6b4fbfdc660f",
+        "expected": "05000000887d6b4fbfdc660f",
+        "name": "op.update.summary",
+        "passed": true
+      }
+    ],
+    "large_records": [
+      {
+        "bytes": 16384,
+        "echoMs": 0.049948692321777344,
+        "getMs": 0.2720355987548828,
+        "getNodeMs": 0.202,
+        "intact": true,
+        "putMs": 47.31595516204834,
+        "putNodeMs": 47.084208000000004
+      },
+      {
+        "bytes": 262144,
+        "echoMs": 0.532984733581543,
+        "getMs": 0.6430149078369141,
+        "getNodeMs": 0.411709,
+        "intact": true,
+        "putMs": 43.94996166229248,
+        "putNodeMs": 43.446417000000004
+      },
+      {
+        "bytes": 1048576,
+        "echoMs": 1.788020133972168,
+        "getMs": 1.9730329513549805,
+        "getNodeMs": 1.187875,
+        "intact": true,
+        "putMs": 47.35696315765381,
+        "putNodeMs": 45.963499999999996
+      },
+      {
+        "bytes": 4194304,
+        "echoMs": 7.772088050842285,
+        "getMs": 8.495926856994629,
+        "getNodeMs": 5.1475,
+        "intact": true,
+        "putMs": 64.97800350189209,
+        "putNodeMs": 59.369916
+      },
+      {
+        "bytes": 16777216,
+        "echoMs": 33.21099281311035,
+        "getMs": 27.231931686401367,
+        "getNodeMs": 13.558625,
+        "intact": true,
+        "putMs": 109.69603061676025,
+        "putNodeMs": 88.19841600000001
+      },
+      {
+        "bytes": 33554432,
+        "echoMs": 66.14100933074951,
+        "getMs": 55.096983909606934,
+        "getNodeMs": 29.674125,
+        "intact": true,
+        "putMs": 163.16509246826172,
+        "putNodeMs": 123.927166
+      }
+    ]
+  },
+  "scenario": "native",
+  "started_at_ms": 1790723142153.387
+}

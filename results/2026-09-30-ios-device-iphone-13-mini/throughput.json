@@ -1,0 +1,64 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 6,
+    "model": "iPhone14,4",
+    "name": "iPhone",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 3853336576,
+    "simulator": false
+  },
+  "finished_at_ms": 1790722039585.77,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "app_bytes": 54270975,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 10.045482873916626
+  },
+  "metrics": {
+    "footprint_bytes": 148244680,
+    "resident_bytes": 206503936,
+    "resident_peak_bytes": 221249536,
+    "system_cpu_ms": 1172.923,
+    "threads": null,
+    "user_cpu_ms": 1344.068,
+    "virtual_bytes": 477314973696
+  },
+  "passed": true,
+  "platform": "ios",
+  "profile": "local",
+  "result": {
+    "delta_bytes": 64,
+    "final_state_bytes": 12801,
+    "notification_bytes": 1286600,
+    "receive_seconds": 9.180723905563354,
+    "received": 200,
+    "send_seconds": 9.180720925331116,
+    "updates": 200,
+    "updates_per_second": 21.78477449679143
+  },
+  "scenario": "throughput",
+  "started_at_ms": 1790722030232.28
+}

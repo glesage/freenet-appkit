@@ -1,0 +1,96 @@
+{
+  "build": {
+    "available_backends": [
+      "cranelift",
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "cranelift",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-linux-android",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "abis": [
+      "arm64-v8a"
+    ],
+    "cpu_count": 4,
+    "model": "Google sdk_gphone16k_arm64",
+    "name": "emu64a16k",
+    "os": "Android 17 (API 37)",
+    "page_size": 16384,
+    "physical_memory_bytes": 4159471616,
+    "simulator": true
+  },
+  "finished_at_ms": 1790719115368,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "apk_bytes": {
+        "base.apk": 42892167
+      },
+      "apk_file_bytes": 42892167,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "am_start": {
+      "TotalTime": "822",
+      "WaitTime": "829"
+    },
+    "wall_s": 2.660025119781494
+  },
+  "metrics": {
+    "footprint_bytes": 73124864,
+    "resident_bytes": 189874176,
+    "resident_peak_bytes": 193921024,
+    "system_cpu_ms": 527.546,
+    "threads": 38,
+    "user_cpu_ms": 541.069,
+    "virtual_bytes": 15999778816
+  },
+  "platform": "android",
+  "profile": "local",
+  "result": {
+    "cycles": [
+      {
+        "fresh_session": true,
+        "previous_session": 1,
+        "same_port": true,
+        "session": 2,
+        "start_ms": 172.4285,
+        "state_after_stop": "stopped",
+        "stop_ms": 38.680625
+      },
+      {
+        "fresh_session": true,
+        "previous_session": 2,
+        "same_port": true,
+        "session": 3,
+        "start_ms": 58.466834,
+        "state_after_stop": "stopped",
+        "stop_ms": 212.017458
+      },
+      {
+        "fresh_session": true,
+        "previous_session": 3,
+        "same_port": true,
+        "session": 4,
+        "start_ms": 45.219833,
+        "state_after_stop": "stopped",
+        "stop_ms": 22.926166
+      }
+    ]
+  },
+  "scenario": "lifecycle",
+  "started_at_ms": 1790719114799
+}

@@ -1,0 +1,62 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 6,
+    "model": "iPhone14,4",
+    "name": "iPhone",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 3853336576,
+    "simulator": false
+  },
+  "finished_at_ms": 1790721208207.431,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "app_bytes": 54270831,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 1.352607011795044
+  },
+  "metrics": {
+    "footprint_bytes": 30033832,
+    "resident_bytes": 106348544,
+    "resident_peak_bytes": 107053056,
+    "system_cpu_ms": 164.224,
+    "threads": null,
+    "user_cpu_ms": 327.473,
+    "virtual_bytes": 476378497024
+  },
+  "passed": true,
+  "platform": "ios",
+  "profile": "local",
+  "result": {
+    "banner_body": "Skate club: see you at 6?",
+    "banner_title": "Bob",
+    "foreground_only": true,
+    "opened": true,
+    "raise_to_banner_ms": 33.875,
+    "river_loaded": true
+  },
+  "scenario": "alerts",
+  "started_at_ms": 1790721207538.035
+}

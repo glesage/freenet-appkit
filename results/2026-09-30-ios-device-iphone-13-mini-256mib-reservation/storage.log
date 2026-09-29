@@ -1,0 +1,7 @@
+Launched application with org.freenet.appkit.demo bundle identifier.
+Waiting for the application to terminate…
+APPKIT_RESULT {"build":{"available_backends":["pulley"],"core_revision":"1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty","core_version":"0.2.139","default_backend":"pulley","mobile_version":"0.1.0","profile":"release","stdlib_version":"0.12.1","target":"aarch64-apple-ios","uniffi_version":"0.32.2","wasmtime_version":"47.0.3"},"device":{"cpu_count":6,"model":"iPhone14,4","name":"iPhone","os":"iOS 27.0","physical_memory_bytes":3853336576,"simulator":false},"finished_at_ms":1790721205351.9358,"metrics":{"footprint_bytes":16893648,"resident_bytes":52133888,"resident_peak_bytes":52133888,"system_cpu_ms":47.658999999999999,"threads":null,"user_cpu_ms":92.444000000000003,"virtual_bytes":474849853440},"platform":"ios","profile":"local","result":{"cache_bytes":8694590,"config_bytes":6046,"data_bytes":5839005,"logs_bytes":616587},"scenario":"storage","started_at_ms":1790721205347.9053}
+The app terminated with the exit code 0.
+2026-09-30 08:33:25.392 AppKitDemo[66839:4625611] AppKitDemo: started session 1 on port 61847 in 47 ms
+sandbox_extension_issue_file failed for /var/containers/Bundle/Application/A1F217DF-31B2-4C6B-AE85-9F7C146C3EAA/AppKitDemo.app: 1 (Operation not permitted)
+2026-09-30 08:33:25.516 AppKitDemo[66839:4625611] AppKitDemo: started session 1 on port 61847 in 47 ms

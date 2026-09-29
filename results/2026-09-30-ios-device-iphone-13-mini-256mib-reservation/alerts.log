@@ -1,0 +1,7 @@
+Launched application with org.freenet.appkit.demo bundle identifier.
+Waiting for the application to terminate…
+APPKIT_RESULT {"build":{"available_backends":["pulley"],"core_revision":"1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty","core_version":"0.2.139","default_backend":"pulley","mobile_version":"0.1.0","profile":"release","stdlib_version":"0.12.1","target":"aarch64-apple-ios","uniffi_version":"0.32.2","wasmtime_version":"47.0.3"},"device":{"cpu_count":6,"model":"iPhone14,4","name":"iPhone","os":"iOS 27.0","physical_memory_bytes":3853336576,"simulator":false},"finished_at_ms":1790721208207.4309,"metrics":{"footprint_bytes":30033832,"resident_bytes":106348544,"resident_peak_bytes":107053056,"system_cpu_ms":164.22399999999999,"threads":null,"user_cpu_ms":327.47300000000001,"virtual_bytes":476378497024},"passed":true,"platform":"ios","profile":"local","result":{"banner_body":"Skate club: see you at 6?","banner_title":"Bob","foreground_only":true,"opened":true,"raise_to_banner_ms":33.875,"river_loaded":true},"scenario":"alerts","started_at_ms":1790721207538.0349}
+The app terminated with the exit code 0.
+2026-09-30 08:33:27.578 AppKitDemo[66849:4625767] AppKitDemo: started session 1 on port 61847 in 43 ms
+sandbox_extension_issue_file failed for /var/containers/Bundle/Application/A1F217DF-31B2-4C6B-AE85-9F7C146C3EAA/AppKitDemo.app: 1 (Operation not permitted)
+2026-09-30 08:33:27.702 AppKitDemo[66849:4625767] AppKitDemo: started session 1 on port 61847 in 43 ms

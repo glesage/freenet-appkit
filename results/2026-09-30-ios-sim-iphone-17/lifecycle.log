@@ -1,0 +1,16 @@
+2026-09-30 09:05:50.872 AppKitDemo[4983:24373676] AppKitDemo: started session 1 on port 59803 in 42 ms
+2026-09-30 09:05:50.873 AppKitDemo[4983:24373676] AppKitDemo: started session 1 on port 59803 in 42 ms
+CRITICAL: Network event listener exited: Graceful shutdown
+2026-09-30 09:05:50.873 AppKitDemo[4983:24373676] AppKitDemo: started session 1 on port 59803 in 42 ms
+2026-09-30 09:05:50.873 AppKitDemo[4983:24373676] AppKitDemo: resumed with a fresh session
+2026-09-30 09:05:50.876 AppKitDemo[4983:24373676] AppKitDemo: stopped
+2026-09-30 09:05:50.939 AppKitDemo[4983:24373676] AppKitDemo: started session 2 on port 59803 in 63 ms
+CRITICAL: Network event listener exited: Graceful shutdown
+2026-09-30 09:05:50.939 AppKitDemo[4983:24373676] AppKitDemo: started session 2 on port 59803 in 63 ms
+2026-09-30 09:05:50.940 AppKitDemo[4983:24373676] AppKitDemo: stopped
+2026-09-30 09:05:50.971 AppKitDemo[4983:24373676] AppKitDemo: started session 3 on port 59803 in 30 ms
+CRITICAL: Network event listener exited: Graceful shutdown
+2026-09-30 09:05:50.972 AppKitDemo[4983:24373676] AppKitDemo: stopped
+2026-09-30 09:05:51.037 AppKitDemo[4983:24373676] AppKitDemo: started session 4 on port 59803 in 63 ms
+APPKIT_RESULT {"build":{"available_backends":["pulley"],"core_revision":"1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty","core_version":"0.2.139","default_backend":"pulley","mobile_version":"0.1.0","profile":"release","stdlib_version":"0.12.1","target":"aarch64-apple-ios-sim","uniffi_version":"0.32.2","wasmtime_version":"47.0.3"},"device":{"cpu_count":14,"model":"iPhone18,3","name":"iPhone 17","os":"iOS 27.0","physical_memory_bytes":51539607552,"simulator":true},"finished_at_ms":1790723151037.6082,"metrics":{"footprint_bytes":35064208,"resident_bytes":261881856,"resident_peak_bytes":261881856,"system_cpu_ms":148.465,"threads":null,"user_cpu_ms":633.67100000000005,"virtual_bytes":420213489664},"platform":"ios","profile":"local","result":{"cycles":[{"fresh_session":true,"previous_session":1,"same_port":true,"session":2,"start_ms":62.157988548278809,"state_after_stop":"starting","stop_ms":3.6709308624267578},{"fresh_session":true,"previous_session":2,"same_port":true,"session":3,"start_ms":31.268954277038574,"state_after_stop":"stopped","stop_ms":0.45299530029296875},{"fresh_session":true,"previous_session":3,"same_port":true,"session":4,"start_ms":65.128922462463379,"state_after_stop":"stopped","stop_ms":1.0650157928466797}]},"scenario":"lifecycle","started_at_ms":1790723150843.0649}
+org.freenet.appkit.demo: 4983

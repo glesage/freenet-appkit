@@ -1,0 +1,84 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios-sim",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 14,
+    "model": "iPhone18,3",
+    "name": "iPhone 17",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 51539607552,
+    "simulator": true
+  },
+  "finished_at_ms": 1790723151037.6082,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "app_bytes": 54334205,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 1.1868829727172852
+  },
+  "metrics": {
+    "footprint_bytes": 35064208,
+    "resident_bytes": 261881856,
+    "resident_peak_bytes": 261881856,
+    "system_cpu_ms": 148.465,
+    "threads": null,
+    "user_cpu_ms": 633.671,
+    "virtual_bytes": 420213489664
+  },
+  "platform": "ios",
+  "profile": "local",
+  "result": {
+    "cycles": [
+      {
+        "fresh_session": true,
+        "previous_session": 1,
+        "same_port": true,
+        "session": 2,
+        "start_ms": 62.15798854827881,
+        "state_after_stop": "starting",
+        "stop_ms": 3.670930862426758
+      },
+      {
+        "fresh_session": true,
+        "previous_session": 2,
+        "same_port": true,
+        "session": 3,
+        "start_ms": 31.268954277038574,
+        "state_after_stop": "stopped",
+        "stop_ms": 0.45299530029296875
+      },
+      {
+        "fresh_session": true,
+        "previous_session": 3,
+        "same_port": true,
+        "session": 4,
+        "start_ms": 65.12892246246338,
+        "state_after_stop": "stopped",
+        "stop_ms": 1.0650157928466797
+      }
+    ]
+  },
+  "scenario": "lifecycle",
+  "started_at_ms": 1790723150843.065
+}

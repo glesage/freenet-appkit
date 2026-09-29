@@ -1,0 +1,59 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 6,
+    "model": "iPhone14,4",
+    "name": "iPhone",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 3853336576,
+    "simulator": false
+  },
+  "finished_at_ms": 1790722029536.408,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "app_bytes": 54270975,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 0.7205572128295898
+  },
+  "metrics": {
+    "footprint_bytes": 16746192,
+    "resident_bytes": 52051968,
+    "resident_peak_bytes": 52051968,
+    "system_cpu_ms": 47.064,
+    "threads": null,
+    "user_cpu_ms": 95.674,
+    "virtual_bytes": 474849820672
+  },
+  "platform": "ios",
+  "profile": "local",
+  "result": {
+    "cache_bytes": 8694590,
+    "config_bytes": 6046,
+    "data_bytes": 6389906,
+    "logs_bytes": 3394658
+  },
+  "scenario": "storage",
+  "started_at_ms": 1790722029533.3528
+}

@@ -1,0 +1,74 @@
+{
+  "build": {
+    "available_backends": [
+      "cranelift",
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "cranelift",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-linux-android",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "abis": [
+      "arm64-v8a"
+    ],
+    "cpu_count": 4,
+    "model": "Google sdk_gphone16k_arm64",
+    "name": "emu64a16k",
+    "os": "Android 17 (API 37)",
+    "page_size": 16384,
+    "physical_memory_bytes": 4159471616,
+    "simulator": true
+  },
+  "finished_at_ms": 1790719185293,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "apk_bytes": {
+        "base.apk": 42892167
+      },
+      "apk_file_bytes": 42892167,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "am_start": {
+      "TotalTime": "822",
+      "WaitTime": "836"
+    },
+    "wall_s": 3.9868509769439697
+  },
+  "metrics": {
+    "footprint_bytes": 109455360,
+    "resident_bytes": 276856832,
+    "resident_peak_bytes": 279003136,
+    "system_cpu_ms": 760.433,
+    "threads": 66,
+    "user_cpu_ms": 1191.497,
+    "virtual_bytes": 42362765312
+  },
+  "passed": true,
+  "platform": "android",
+  "profile": "local",
+  "result": {
+    "banner_body": "Skate club: see you at 6?",
+    "banner_title": "Bob",
+    "foreground_only": true,
+    "opened": true,
+    "raise_to_banner_ms": 12,
+    "river_loaded": true
+  },
+  "scenario": "alerts",
+  "started_at_ms": 1790719183761
+}

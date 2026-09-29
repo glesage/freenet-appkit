@@ -1,0 +1,284 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F7E0A1B2C3D4E5F60000000B /* FreenetAppKit in Frameworks */ = {isa = PBXBuildFile; productRef = F7E0A1B2C3D4E5F600000014 /* FreenetAppKit */; };
+		F7E0A1B2C3D4E5F60000000C /* AppKitResources in Resources */ = {isa = PBXBuildFile; fileRef = F7E0A1B2C3D4E5F600000006 /* AppKitResources */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F7E0A1B2C3D4E5F600000004 /* AppKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F7E0A1B2C3D4E5F600000006 /* AppKitResources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppKitResources; sourceTree = "<group>"; };
+		F7E0A1B2C3D4E5F600000015 /* AppKitDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppKitDemo-Info.plist"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		F7E0A1B2C3D4E5F600000005 /* AppKitDemo */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AppKitDemo;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F7E0A1B2C3D4E5F600000009 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7E0A1B2C3D4E5F60000000B /* FreenetAppKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F7E0A1B2C3D4E5F600000002 = {
+			isa = PBXGroup;
+			children = (
+				F7E0A1B2C3D4E5F600000005 /* AppKitDemo */,
+				F7E0A1B2C3D4E5F600000006 /* AppKitResources */,
+				F7E0A1B2C3D4E5F600000015 /* AppKitDemo-Info.plist */,
+				F7E0A1B2C3D4E5F600000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F7E0A1B2C3D4E5F600000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F7E0A1B2C3D4E5F600000004 /* AppKitDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F7E0A1B2C3D4E5F600000007 /* AppKitDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F7E0A1B2C3D4E5F600000010 /* Build configuration list for PBXNativeTarget "AppKitDemo" */;
+			buildPhases = (
+				F7E0A1B2C3D4E5F600000008 /* Sources */,
+				F7E0A1B2C3D4E5F600000009 /* Frameworks */,
+				F7E0A1B2C3D4E5F60000000A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F7E0A1B2C3D4E5F600000005 /* AppKitDemo */,
+			);
+			name = AppKitDemo;
+			packageProductDependencies = (
+				F7E0A1B2C3D4E5F600000014 /* FreenetAppKit */,
+			);
+			productName = AppKitDemo;
+			productReference = F7E0A1B2C3D4E5F600000004 /* AppKitDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F7E0A1B2C3D4E5F600000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2700;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					F7E0A1B2C3D4E5F600000007 = {
+						CreatedOnToolsVersion = 27.0;
+					};
+				};
+			};
+			buildConfigurationList = F7E0A1B2C3D4E5F60000000D /* Build configuration list for PBXProject "AppKitDemo" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F7E0A1B2C3D4E5F600000002;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F7E0A1B2C3D4E5F600000013 /* XCLocalSwiftPackageReference ".." */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = F7E0A1B2C3D4E5F600000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F7E0A1B2C3D4E5F600000007 /* AppKitDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F7E0A1B2C3D4E5F60000000A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7E0A1B2C3D4E5F60000000C /* AppKitResources in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F7E0A1B2C3D4E5F600000008 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		F7E0A1B2C3D4E5F60000000E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				SDKROOT = iphoneos;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F7E0A1B2C3D4E5F60000000F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				SDKROOT = iphoneos;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F7E0A1B2C3D4E5F600000011 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "AppKitDemo-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "AppKit Demo";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = org.freenet.appkit.demo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F7E0A1B2C3D4E5F600000012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "AppKitDemo-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "AppKit Demo";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = org.freenet.appkit.demo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F7E0A1B2C3D4E5F60000000D /* Build configuration list for PBXProject "AppKitDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F7E0A1B2C3D4E5F60000000E /* Debug */,
+				F7E0A1B2C3D4E5F60000000F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F7E0A1B2C3D4E5F600000010 /* Build configuration list for PBXNativeTarget "AppKitDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F7E0A1B2C3D4E5F600000011 /* Debug */,
+				F7E0A1B2C3D4E5F600000012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		F7E0A1B2C3D4E5F600000013 /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ..;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F7E0A1B2C3D4E5F600000014 /* FreenetAppKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F7E0A1B2C3D4E5F600000013 /* XCLocalSwiftPackageReference ".." */;
+			productName = FreenetAppKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = F7E0A1B2C3D4E5F600000001 /* Project object */;
+}

@@ -1,0 +1,1646 @@
+{
+  "build": {
+    "available_backends": [
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "pulley",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-apple-ios",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "cpu_count": 6,
+    "model": "iPhone14,4",
+    "name": "iPhone",
+    "os": "iOS 27.0",
+    "physical_memory_bytes": 3853336576,
+    "simulator": false
+  },
+  "finished_at_ms": 1790722548454.545,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "app_bytes": 54365407,
+      "config": "Release"
+    },
+    "profile": "public"
+  },
+  "host": {
+    "actions": [],
+    "wall_s": 178.39574885368347
+  },
+  "metrics": {
+    "footprint_bytes": 47663136,
+    "resident_bytes": 126222336,
+    "resident_peak_bytes": 128090112,
+    "system_cpu_ms": 4558.621,
+    "threads": null,
+    "user_cpu_ms": 5603.405,
+    "virtual_bytes": 476115419136
+  },
+  "platform": "ios",
+  "profile": "public",
+  "result": {
+    "marks": [
+      {
+        "event": "prompt_wifi_off",
+        "ms": 15381.178955078125
+      },
+      {
+        "event": "on_cellular",
+        "ms": 54930.091064453125
+      },
+      {
+        "event": "prompt_wifi_on",
+        "ms": 116234.70703125
+      },
+      {
+        "event": "on_wifi",
+        "ms": 146134.06396484375
+      }
+    ],
+    "path": {
+      "constrained": false,
+      "expensive": false,
+      "interfaces": [
+        "wifi",
+        "wifi",
+        "cellular"
+      ],
+      "status": "satisfied"
+    },
+    "samples": [
+      {
+        "download_bytes": 0,
+        "ms": 0.00390625,
+        "path": "none",
+        "peers": 0,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 0
+      },
+      {
+        "download_bytes": 636,
+        "ms": 1056.111083984375,
+        "path": "wifi",
+        "peers": 2,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 548
+      },
+      {
+        "download_bytes": 1028,
+        "ms": 2086.487060546875,
+        "path": "wifi",
+        "peers": 2,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 891
+      },
+      {
+        "download_bytes": 1371,
+        "ms": 3152.52392578125,
+        "path": "wifi",
+        "peers": 2,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 1234
+      },
+      {
+        "download_bytes": 1714,
+        "ms": 4176.738037109375,
+        "path": "wifi",
+        "peers": 2,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 1577
+      },
+      {
+        "download_bytes": 2367,
+        "ms": 5179.647216796875,
+        "path": "wifi",
+        "peers": 2,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 2295
+      },
+      {
+        "download_bytes": 3012,
+        "ms": 6240.378173828125,
+        "path": "wifi",
+        "peers": 2,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 2838
+      },
+      {
+        "download_bytes": 6952,
+        "ms": 7249.923828125,
+        "path": "wifi",
+        "peers": 2,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 3747
+      },
+      {
+        "download_bytes": 27254,
+        "ms": 8282.366943359375,
+        "path": "wifi",
+        "peers": 3,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 4582
+      },
+      {
+        "download_bytes": 27940,
+        "ms": 9343.936279296875,
+        "path": "wifi",
+        "peers": 3,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 5268
+      },
+      {
+        "download_bytes": 28940,
+        "ms": 10347.575927734375,
+        "path": "wifi",
+        "peers": 3,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 6231
+      },
+      {
+        "download_bytes": 29920,
+        "ms": 11358.60302734375,
+        "path": "wifi",
+        "peers": 3,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 7215
+      },
+      {
+        "download_bytes": 30985,
+        "ms": 12363.8779296875,
+        "path": "wifi",
+        "peers": 3,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 8380
+      },
+      {
+        "download_bytes": 32172,
+        "ms": 13367.210205078125,
+        "path": "wifi",
+        "peers": 3,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 9614
+      },
+      {
+        "download_bytes": 97141,
+        "ms": 14371.30078125,
+        "path": "wifi",
+        "peers": 3,
+        "phase": "wifi",
+        "state": "running",
+        "upload_bytes": 13078
+      },
+      {
+        "download_bytes": 237987,
+        "ms": 15381.294921875,
+        "path": "wifi",
+        "peers": 6,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 16574
+      },
+      {
+        "download_bytes": 240371,
+        "ms": 16382.953857421875,
+        "path": "wifi",
+        "peers": 6,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 19452
+      },
+      {
+        "download_bytes": 243112,
+        "ms": 17385.637939453125,
+        "path": "wifi",
+        "peers": 6,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 23695
+      },
+      {
+        "download_bytes": 265911,
+        "ms": 18388.12890625,
+        "path": "wifi",
+        "peers": 6,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 26409
+      },
+      {
+        "download_bytes": 336500,
+        "ms": 19429.369140625,
+        "path": "wifi",
+        "peers": 10,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 31397
+      },
+      {
+        "download_bytes": 351872,
+        "ms": 20432.691162109375,
+        "path": "wifi",
+        "peers": 10,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 34564
+      },
+      {
+        "download_bytes": 355057,
+        "ms": 21435.3349609375,
+        "path": "wifi",
+        "peers": 10,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 37753
+      },
+      {
+        "download_bytes": 359003,
+        "ms": 22437.241943359375,
+        "path": "wifi",
+        "peers": 10,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 41943
+      },
+      {
+        "download_bytes": 1166695,
+        "ms": 23439.080078125,
+        "path": "wifi",
+        "peers": 11,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 50615
+      },
+      {
+        "download_bytes": 1543362,
+        "ms": 24440.448974609375,
+        "path": "wifi",
+        "peers": 11,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 57421
+      },
+      {
+        "download_bytes": 1548488,
+        "ms": 25458.419921875,
+        "path": "wifi",
+        "peers": 11,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 62866
+      },
+      {
+        "download_bytes": 1559762,
+        "ms": 26461.384033203125,
+        "path": "wifi",
+        "peers": 12,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 68010
+      },
+      {
+        "download_bytes": 1615633,
+        "ms": 27463.06787109375,
+        "path": "wifi",
+        "peers": 12,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 72895
+      },
+      {
+        "download_bytes": 1661311,
+        "ms": 28466.5009765625,
+        "path": "wifi",
+        "peers": 13,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 77986
+      },
+      {
+        "download_bytes": 1667273,
+        "ms": 29476.2470703125,
+        "path": "wifi",
+        "peers": 13,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 84135
+      },
+      {
+        "download_bytes": 1672106,
+        "ms": 30489.6982421875,
+        "path": "wifi",
+        "peers": 13,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 88821
+      },
+      {
+        "download_bytes": 1676099,
+        "ms": 31512.86376953125,
+        "path": "wifi",
+        "peers": 13,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 93310
+      },
+      {
+        "download_bytes": 1680076,
+        "ms": 32573.8818359375,
+        "path": "wifi",
+        "peers": 13,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 97587
+      },
+      {
+        "download_bytes": 1684492,
+        "ms": 33617.044189453125,
+        "path": "wifi",
+        "peers": 13,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 102247
+      },
+      {
+        "download_bytes": 1689656,
+        "ms": 34646.537109375,
+        "path": "wifi",
+        "peers": 13,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 107398
+      },
+      {
+        "download_bytes": 1694408,
+        "ms": 35651.14697265625,
+        "path": "wifi",
+        "peers": 13,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 111827
+      },
+      {
+        "download_bytes": 1698523,
+        "ms": 36654.531005859375,
+        "path": "wifi",
+        "peers": 13,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 115816
+      },
+      {
+        "download_bytes": 1702772,
+        "ms": 37682.48486328125,
+        "path": "wifi",
+        "peers": 13,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 119898
+      },
+      {
+        "download_bytes": 1707128,
+        "ms": 38749.529052734375,
+        "path": "wifi",
+        "peers": 13,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 124495
+      },
+      {
+        "download_bytes": 1712727,
+        "ms": 39781.86376953125,
+        "path": "wifi",
+        "peers": 13,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 130152
+      },
+      {
+        "download_bytes": 1785966,
+        "ms": 40786.77294921875,
+        "path": "wifi",
+        "peers": 14,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 136023
+      },
+      {
+        "download_bytes": 1789969,
+        "ms": 41789.105224609375,
+        "path": "wifi",
+        "peers": 14,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 140295
+      },
+      {
+        "download_bytes": 1793757,
+        "ms": 42791.256103515625,
+        "path": "wifi",
+        "peers": 14,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 144485
+      },
+      {
+        "download_bytes": 1797937,
+        "ms": 43793.9150390625,
+        "path": "wifi",
+        "peers": 14,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 148880
+      },
+      {
+        "download_bytes": 1802923,
+        "ms": 44796.06591796875,
+        "path": "wifi",
+        "peers": 14,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 153768
+      },
+      {
+        "download_bytes": 1807078,
+        "ms": 45798.847900390625,
+        "path": "wifi",
+        "peers": 14,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 157684
+      },
+      {
+        "download_bytes": 1810980,
+        "ms": 46800.64501953125,
+        "path": "wifi",
+        "peers": 14,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 162681
+      },
+      {
+        "download_bytes": 1814964,
+        "ms": 47802.4970703125,
+        "path": "wifi",
+        "peers": 14,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 166804
+      },
+      {
+        "download_bytes": 1820018,
+        "ms": 48805.495849609375,
+        "path": "wifi",
+        "peers": 14,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 172462
+      },
+      {
+        "download_bytes": 1824993,
+        "ms": 49808.783935546875,
+        "path": "wifi",
+        "peers": 14,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 177416
+      },
+      {
+        "download_bytes": 1830326,
+        "ms": 50811.743896484375,
+        "path": "wifi",
+        "peers": 14,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 182419
+      },
+      {
+        "download_bytes": 1834565,
+        "ms": 51814.598876953125,
+        "path": "wifi",
+        "peers": 14,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 186976
+      },
+      {
+        "download_bytes": 2422601,
+        "ms": 52871.30908203125,
+        "path": "wifi",
+        "peers": 15,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 194730
+      },
+      {
+        "download_bytes": 3170201,
+        "ms": 53924.076904296875,
+        "path": "wifi",
+        "peers": 15,
+        "phase": "waiting_for_cellular",
+        "state": "running",
+        "upload_bytes": 204346
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 54930.318115234375,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 209621
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 55959.47607421875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 211405
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 56962.608154296875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 212105
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 57965.763916015625,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 213265
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 58994.028076171875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 214328
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 59996.02197265625,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 214540
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 61009.65625,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 214864
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 62012.60595703125,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 215841
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 63015.638916015625,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 216869
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 64018.2001953125,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 217285
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 65022.06005859375,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 217497
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 66081.99389648438,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 217550
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 67120.44116210938,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 217798
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 68125.2548828125,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 218063
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 69128.61303710938,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 218381
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 70133.6669921875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 219648
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 71134.78491210938,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 219950
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 72139.86694335938,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 220003
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 73142.52490234375,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 220482
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 74147.69091796875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 220800
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 75174.34814453125,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 221012
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 76226.48486328125,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 221012
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 77252.15698242188,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 221118
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 78310.85888671875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 221277
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 79371,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 221595
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 80424.52783203125,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 221936
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 81464.2099609375,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 223079
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 82468.01391601562,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 223132
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 83469.13208007812,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 223291
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 84506.57299804688,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 223662
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 85571.7861328125,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 223662
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 86586.88403320312,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 224811
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 87607.57299804688,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 224966
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 88673.34912109375,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 225243
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 89709.14916992188,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 225296
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 90775.04614257812,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 225402
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 91841.8671875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 225722
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 92848.36401367188,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 225881
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 93915.4609375,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226199
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 94962.7529296875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226529
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 95965.751953125,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226529
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 96973.78076171875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226529
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 97974.48608398438,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226529
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 98978.92407226562,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226529
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 99980.04321289062,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226529
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 101028.88330078125,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226529
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 102046.4140625,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226529
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 103083.52807617188,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226529
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 104087.1630859375,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226529
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 105090.1171875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226840
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 106093.798828125,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226840
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 107096.57495117188,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226840
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 108099.09399414062,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226840
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 109101.32275390625,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226840
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 110104.580078125,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226946
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 111105.61791992188,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 226999
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 112107.58984375,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 227052
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 113127.94384765625,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 227264
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 114130.18920898438,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 227582
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 115188.93701171875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "cellular",
+        "state": "running",
+        "upload_bytes": 227582
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 116234.7939453125,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 227582
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 117295.17602539062,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 227582
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 118307.68603515625,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229018
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 119309.59594726562,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229018
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 120325.92602539062,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229018
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 121389.88403320312,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229116
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 122448.9130859375,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229116
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 123456.07104492188,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229719
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 124519.98583984375,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229719
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 125560.73999023438,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229719
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 126587.046875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229719
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 127650.81616210938,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229772
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 128668.90991210938,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 129736.05419921875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 130780.39184570312,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 131847.46801757812,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 132907.77612304688,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 133914.75512695312,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 134929.01708984375,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 135939.72802734375,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 136943.26000976562,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 137944.2021484375,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 139009.0888671875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 140015.59716796875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 141016.794921875,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 142018.04516601562,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 143057.53393554688,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235446,
+        "ms": 144061.16015625,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 229870
+      },
+      {
+        "download_bytes": 3235674,
+        "ms": 145126.80395507812,
+        "path": "cellular",
+        "peers": 16,
+        "phase": "waiting_for_wifi",
+        "state": "running",
+        "upload_bytes": 230200
+      },
+      {
+        "download_bytes": 3235674,
+        "ms": 146134.38598632812,
+        "path": "wifi",
+        "peers": 16,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 230200
+      },
+      {
+        "download_bytes": 3235674,
+        "ms": 147164.57006835938,
+        "path": "wifi",
+        "peers": 16,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 230200
+      },
+      {
+        "download_bytes": 3235902,
+        "ms": 148204.55712890625,
+        "path": "wifi",
+        "peers": 16,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 230477
+      },
+      {
+        "download_bytes": 3246117,
+        "ms": 149205.31494140625,
+        "path": "wifi",
+        "peers": 16,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 243893
+      },
+      {
+        "download_bytes": 3305056,
+        "ms": 150211.32885742188,
+        "path": "wifi",
+        "peers": 18,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 256607
+      },
+      {
+        "download_bytes": 3413719,
+        "ms": 151223.92700195312,
+        "path": "wifi",
+        "peers": 21,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 273206
+      },
+      {
+        "download_bytes": 3859795,
+        "ms": 152283.90893554688,
+        "path": "wifi",
+        "peers": 22,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 287500
+      },
+      {
+        "download_bytes": 3960680,
+        "ms": 153314.88208007812,
+        "path": "wifi",
+        "peers": 22,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 646623
+      },
+      {
+        "download_bytes": 3971544,
+        "ms": 154379.14697265625,
+        "path": "wifi",
+        "peers": 22,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 728926
+      },
+      {
+        "download_bytes": 3985349,
+        "ms": 155384.02905273438,
+        "path": "wifi",
+        "peers": 23,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 791459
+      },
+      {
+        "download_bytes": 4019493,
+        "ms": 156386.97216796875,
+        "path": "wifi",
+        "peers": 23,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 823743
+      },
+      {
+        "download_bytes": 4028195,
+        "ms": 157390.1708984375,
+        "path": "wifi",
+        "peers": 23,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 832969
+      },
+      {
+        "download_bytes": 4071495,
+        "ms": 158393.90112304688,
+        "path": "wifi",
+        "peers": 24,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 841044
+      },
+      {
+        "download_bytes": 4080170,
+        "ms": 159409.65185546875,
+        "path": "wifi",
+        "peers": 24,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 850522
+      },
+      {
+        "download_bytes": 4557662,
+        "ms": 160426.23583984375,
+        "path": "wifi",
+        "peers": 24,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 892401
+      },
+      {
+        "download_bytes": 5503303,
+        "ms": 161428.10888671875,
+        "path": "wifi",
+        "peers": 24,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 3057960
+      },
+      {
+        "download_bytes": 6348087,
+        "ms": 162432.21801757812,
+        "path": "wifi",
+        "peers": 25,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 3603534
+      },
+      {
+        "download_bytes": 6362659,
+        "ms": 163453.73974609375,
+        "path": "wifi",
+        "peers": 25,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 3683676
+      },
+      {
+        "download_bytes": 6389718,
+        "ms": 164512.158203125,
+        "path": "wifi",
+        "peers": 26,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 3778038
+      },
+      {
+        "download_bytes": 6399392,
+        "ms": 165516.080078125,
+        "path": "wifi",
+        "peers": 26,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 3885269
+      },
+      {
+        "download_bytes": 6410605,
+        "ms": 166551.16015625,
+        "path": "wifi",
+        "peers": 26,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 4139248
+      },
+      {
+        "download_bytes": 6423351,
+        "ms": 167584.85205078125,
+        "path": "wifi",
+        "peers": 26,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 4511790
+      },
+      {
+        "download_bytes": 6433810,
+        "ms": 168644.31689453125,
+        "path": "wifi",
+        "peers": 26,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 4603113
+      },
+      {
+        "download_bytes": 6442716,
+        "ms": 169685.73901367188,
+        "path": "wifi",
+        "peers": 26,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 4672228
+      },
+      {
+        "download_bytes": 6451043,
+        "ms": 170699.291015625,
+        "path": "wifi",
+        "peers": 26,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 4733806
+      },
+      {
+        "download_bytes": 6459295,
+        "ms": 171702.44091796875,
+        "path": "wifi",
+        "peers": 26,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 4765380
+      },
+      {
+        "download_bytes": 6467681,
+        "ms": 172705.2958984375,
+        "path": "wifi",
+        "peers": 26,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 4794071
+      },
+      {
+        "download_bytes": 6476182,
+        "ms": 173706.4091796875,
+        "path": "wifi",
+        "peers": 26,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 4802793
+      },
+      {
+        "download_bytes": 6484728,
+        "ms": 174711.31103515625,
+        "path": "wifi",
+        "peers": 26,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 4811636
+      },
+      {
+        "download_bytes": 6492272,
+        "ms": 175712.46606445312,
+        "path": "wifi",
+        "peers": 26,
+        "phase": "wifi_again",
+        "state": "running",
+        "upload_bytes": 4819506
+      }
+    ],
+    "traffic": {
+      "download_bytes": 6499831,
+      "upload_bytes": 4827238
+    }
+  },
+  "scenario": "transition",
+  "started_at_ms": 1790722371012.192
+}

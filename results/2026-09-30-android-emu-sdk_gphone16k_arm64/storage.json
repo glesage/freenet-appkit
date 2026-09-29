@@ -1,0 +1,71 @@
+{
+  "build": {
+    "available_backends": [
+      "cranelift",
+      "pulley"
+    ],
+    "core_revision": "1d13bf5d43453d8fa0e105928c9fc67a20a4f878+dirty",
+    "core_version": "0.2.139",
+    "default_backend": "cranelift",
+    "mobile_version": "0.1.0",
+    "profile": "release",
+    "stdlib_version": "0.12.1",
+    "target": "aarch64-linux-android",
+    "uniffi_version": "0.32.2",
+    "wasmtime_version": "47.0.3"
+  },
+  "device": {
+    "abis": [
+      "arm64-v8a"
+    ],
+    "cpu_count": 4,
+    "model": "Google sdk_gphone16k_arm64",
+    "name": "emu64a16k",
+    "os": "Android 17 (API 37)",
+    "page_size": 16384,
+    "physical_memory_bytes": 4159471616,
+    "simulator": true
+  },
+  "finished_at_ms": 1790719168995,
+  "harness": {
+    "cold": false,
+    "config": "Release",
+    "during": null,
+    "fresh_install": false,
+    "package": {
+      "apk_bytes": {
+        "base.apk": 42892167
+      },
+      "apk_file_bytes": 42892167,
+      "config": "Release"
+    },
+    "profile": "local"
+  },
+  "host": {
+    "actions": [],
+    "am_start": {
+      "TotalTime": "940",
+      "WaitTime": "964"
+    },
+    "wall_s": 1.6290497779846191
+  },
+  "metrics": {
+    "footprint_bytes": 59691008,
+    "resident_bytes": 175800320,
+    "resident_peak_bytes": 175800320,
+    "system_cpu_ms": 309.052,
+    "threads": 32,
+    "user_cpu_ms": 282.677,
+    "virtual_bytes": 15835381760
+  },
+  "platform": "android",
+  "profile": "local",
+  "result": {
+    "cache_bytes": 15140646,
+    "config_bytes": 5086,
+    "data_bytes": 17182181,
+    "logs_bytes": 5730938
+  },
+  "scenario": "storage",
+  "started_at_ms": 1790719168980
+}
