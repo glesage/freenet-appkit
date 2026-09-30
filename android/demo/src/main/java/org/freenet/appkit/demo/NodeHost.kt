@@ -69,6 +69,10 @@ object NodeHost {
         stateListeners.add(listener)
     }
 
+    fun removeOnChange(listener: () -> Unit) {
+        stateListeners.remove(listener)
+    }
+
     private fun changed() = stateListeners.forEach { it() }
 
     private fun currentNode(): MobileNode {

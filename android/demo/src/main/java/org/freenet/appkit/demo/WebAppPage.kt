@@ -15,6 +15,7 @@ import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -24,31 +25,43 @@ import org.json.JSONObject
 /**
  * River or Atlas, served by the embedded node. The shell page gets a
  * `Notification` that shows in-app alerts while the app is open.
+ *
+ * Each node session serves the app at a new URL. When a new session starts
+ * while a page is on screen, the old page stays, dimmed and under a
+ * "Reconnecting" pill, until the new page has drawn behind it.
  */
 @SuppressLint("SetJavaScriptEnabled")
 class WebAppPage(private val context: Context, val app: DemoWebApp) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     val view = FrameLayout(context)
     private val loading = LoadingView(context)
+    private val reconnect = ReconnectOverlay(context)
     private var webView: WebView? = null
-    private var loadedGeneration = -1
+    /** The page on screen while [webView] loads for a new session. */
+    private var previous: WebView? = null
+    /** The node session [webView] was loaded for. */
+    private var loadedSession: ULong? = null
+    private var job: Job? = null
     /** Set from the WebView's network thread when the app frame is requested. */
     @Volatile private var appFrameSeen = false
     private var shown = false
+    /** The last load failed; its error stays until "Try again". */
+    private var failed = false
     private val fallback = Runnable { reveal() }
     /** Called when the page's back history changes. */
     var onHistoryChanged: (() -> Unit)? = null
 
     init {
         view.addView(loading.view, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
+        view.addView(reconnect.view, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
         loading.loading(LoadMessages.STARTING)
     }
 
-    /** Prepare and load the app for the current node session. */
+    /** Load the app for the current node session, unless it already is. */
     fun show() {
-        if (loadedGeneration == NodeHost.sessionGeneration && webView != null) return
-        loadedGeneration = NodeHost.sessionGeneration
-        scope.launch { prepare() }
+        if (job?.isActive == true) return
+        if (webView != null && loadedSession != null && loadedSession == NodeHost.info?.session) return
+        job = scope.launch { prepare() }
     }
 
     /** Whether the page has somewhere to go back to. */
@@ -59,19 +72,19 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
     }
 
     private fun retry() {
-        loadedGeneration = NodeHost.sessionGeneration
-        scope.launch { prepare() }
+        job?.cancel()
+        job = scope.launch { prepare() }
     }
 
     private suspend fun prepare() {
-        showStatus(LoadMessages.STARTING)
-        if (NodeHost.start() == null) {
-            return showError(LoadMessages.NODE_FAILED, NodeHost.lastError)
-        }
-        showStatus(LoadMessages.CONNECTING)
+        // A page that has drawn stays on screen while the node reconnects.
+        val reconnecting = shown && !failed && webView != null && previous == null
+        if (reconnecting) keepForReconnect() else showStatus(LoadMessages.STARTING)
+        val info = NodeHost.start() ?: return showError(LoadMessages.NODE_FAILED, NodeHost.lastError)
+        if (!reconnecting) showStatus(LoadMessages.CONNECTING)
         val slow = scope.launch {
             delay(LoadMessages.SLOW_CONNECT_MS)
-            loading.loading(LoadMessages.CONNECTING_SLOW)
+            if (!reconnecting) loading.loading(LoadMessages.CONNECTING_SLOW)
         }
         val connected = NodeHost.waitForPeers()
         slow.cancel()
@@ -79,7 +92,26 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
             return showError(LoadMessages.NO_PEER, NodeHost.lastError)
         }
         val url = NodeHost.webUrl(app) ?: return showError(LoadMessages.NODE_FAILED, "The node is not running.")
+        loadedSession = info.session
         load(url)
+    }
+
+    /** Dim the page on screen, block its taps and show the pill. */
+    private fun keepForReconnect() {
+        val web = webView ?: return
+        view.removeCallbacks(fallback)
+        previous = web
+        webView = null
+        web.alpha = 0.6f
+        loading.hide()
+        reconnect.show()
+        onHistoryChanged?.invoke()
+    }
+
+    private fun removePrevious() {
+        previous?.let { view.removeView(it); it.destroy() }
+        previous = null
+        reconnect.hide()
     }
 
     private fun removeWebView() {
@@ -90,11 +122,13 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
     }
 
     private fun showStatus(text: String) {
+        removePrevious()
         removeWebView()
         loading.loading(text)
     }
 
     private fun showError(text: String, detail: String?) {
+        removePrevious()
         removeWebView()
         loading.failed(text, detail) { retry() }
     }
@@ -104,22 +138,27 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
         view.removeCallbacks(fallback)
         if (shown) return
         shown = true
+        removePrevious()
         loading.hide()
+        onHistoryChanged?.invoke()
     }
 
     private fun appFrameLoaded() {
         if (shown) return
-        loading.loading(LoadMessages.opening(app))
+        if (previous == null) loading.loading(LoadMessages.opening(app))
         view.removeCallbacks(fallback)
         view.postDelayed(fallback, PAINT_FALLBACK_MS)
     }
 
     private fun loadFailed(message: String) {
         view.removeCallbacks(fallback)
+        removePrevious()
         shown = true
+        failed = true
         loading.failed(LoadMessages.pageFailed(app), message) { retry() }
     }
 
+    /** Load [url] into a new web view, behind the page on screen if there is one. */
     private fun load(url: String) {
         removeWebView()
         val origin = originOf(url)
@@ -135,14 +174,17 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
         }
         if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
             WebViewCompat.addWebMessageListener(web, "appkitAlerts", setOf(origin)) { _, message, _, _, _ ->
-                message.data?.let { handleAlert(web, JSONObject(it)) }
+                if (webView === web) message.data?.let { handleAlert(web, JSONObject(it)) }
             }
             WebViewCompat.addWebMessageListener(web, "appkitFrames", setOf("*")) { _, message, _, _, _ ->
+                if (webView !== web) return@addWebMessageListener
                 val body = message.data?.let { JSONObject(it) } ?: JSONObject()
                 when (body.optString("kind")) {
                     // The DOM has content; reveal once the view has drawn it.
                     "painted" -> web.postVisualStateCallback(0, object : WebView.VisualStateCallback() {
-                        override fun onComplete(requestId: Long) = reveal()
+                        override fun onComplete(requestId: Long) {
+                            if (webView === web) reveal()
+                        }
                     })
                     // The app frame's history moves without a main-frame visit.
                     "history" -> onHistoryChanged?.invoke()
@@ -163,7 +205,7 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
             }
 
             override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
-                if (request.isForMainFrame) loadFailed(error.description.toString())
+                if (request.isForMainFrame && view === webView) loadFailed(error.description.toString())
             }
 
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
@@ -196,7 +238,8 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
         view.addView(web, 0, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
         appFrameSeen = false
         shown = false
-        loading.loading(LoadMessages.downloading(app))
+        failed = false
+        if (previous == null) loading.loading(LoadMessages.downloading(app))
         webView = web
         web.loadUrl(url)
     }

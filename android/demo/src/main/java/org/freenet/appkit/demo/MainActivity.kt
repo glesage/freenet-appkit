@@ -31,6 +31,14 @@ class MainActivity : Activity() {
     private var current: WebAppPage? = null
     /** Goes back in the page. Registered only while the page can go back. */
     private var backCallback: Any? = null
+    private var sessionGeneration = 0
+    /** A new node session serves the apps at new URLs: reload the tab on screen. */
+    private val sessionListener: () -> Unit = {
+        if (NodeHost.sessionGeneration != sessionGeneration) {
+            sessionGeneration = NodeHost.sessionGeneration
+            current?.show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +52,7 @@ class MainActivity : Activity() {
         setContentView(root)
         SystemBars.apply(this, root)
         NodeHost.alertPresenter = { alert -> showAlert(alert) }
+        NodeHost.onChange(sessionListener)
         content.post { select(Tab.RIVER) }
     }
 
@@ -56,6 +65,12 @@ class MainActivity : Activity() {
     override fun onStop() {
         super.onStop()
         NodeHost.onBackground()
+    }
+
+    override fun onDestroy() {
+        NodeHost.removeOnChange(sessionListener)
+        NodeHost.alertPresenter = null
+        super.onDestroy()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
