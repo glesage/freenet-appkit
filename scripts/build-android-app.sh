@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the Android demo APK: harness/build-android-app.sh [Debug|Release]
+# Build the Android APKs: scripts/build-android-app.sh [Debug|Release]
 set -euo pipefail
 cd "$(dirname "$0")/../android"
 config="${1:-Release}"

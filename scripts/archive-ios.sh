@@ -8,9 +8,8 @@
 # must go up on every upload. Build the XCFramework first with
 # scripts/build-ios.sh (device and simulator).
 #
-# Output: build/ios/AppKitDemo.xcarchive. The export writes its logs to
-# build/ios/export/ and, with `destination` = `upload` in
-# ios/ExportOptions.plist, sends the build to App Store Connect.
+# Output: build/ios/AppKitDemo.xcarchive and build/ios/export/AppKitDemo.ipa,
+# ready to upload with Xcode Organizer or `xcrun altool --upload-app`.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 : "${DEVELOPMENT_TEAM:?set DEVELOPMENT_TEAM to the Apple team ID}"

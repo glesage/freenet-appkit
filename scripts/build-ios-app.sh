@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Build the iOS demo app for the simulator (default) or a device.
-#   harness/build-ios-app.sh [Debug|Release] [simulator|device]
+# Build the iOS app for the simulator (default) or a device.
+#   scripts/build-ios-app.sh [Debug|Release] [simulator|device]
 # Device builds need a signing team: DEVELOPMENT_TEAM=<team id>. Simulator
 # builds are arm64 only (Apple silicon Macs), matching the XCFramework.
 set -euo pipefail
