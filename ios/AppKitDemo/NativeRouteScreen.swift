@@ -13,8 +13,14 @@ struct NativeRouteScreen: View {
                 Section {
                     Text("Swift calls the node directly through the SDK: put, get, update and subscribe on a local fixture node, compared with the desktop values.")
                         .font(.callout).foregroundStyle(.secondary)
-                    Button(running ? "Running…" : "Run the native route") { Task { await run() } }
+                    Button("Run the native route") { Task { await run() } }
                         .disabled(running)
+                    if running {
+                        HStack(spacing: 8) {
+                            ProgressView()
+                            Text("Storing and reading contracts on the fixture node").foregroundStyle(.secondary)
+                        }
+                    }
                 }
                 if let error {
                     Section("Error") { Text(error).foregroundStyle(.red) }

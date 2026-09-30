@@ -26,10 +26,22 @@ final class WebTimeline: ObservableObject {
     }
 }
 
+/// How far the web app has got once the node serves its page.
+enum PageState: Equatable {
+    /// The node is fetching the website container.
+    case fetching
+    /// The app's frame is loading its code.
+    case starting
+    /// The app has drawn something, or the node showed its own page.
+    case shown
+    case failed(String)
+}
+
 @MainActor
 final class WebAppModel: ObservableObject {
     @Published var url: URL?
     @Published var phase = "Starting the node"
+    @Published var page: PageState = .fetching
 
     func prepare(app: DemoWebApp, host: NodeHost) async {
         let timeline = WebTimeline.shared
@@ -59,8 +71,22 @@ final class WebAppModel: ObservableObject {
                 return
             }
         }
+        page = .fetching
         url = host.webURL(for: app)
         timeline.mark(app, "load_start")
+    }
+
+    func pageText(app: DemoWebApp, host: NodeHost) -> String {
+        switch page {
+        case .fetching:
+            return host.profile == .local ? "Opening \(app.name)" : "Fetching \(app.name) from the network"
+        case .starting:
+            return "Starting \(app.name)"
+        case .shown:
+            return ""
+        case .failed(let message):
+            return "\(app.name) did not load.\n\(message)"
+        }
     }
 }
 
@@ -70,23 +96,46 @@ struct WebAppScreen: View {
     @StateObject private var model = WebAppModel()
 
     var body: some View {
-        Group {
+        ZStack {
             if let url = model.url {
-                WebAppView(app: app, url: url, generation: host.sessionGeneration)
+                WebAppView(app: app, url: url, generation: host.sessionGeneration, model: model)
                     .ignoresSafeArea(edges: .bottom)
-            } else {
-                VStack(spacing: 12) {
-                    ProgressView()
-                    Text(model.phase)
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(.secondary)
-                        .padding(.horizontal)
+                if model.page != .shown {
+                    LoadingView(
+                        text: model.pageText(app: app, host: host),
+                        failed: model.page != .fetching && model.page != .starting,
+                        retry: { Task { await model.prepare(app: app, host: host) } })
                 }
+            } else {
+                LoadingView(text: model.phase, failed: false, retry: nil)
             }
         }
         .task(id: host.sessionGeneration) {
             await model.prepare(app: app, host: host)
         }
+    }
+}
+
+/// A spinner and a line of text over the whole screen, or the error and a
+/// retry button once loading failed.
+struct LoadingView: View {
+    let text: String
+    let failed: Bool
+    let retry: (() -> Void)?
+
+    var body: some View {
+        VStack(spacing: 12) {
+            if !failed { ProgressView() }
+            Text(text)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.secondary)
+                .padding(.horizontal)
+            if failed, let retry {
+                Button("Try again", action: retry).buttonStyle(.bordered)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(uiColor: .systemBackground))
     }
 }
 
@@ -97,10 +146,11 @@ struct WebAppView: UIViewRepresentable {
     let app: DemoWebApp
     let url: URL
     let generation: Int
+    let model: WebAppModel
     @EnvironmentObject var host: NodeHost
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(app: app, host: host)
+        Coordinator(app: app, host: host, model: model)
     }
 
     func makeUIView(context: Context) -> WKWebView {
@@ -130,6 +180,7 @@ struct WebAppView: UIViewRepresentable {
     func updateUIView(_ webView: WKWebView, context: Context) {
         if context.coordinator.loaded.url != url || context.coordinator.loaded.generation != generation {
             context.coordinator.loaded = (url, generation)
+            context.coordinator.startLoad()
             webView.load(URLRequest(url: url))
         }
     }
@@ -142,9 +193,16 @@ struct WebAppView: UIViewRepresentable {
     final class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
         let app: DemoWebApp
         let host: NodeHost
+        weak var model: WebAppModel?
         weak var webView: WKWebView?
         var loaded: (url: URL?, generation: Int) = (nil, -1)
         private var titleObservation: NSKeyValueObservation?
+        private var appFrameSeen = false
+        private var fallback: Task<Void, Never>?
+
+        /// Longest the loading view stays once the app frame has loaded, for
+        /// apps that draw nothing the paint check sees.
+        static let paintFallbackSeconds: UInt64 = 15
 
         /// WebKit zooms in when a text field with a font under 16 px takes
         /// focus, and stays zoomed. A maximum scale of 1 on the shell page
@@ -162,20 +220,61 @@ struct WebAppView: UIViewRepresentable {
         """
 
         /// Every frame reports when its document is ready, so the harness can
-        /// time the shell page and the app frame separately.
+        /// time the shell page and the app frame separately. The app frame
+        /// also reports when it first shows text or media, which ends the
+        /// loading view.
         static let frameReportScript = """
         (function () {
-          try {
-            window.webkit.messageHandlers.appkitFrames.postMessage({
-              top: window === window.top, href: String(location.href), title: document.title
-            });
-          } catch (e) {}
+          function post(msg) {
+            try { window.webkit.messageHandlers.appkitFrames.postMessage(msg); } catch (e) {}
+          }
+          var top = window === window.top;
+          post({ kind: 'frame', top: top, href: String(location.href) });
+          if (top) { return; }
+          function painted() {
+            var body = document.body;
+            if (!body) { return false; }
+            if (body.innerText && body.innerText.trim().length > 0) { return true; }
+            var media = body.querySelectorAll('img, svg, canvas, video, input, button');
+            for (var i = 0; i < media.length; i++) {
+              var r = media[i].getBoundingClientRect();
+              if (r.width > 0 && r.height > 0) { return true; }
+            }
+            return false;
+          }
+          var done = false, queued = false, observer;
+          function check() {
+            queued = false;
+            if (done || !painted()) { return; }
+            done = true;
+            if (observer) { observer.disconnect(); }
+            post({ kind: 'painted', top: false });
+          }
+          observer = new MutationObserver(function () {
+            if (!queued) { queued = true; requestAnimationFrame(check); }
+          });
+          observer.observe(document, { childList: true, subtree: true, characterData: true });
+          check();
         })();
         """
 
-        init(app: DemoWebApp, host: NodeHost) {
+        init(app: DemoWebApp, host: NodeHost, model: WebAppModel) {
             self.app = app
             self.host = host
+            self.model = model
+        }
+
+        func startLoad() {
+            appFrameSeen = false
+            fallback?.cancel()
+            model?.page = .fetching
+        }
+
+        private func show() {
+            fallback?.cancel()
+            guard let model, model.page != .shown else { return }
+            if case .failed = model.page { return }
+            model.page = .shown
         }
 
         func attach(_ webView: WKWebView) {
@@ -190,18 +289,39 @@ struct WebAppView: UIViewRepresentable {
             }
         }
 
+        /// The shell page and its frames have loaded. With no app frame, the
+        /// node answered with its own page, such as an error, so show it.
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             WebTimeline.shared.mark(app, "shell_loaded")
+            if !appFrameSeen { show() }
         }
 
         func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-            WebTimeline.shared.mark(app, "load_failed:\(error.localizedDescription)")
+            failed(error)
         }
 
         func webView(
             _ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error
         ) {
+            failed(error)
+        }
+
+        private func failed(_ error: Error) {
             WebTimeline.shared.mark(app, "load_failed:\(error.localizedDescription)")
+            if (error as NSError).code == NSURLErrorCancelled { return }
+            fallback?.cancel()
+            model?.page = .failed(error.localizedDescription)
+        }
+
+        private func appFrameLoaded() {
+            guard !appFrameSeen else { return }
+            appFrameSeen = true
+            if model?.page == .fetching { model?.page = .starting }
+            fallback = Task { [weak self] in
+                try? await Task.sleep(nanoseconds: Self.paintFallbackSeconds * 1_000_000_000)
+                guard !Task.isCancelled else { return }
+                self?.show()
+            }
         }
 
         /// Links that open a new window: loopback pages stay in this view,
@@ -227,7 +347,13 @@ struct WebAppView: UIViewRepresentable {
             switch message.name {
             case "appkitFrames":
                 let top = body["top"] as? Bool ?? false
-                WebTimeline.shared.mark(app, top ? "shell_dom" : "app_frame_dom")
+                if body["kind"] as? String == "painted" {
+                    WebTimeline.shared.mark(app, "app_painted")
+                    show()
+                } else {
+                    WebTimeline.shared.mark(app, top ? "shell_dom" : "app_frame_dom")
+                    if !top { appFrameLoaded() }
+                }
             case "appkitAlerts":
                 handleAlert(body)
             default:

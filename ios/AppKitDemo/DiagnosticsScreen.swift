@@ -50,11 +50,18 @@ struct DiagnosticsScreen: View {
                     Text("Message alerts appear only while this app is open. Messages that arrive while it is closed show up the next time you open it.")
                 }
                 Section("Checks") {
-                    Button("Wasm backend conformance") { run { await conformance() } }
-                    Button("Protocol fixtures") { run { await fixtures() } }
-                    Button("Process metrics") { run { processMetricsJson(metrics: processMetrics()) } }
-                        .disabled(busy)
-                    if busy { ProgressView() }
+                    Group {
+                        Button("Wasm backend conformance") { run { await conformance() } }
+                        Button("Protocol fixtures") { run { await fixtures() } }
+                        Button("Process metrics") { run { processMetricsJson(metrics: processMetrics()) } }
+                    }
+                    .disabled(busy)
+                    if busy {
+                        HStack(spacing: 8) {
+                            ProgressView()
+                            Text("Running").foregroundStyle(.secondary)
+                        }
+                    }
                     if !output.isEmpty {
                         Text(output).font(.caption.monospaced()).textSelection(.enabled)
                     }

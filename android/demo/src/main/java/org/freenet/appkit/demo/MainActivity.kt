@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.Spinner
 import android.widget.TextView
@@ -190,6 +191,16 @@ class MainActivity : Activity() {
         return ScrollView(this).apply { addView(list) } to list
     }
 
+    /** A small spinner and a label, hidden until work starts. */
+    private fun progressRow(label: String) = LinearLayout(this).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+        setPadding(0, 16, 0, 16)
+        visibility = View.GONE
+        addView(ProgressBar(this@MainActivity).apply { isIndeterminate = true }, LinearLayout.LayoutParams(64, 64))
+        addView(TextView(this@MainActivity).apply { text = label; setPadding(24, 0, 0, 0) })
+    }
+
     private fun monoText() = TextView(this).apply {
         typeface = Typeface.MONOSPACE
         textSize = 12f
@@ -202,12 +213,14 @@ class MainActivity : Activity() {
             text = "Kotlin calls the node directly through the SDK: put, get, update and subscribe on a local fixture node, compared with the desktop values."
         })
         nativeText = monoText()
+        val progress = progressRow("Storing and reading contracts on the fixture node")
         list.addView(Button(this).apply {
             text = "Run the native route"
             isAllCaps = false
             setOnClickListener {
                 isEnabled = false
-                nativeText.text = "Running…"
+                nativeText.text = ""
+                progress.visibility = View.VISIBLE
                 scope.launch {
                     nativeText.text = try {
                         val checks = NativeRoute.run(applicationContext, Harness.expectedFixtureValues(applicationContext))
@@ -222,10 +235,12 @@ class MainActivity : Activity() {
                     } catch (e: Exception) {
                         "error: ${e.message}"
                     }
+                    progress.visibility = View.GONE
                     isEnabled = true
                 }
             }
         })
+        list.addView(progress)
         list.addView(nativeText)
         return scroll
     }
@@ -265,12 +280,21 @@ class MainActivity : Activity() {
             setPadding(0, 24, 0, 24)
         })
         val output = monoText()
+        val progress = progressRow("Running")
+        val actions = mutableListOf<Button>()
         fun action(label: String, work: suspend () -> String) = Button(this).apply {
             text = label
             isAllCaps = false
+            actions += this
             setOnClickListener {
-                output.text = "Running…"
-                scope.launch { output.text = try { work() } catch (e: Exception) { "error: ${e.message}" } }
+                output.text = ""
+                progress.visibility = View.VISIBLE
+                actions.forEach { it.isEnabled = false }
+                scope.launch {
+                    output.text = try { work() } catch (e: Exception) { "error: ${e.message}" }
+                    progress.visibility = View.GONE
+                    actions.forEach { it.isEnabled = true }
+                }
             }
         }
         list.addView(action("Start the node") { NodeHost.start(); "started" })
@@ -288,6 +312,7 @@ class MainActivity : Activity() {
         })
         list.addView(action("Process metrics") { processMetricsJson(processMetrics()) })
         list.addView(action("Ask about alerts again") { NodeHost.alertGrant = AlertGrant.NOT_ASKED; "alerts reset" })
+        list.addView(progress)
         list.addView(output)
         return scroll
     }
