@@ -65,7 +65,8 @@ Core builds its DNS resolver and resolves every gateway hostname when it builds 
 
 - Evidence: `offline_start` in `results/2026-09-30-ios-device-iphone-13-mini-public`; the Android emulator runs.
 - Why it matters: Alice cannot open River on the subway and read "Skate club" from her phone's own copy.
-- Next: Core should start without gateways it cannot resolve and retry them, instead of failing the build. Until then 1.2 Embedded node and mobile SDK needs an offline start: serve the stored contracts and join once the network is back. For the Android panic, initialize `ndk-context` from the Kotlin library or drop hickory's `system-config` on Android.
+- Cause: `NodeConfig::new` resolves each gateway hostname once, with `parse_socket_addr(address).await?` (`crates/core/src/node.rs`), and stores only the resulting IP address and port. The `?` aborts the build on the first hostname that does not resolve. When the OS lookup fails, `parse_socket_addr` falls back to a hickory resolver, and building that resolver reads the OS DNS settings: offline, iOS has no DNS servers and Android has no Android context. The join loop after it already retries each gateway with exponential backoff (`operations/connect.rs`), so only this startup step needs the network.
+- Recommended fix (freenet-core): resolve gateways lazily. Keep a gateway that does not resolve as a hostname entry instead of failing the build, and resolve it inside the join loop before each connection attempt, reusing the loop's backoff. The node then starts offline, serves its stored contracts, and joins once the network is back. The same change should build the hickory fallback only when an online OS lookup has failed, and drop hickory's `system-config` on Android, which removes the panic.
 
 ## The node does not move to cellular on its own
 
