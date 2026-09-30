@@ -2,19 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- The node uses X25519, AES-GCM, ChaCha20, Ed25519 and BLAKE3 outside
-	     the OS. The export questions are answered in App Store Connect. -->
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<true/>
-	<!-- The embedded node serves web apps and its client API over plain HTTP
-	     and WebSocket on 127.0.0.1 only. -->
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-	<!-- Shown only when the node reaches a peer at a private address on the same Wi-Fi; loopback and the internet need no permission. -->
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>Lets AppKit connect to Freenet devices on your Wi-Fi network.</string>
 </dict>
 </plist>
