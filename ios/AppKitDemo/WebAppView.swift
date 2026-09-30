@@ -31,7 +31,9 @@ struct WebAppView: UIViewRepresentable {
         controller.add(context.coordinator, name: "appkitAlerts")
         controller.add(context.coordinator, name: "appkitFrames")
         let webView = WKWebView(frame: .zero, configuration: config)
+        #if DEBUG
         if #available(iOS 16.4, *) { webView.isInspectable = true }
+        #endif
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
         context.coordinator.attach(webView)

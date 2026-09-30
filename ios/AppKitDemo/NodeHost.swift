@@ -34,7 +34,9 @@ final class NodeHost: ObservableObject {
     }
 
     private(set) var node: MobileNode?
-    let directories: NodeDirectories
+    /// `nil` when the node's folders could not be created; `start()` then
+    /// reports the error instead of starting.
+    let directories: NodeDirectories?
     private var listener: HostListener?
     private let defaults = UserDefaults.standard
 
@@ -44,7 +46,7 @@ final class NodeHost: ObservableObject {
     }
 
     private init() {
-        directories = try! NodeDirectories.standard()
+        directories = try? NodeDirectories.standard()
         alertGrant = AlertGrant(rawValue: defaults.string(forKey: Keys.alerts) ?? "") ?? .notAsked
     }
 
@@ -52,7 +54,7 @@ final class NodeHost: ObservableObject {
 
     /// The node always joins the public network. It asks for the last
     /// WebSocket port again, so web app data stored per origin stays reachable.
-    private func settings() -> NodeSettings {
+    private func settings(in directories: NodeDirectories) -> NodeSettings {
         let lastPort = UInt16(clamping: defaults.integer(forKey: Keys.port))
         return directories.settings(mode: .network, preferredWsPort: lastPort == 0 ? nil : lastPort)
     }
@@ -62,8 +64,12 @@ final class NodeHost: ObservableObject {
     /// Start the node. Repeated calls return the running node.
     @discardableResult
     func start() async -> NodeInfo? {
+        guard let directories else {
+            lastError = "Freenet could not create its folders on this device."
+            return nil
+        }
         do {
-            let node = try currentNode()
+            let node = try currentNode(directories: directories)
             let info = try await node.start()
             self.info = info
             self.status = node.status()
@@ -87,9 +93,9 @@ final class NodeHost: ObservableObject {
         status = node.status()
     }
 
-    private func currentNode() throws -> MobileNode {
+    private func currentNode(directories: NodeDirectories) throws -> MobileNode {
         if let node { return node }
-        let node = try MobileNode(settings: settings())
+        let node = try MobileNode(settings: settings(in: directories))
         let listener = HostListener(host: self)
         node.setListener(listener: listener)
         self.listener = listener
