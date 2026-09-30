@@ -1,33 +1,48 @@
 package org.freenet.appkit.demo
 
 import android.app.Activity
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.window.OnBackInvokedCallback
+import android.window.OnBackInvokedDispatcher
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 
 /** The app shell: River and Atlas tabs over the embedded node. */
 class MainActivity : Activity() {
-    enum class Tab(val label: String) { RIVER("River"), ATLAS("Atlas") }
+    enum class Tab(val label: String, val icon: Int) {
+        RIVER("River", R.drawable.ic_tab_river),
+        ATLAS("Atlas", R.drawable.ic_tab_atlas),
+    }
 
+    private lateinit var root: View
     private lateinit var content: FrameLayout
     private lateinit var banner: TextView
-    private val tabButtons = mutableMapOf<Tab, Button>()
+    private lateinit var tabBar: TabBar
     private lateinit var river: WebAppPage
     private lateinit var atlas: WebAppPage
+    private var current: WebAppPage? = null
+    /** Goes back in the page. Registered only while the page can go back. */
+    private var backCallback: Any? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NodeHost.init(this)
         river = WebAppPage(this, DemoWebApp.RIVER)
         atlas = WebAppPage(this, DemoWebApp.ATLAS)
-        setContentView(buildShell())
+        river.onHistoryChanged = { updateBackCallback() }
+        atlas.onHistoryChanged = { updateBackCallback() }
+        actionBar?.hide()
+        root = buildShell()
+        setContentView(root)
+        SystemBars.apply(this, root)
         NodeHost.alertPresenter = { alert -> showAlert(alert) }
         content.post { select(Tab.RIVER) }
     }
@@ -43,21 +58,56 @@ class MainActivity : Activity() {
         NodeHost.onBackground()
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        SystemBars.updateIconColours(this, root)
+    }
+
     fun select(tab: Tab) {
         content.removeAllViews()
-        val view = when (tab) {
-            Tab.RIVER -> river.view.also { river.show() }
-            Tab.ATLAS -> atlas.view.also { atlas.show() }
+        val page = when (tab) {
+            Tab.RIVER -> river
+            Tab.ATLAS -> atlas
         }
-        (view.parent as? ViewGroup)?.removeView(view)
-        content.addView(view, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-        tabButtons.forEach { (t, button) -> button.alpha = if (t == tab) 1f else 0.55f }
+        current = page
+        page.show()
+        (page.view.parent as? ViewGroup)?.removeView(page.view)
+        content.addView(page.view, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        tabBar.select(tab)
+        updateBackCallback()
     }
+
+    // --- Back -----------------------------------------------------------
+    // Back goes back inside the current page while it has history. With
+    // nothing to go back to, the system's own back runs.
+
+    private fun updateBackCallback() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+        val wanted = current?.canGoBack() == true
+        val registered = backCallback as OnBackInvokedCallback?
+        if (wanted && registered == null) {
+            val callback = OnBackInvokedCallback { current?.goBack() }
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, callback)
+            backCallback = callback
+        } else if (!wanted && registered != null) {
+            onBackInvokedDispatcher.unregisterOnBackInvokedCallback(registered)
+            backCallback = null
+        }
+    }
+
+    /** Android 12L and earlier. */
+    @Deprecated("Android 13 and later use OnBackInvokedCallback")
+    override fun onBackPressed() {
+        val page = current
+        if (page != null && page.canGoBack()) page.goBack() else super.onBackPressed()
+    }
+
+    // --- Layout ---------------------------------------------------------
 
     private fun buildShell(): View {
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            fitsSystemWindows = true
+            setBackgroundColor(themeBackground())
         }
         val stack = FrameLayout(this)
         content = FrameLayout(this)
@@ -74,18 +124,16 @@ class MainActivity : Activity() {
             setMargins(24, 24, 24, 0)
         })
         root.addView(stack, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
-        val tabs = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-        for (tab in Tab.entries) {
-            val button = Button(this).apply {
-                text = tab.label
-                isAllCaps = false
-                setOnClickListener { select(tab) }
-            }
-            tabButtons[tab] = button
-            tabs.addView(button, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
-        }
-        root.addView(tabs)
+        tabBar = TabBar(this, Tab.entries) { select(it) }
+        root.addView(tabBar.view)
         return root
+    }
+
+    private fun themeBackground(): Int {
+        val attrs = obtainStyledAttributes(intArrayOf(android.R.attr.colorBackground))
+        val color = attrs.getColor(0, Color.WHITE)
+        attrs.recycle()
+        return color
     }
 
     private fun showAlert(alert: InAppAlert) {

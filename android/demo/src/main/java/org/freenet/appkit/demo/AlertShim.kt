@@ -52,8 +52,9 @@ object AlertShim {
     """.trimIndent()
 
     /**
-     * Every frame reports when its document is ready. The app frame also
-     * reports when it first shows text or media, which ends the loading view.
+     * Every frame reports when its document is ready and when its history
+     * changes. The app frame also reports when it first shows text or media,
+     * which ends the loading view.
      */
     const val FRAME_REPORT = """
         (function () {
@@ -62,6 +63,17 @@ object AlertShim {
           }
           var top = window === window.top;
           post({ kind: 'frame', top: top, href: String(location.href) });
+          function historyChanged() { post({ kind: 'history', top: top }); }
+          ['pushState', 'replaceState'].forEach(function (name) {
+            var original = history[name];
+            history[name] = function () {
+              var result = original.apply(this, arguments);
+              historyChanged();
+              return result;
+            };
+          });
+          window.addEventListener('popstate', historyChanged);
+          window.addEventListener('hashchange', historyChanged);
           if (top) { return; }
           function painted() {
             var body = document.body;

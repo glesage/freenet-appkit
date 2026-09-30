@@ -35,6 +35,8 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
     @Volatile private var appFrameSeen = false
     private var shown = false
     private val fallback = Runnable { reveal() }
+    /** Called when the page's back history changes. */
+    var onHistoryChanged: (() -> Unit)? = null
 
     init {
         view.addView(loading.view, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
@@ -46,6 +48,13 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
         if (loadedGeneration == NodeHost.sessionGeneration && webView != null) return
         loadedGeneration = NodeHost.sessionGeneration
         scope.launch { prepare() }
+    }
+
+    /** Whether the page has somewhere to go back to. */
+    fun canGoBack() = webView?.canGoBack() == true
+
+    fun goBack() {
+        webView?.goBack()
     }
 
     private fun retry() {
@@ -70,6 +79,7 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
         view.removeCallbacks(fallback)
         webView?.let { view.removeView(it); it.destroy() }
         webView = null
+        onHistoryChanged?.invoke()
     }
 
     private fun showStatus(text: String) {
@@ -122,13 +132,14 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
             }
             WebViewCompat.addWebMessageListener(web, "appkitFrames", setOf("*")) { _, message, _, _, _ ->
                 val body = message.data?.let { JSONObject(it) } ?: JSONObject()
-                if (body.optString("kind") == "painted") {
+                when (body.optString("kind")) {
                     // The DOM has content; reveal once the view has drawn it.
-                    web.postVisualStateCallback(0, object : WebView.VisualStateCallback() {
+                    "painted" -> web.postVisualStateCallback(0, object : WebView.VisualStateCallback() {
                         override fun onComplete(requestId: Long) = reveal()
                     })
-                } else if (!body.optBoolean("top")) {
-                    appFrameLoaded()
+                    // The app frame's history moves without a main-frame visit.
+                    "history" -> onHistoryChanged?.invoke()
+                    else -> if (!body.optBoolean("top")) appFrameLoaded()
                 }
             }
         }
@@ -138,6 +149,10 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
             // after this callback, so look again a moment later.
             override fun onPageFinished(view: WebView, url: String) {
                 if (!appFrameSeen) view.postDelayed({ if (!appFrameSeen && webView === view) reveal() }, NO_FRAME_WAIT_MS)
+            }
+
+            override fun doUpdateVisitedHistory(view: WebView, url: String?, isReload: Boolean) {
+                onHistoryChanged?.invoke()
             }
 
             override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
