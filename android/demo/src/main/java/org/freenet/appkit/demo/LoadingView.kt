@@ -1,6 +1,7 @@
 package org.freenet.appkit.demo
 
 import android.content.Context
+import android.graphics.Typeface
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
@@ -9,8 +10,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 
 /**
- * A spinner and a line of text over the whole page, or the error and a retry
- * button once loading failed.
+ * A spinner and a line of text over the whole page, or the error with "Try
+ * again" and "Details" buttons once loading failed. The details are
+ * selectable, so testers can copy them into a report.
  */
 class LoadingView(context: Context) {
     private val spinner = ProgressBar(context).apply { isIndeterminate = true }
@@ -22,6 +24,16 @@ class LoadingView(context: Context) {
         text = "Try again"
         isAllCaps = false
     }
+    private val detailsButton = Button(context, null, android.R.attr.borderlessButtonStyle).apply {
+        text = "Details"
+        isAllCaps = false
+    }
+    private val details = TextView(context).apply {
+        typeface = Typeface.MONOSPACE
+        textSize = 12f
+        setTextIsSelectable(true)
+        setPadding(48, 16, 48, 16)
+    }
     val view = LinearLayout(context).apply {
         orientation = LinearLayout.VERTICAL
         gravity = Gravity.CENTER
@@ -30,21 +42,34 @@ class LoadingView(context: Context) {
         addView(spinner, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
         addView(text, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
         addView(retry, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+        addView(detailsButton, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+        addView(details, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
+    }
+
+    init {
+        detailsButton.setOnClickListener {
+            details.visibility = if (details.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        }
     }
 
     fun loading(message: String) {
         spinner.visibility = View.VISIBLE
         retry.visibility = View.GONE
+        detailsButton.visibility = View.GONE
+        details.visibility = View.GONE
         text.text = message
         view.visibility = View.VISIBLE
         view.bringToFront()
     }
 
-    fun failed(message: String, onRetry: (() -> Unit)?) {
+    fun failed(message: String, detail: String?, onRetry: (() -> Unit)?) {
         spinner.visibility = View.GONE
         text.text = message
         retry.visibility = if (onRetry == null) View.GONE else View.VISIBLE
         retry.setOnClickListener { onRetry?.invoke() }
+        details.text = detail.orEmpty()
+        details.visibility = View.GONE
+        detailsButton.visibility = if (detail.isNullOrBlank()) View.GONE else View.VISIBLE
         view.visibility = View.VISIBLE
         view.bringToFront()
     }

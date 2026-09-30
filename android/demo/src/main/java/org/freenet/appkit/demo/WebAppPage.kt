@@ -16,6 +16,7 @@ import androidx.webkit.WebViewFeature
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.freenet.appkit.originOf
 import org.json.JSONObject
@@ -40,7 +41,7 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
 
     init {
         view.addView(loading.view, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
-        loading.loading("Starting the node")
+        loading.loading(LoadMessages.STARTING)
     }
 
     /** Prepare and load the app for the current node session. */
@@ -63,15 +64,21 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
     }
 
     private suspend fun prepare() {
-        showStatus("Starting the node")
+        showStatus(LoadMessages.STARTING)
         if (NodeHost.start() == null) {
-            return showError("The node did not start.\n${NodeHost.lastError}")
+            return showError(LoadMessages.NODE_FAILED, NodeHost.lastError)
         }
-        showStatus("Waiting for a peer")
-        if (!NodeHost.waitForPeers()) {
-            return showError("No peer answered.\n${NodeHost.lastError}")
+        showStatus(LoadMessages.CONNECTING)
+        val slow = scope.launch {
+            delay(LoadMessages.SLOW_CONNECT_MS)
+            loading.loading(LoadMessages.CONNECTING_SLOW)
         }
-        val url = NodeHost.webUrl(app) ?: return showError("The node is not running")
+        val connected = NodeHost.waitForPeers()
+        slow.cancel()
+        if (!connected) {
+            return showError(LoadMessages.NO_PEER, NodeHost.lastError)
+        }
+        val url = NodeHost.webUrl(app) ?: return showError(LoadMessages.NODE_FAILED, "The node is not running.")
         load(url)
     }
 
@@ -87,9 +94,9 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
         loading.loading(text)
     }
 
-    private fun showError(text: String) {
+    private fun showError(text: String, detail: String?) {
         removeWebView()
-        loading.failed(text) { retry() }
+        loading.failed(text, detail) { retry() }
     }
 
     /** The app has drawn something, or the node showed its own page. */
@@ -102,7 +109,7 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
 
     private fun appFrameLoaded() {
         if (shown) return
-        loading.loading("Starting ${app.title}")
+        loading.loading(LoadMessages.opening(app))
         view.removeCallbacks(fallback)
         view.postDelayed(fallback, PAINT_FALLBACK_MS)
     }
@@ -110,7 +117,7 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
     private fun loadFailed(message: String) {
         view.removeCallbacks(fallback)
         shown = true
-        loading.failed("${app.title} did not load.\n$message") { retry() }
+        loading.failed(LoadMessages.pageFailed(app), message) { retry() }
     }
 
     private fun load(url: String) {
@@ -189,7 +196,7 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
         view.addView(web, 0, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
         appFrameSeen = false
         shown = false
-        loading.loading("Fetching ${app.title} from the network")
+        loading.loading(LoadMessages.downloading(app))
         webView = web
         web.loadUrl(url)
     }
