@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Three peers joined in a triangle, the same art as art/icon-1024.png at
+     108/1024 scale. Everything sits inside the central 72 dp. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:pathData="M54,31.6 L34,69.6 L74,69.6 Z"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4.6"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M45.8,31.6 a8.2,8.2 0 1,0 16.4,0 a8.2,8.2 0 1,0 -16.4,0 Z
+            M25.8,69.6 a8.2,8.2 0 1,0 16.4,0 a8.2,8.2 0 1,0 -16.4,0 Z
+            M65.8,69.6 a8.2,8.2 0 1,0 16.4,0 a8.2,8.2 0 1,0 -16.4,0 Z" />
+</vector>

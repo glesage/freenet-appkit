@@ -111,7 +111,7 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
         web.settings.domStorageEnabled = true
         web.settings.mediaPlaybackRequiresUserGesture = false
         web.settings.setSupportMultipleWindows(true)
-        WebView.setWebContentsDebuggingEnabled(true)
+        if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
         if (WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)) {
             WebViewCompat.addDocumentStartJavaScript(web, AlertShim.script(NodeHost.alertGrant.key), setOf(origin))
             WebViewCompat.addDocumentStartJavaScript(web, AlertShim.FRAME_REPORT, setOf("*"))

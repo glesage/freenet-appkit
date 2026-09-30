@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Launcher label and the name in prompts. -->
+    <string name="app_name">AppKit</string>
+    <!-- Welcome screen title and Play listing title. -->
+    <string name="app_full_name">Freenet AppKit</string>
+</resources>
