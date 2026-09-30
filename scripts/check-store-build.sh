@@ -114,7 +114,7 @@ check_signing() {
   owner="$(cert_owner "$1")"
   if [ -z "$owner" ]; then
     fail "Not debug-signed" "no signing certificate found"
-  elif printf '%s\n' "$owner" | grep -q 'CN=Android Debug'; then
+  elif grep -q 'CN=Android Debug' <<<"$owner"; then
     fail "Not debug-signed" "signed with the Android Debug certificate"
   else
     pass "Not debug-signed" "$(printf '%s\n' "$owner" | head -n 1 | sed -E 's/^(Signer #1 certificate DN|Owner): //')"
@@ -138,7 +138,11 @@ check_dex() {
 check_apk() {
   local apk="$1"
 
-  if "$tools/aapt2" dump badging "$apk" 2>/dev/null | grep -q '^application-icon'; then
+  # Read the whole output first: under pipefail, grep -q exiting early makes
+  # the writer fail with SIGPIPE and the pipeline report failure.
+  local badging
+  badging="$("$tools/aapt2" dump badging "$apk" 2>/dev/null || true)"
+  if grep -q '^application-icon' <<<"$badging"; then
     pass "Launcher icon" "application-icon present"
   else
     fail "Launcher icon" "no application-icon in aapt2 dump badging"
@@ -147,7 +151,7 @@ check_apk() {
   local manifest
   if ! manifest="$("$tools/aapt2" dump xmltree --file AndroidManifest.xml "$apk" 2>/dev/null)"; then
     fail "Not profileable" "aapt2 could not read AndroidManifest.xml"
-  elif printf '%s\n' "$manifest" | grep -q 'profileable'; then
+  elif grep -q 'profileable' <<<"$manifest"; then
     fail "Not profileable" "manifest has a profileable element"
   else
     pass "Not profileable" "no profileable in manifest"
@@ -170,14 +174,14 @@ check_aab() {
   if command -v bundletool >/dev/null 2>&1; then
     local manifest
     manifest="$(bundletool dump manifest --bundle "$aab" 2>/dev/null || true)"
-    if printf '%s\n' "$manifest" | grep -q 'android:icon='; then
+    if grep -q 'android:icon=' <<<"$manifest"; then
       pass "Launcher icon" "android:icon set (bundletool)"
     else
       fail "Launcher icon" "no android:icon in manifest (bundletool)"
     fi
     if [ -z "$manifest" ]; then
       fail "Not profileable" "bundletool could not read the manifest"
-    elif printf '%s\n' "$manifest" | grep -q 'profileable'; then
+    elif grep -q 'profileable' <<<"$manifest"; then
       fail "Not profileable" "manifest has a profileable element (bundletool)"
     else
       pass "Not profileable" "no profileable in manifest (bundletool)"
@@ -186,14 +190,14 @@ check_aab() {
     # Without bundletool, read the strings of the proto manifest.
     local words
     words="$(unzip -p "$aab" base/manifest/AndroidManifest.xml 2>/dev/null | strings || true)"
-    if printf '%s\n' "$words" | grep -qE '(^|[^A-Za-z])icon([^A-Za-z]|$)'; then
+    if grep -qE '(^|[^A-Za-z])icon([^A-Za-z]|$)' <<<"$words"; then
       pass "Launcher icon" "icon attribute in proto manifest (strings, no bundletool)"
     else
       fail "Launcher icon" "no icon attribute in proto manifest (strings, no bundletool)"
     fi
     if [ -z "$words" ]; then
       fail "Not profileable" "base/manifest/AndroidManifest.xml not found"
-    elif printf '%s\n' "$words" | grep -q 'profileable'; then
+    elif grep -q 'profileable' <<<"$words"; then
       fail "Not profileable" "profileable in proto manifest (strings, no bundletool)"
     else
       pass "Not profileable" "no profileable in proto manifest (strings, no bundletool)"
