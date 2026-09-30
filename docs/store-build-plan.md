@@ -1,13 +1,17 @@
 # Store build plan
 
-Turn the iOS and Android demo apps into store builds that can go to TestFlight and Google Play internal testing, and later through App Review and Play review.
+This plan ships Freenet AppKit from branch `store-build` to TestFlight and Google Play internal testing, and then to the App Store and Google Play.
 
-The store build:
+```mermaid
+flowchart LR
+  prep["Part 1<br/>Prepare now<br/>(no account)"] --> acc["Part 2<br/>Create the accounts"]
+  acc --> ios["Part 3<br/>iOS: TestFlight"]
+  acc --> and["Part 4<br/>Android: internal testing"]
+  ios --> pub["Part 5<br/>Public release"]
+  and --> pub
+```
 
-- has two tabs, River and Atlas, on both platforms
-- always joins the public network
-- contains no measurement harness, profile switching, Native or Bridge screens, diagnostics or in-app logs
-- fixes the upload blockers and review risks listed in [distribution review](distribution-review.md)
+## The store build
 
 ```mermaid
 flowchart LR
@@ -22,533 +26,403 @@ flowchart LR
   host -- "UDP" --> net["Public Freenet network"]
 ```
 
-## Names
-
-| Name | Value | Where it is used |
+| Feature | iOS | Android |
 | --- | --- | --- |
-| Short name | `AppKit` | Home screen and launcher label, alert prompts: iOS `INFOPLIST_KEY_CFBundleDisplayName`, Android `app_name` |
-| Full name | `Freenet AppKit` | Welcome screen title, App Store Connect app name, Play store listing title: `AppInfo.fullName`, Android `app_full_name` |
-| Identifier | `freenet.appkit` | iOS bundle ID and Android application ID |
+| Screens | Welcome screen once, then River and Atlas tabs | Same, with a bottom tab bar (icons, selected state, TalkBack labels) |
+| Network | Public network only | Same |
+| Node lifecycle | Runs while the app is open; the page stays on screen with a "Reconnecting" pill when the app returns | Same |
+| Loading and errors | Plain messages from `LoadMessages.swift`, with "Try again" and "Details" | Same, from `LoadMessages.kt` |
+| Back | Swipe back through web view history | Back button and gesture through web view history, then home |
+| Icon | `AppIcon` asset catalog | Adaptive icon with a monochrome layer |
+| Store keys | Privacy manifest, `ITSAppUsesNonExemptEncryption = YES`, local network text, iPhone only | Upload signing from `keystore.properties`, version code from the command line |
+| Debug tools | Web inspector in Debug builds only | Same |
 
-## Decisions to confirm before Task 1
+The measurement harness for 1.1 Mobile feasibility and supported profiles is at git tag `plan-1.1-harness`.
 
-| Decision | Default in this plan | Where it is used |
+### Store build check
+
+`scripts/check-store-build.sh ios <.app>` and `scripts/check-store-build.sh android <.apk or .aab>` print one line per check and exit non-zero on any failure. `scripts/archive-ios.sh` and `scripts/bundle-android.sh` run it on their output.
+
+| Platform | Check | How |
 | --- | --- | --- |
-| Bundle ID and application ID | `freenet.appkit` (decided). The Kotlin package and Gradle `namespace` stay `org.freenet.appkit.demo` | Xcode `PRODUCT_BUNDLE_IDENTIFIER`, Gradle `applicationId` |
-| Apple team | The project's paid Apple Developer Program team (the free personal team cannot use TestFlight) | `DEVELOPMENT_TEAM` for the archive script |
-| Play account | The project's Play Console account | Upload key, internal testing track |
-| Terms URL and support URL | Placeholders `https://freenet.org/terms` and `https://freenet.org/support` | `AppInfo.swift`, `AppInfo.kt`, store listings |
-| Icon art | One 1024 × 1024 PNG with no transparency, plus the same art as a vector for Android | `art/` |
-| Store category | iOS: Social Networking. Play: Communication | `INFOPLIST_KEY_LSApplicationCategoryType`, Play listing |
+| iOS | App icon compiled | `Assets.car` exists and `Info.plist` has `CFBundleIcons` |
+| iOS | Privacy manifest present | `PrivacyInfo.xcprivacy` is in the `.app` |
+| iOS | Encryption key set | `Info.plist` has `ITSAppUsesNonExemptEncryption` |
+| iOS | No file sharing | `Info.plist` has no `UIFileSharingEnabled` |
+| iOS | iPhone only | `UIDeviceFamily` is `[1]` |
+| iOS, Android | No harness | The binary or `classes*.dex` has no `appkit.scenario` or `APPKIT_RESULT` |
+| Android | Launcher icon | `aapt2 dump badging` shows `application-icon` |
+| Android | Not profileable | The manifest has no `profileable` |
+| Android | Not debug-signed | The signing certificate is not `CN=Android Debug` |
+| Android | 16 KB aligned | `zipalign -c -P 16` passes (APK only; Play aligns the APKs it builds from an AAB) |
 
-## Files
+Today every iOS check passes, and every Android check passes except "Not debug-signed", which passes once the upload key exists (Task 4.1).
 
-### iOS app (`ios/`)
+## Facts
 
-| File | Change | Responsibility after the change |
+### Names and identifiers
+
+| Item | iOS | Android |
 | --- | --- | --- |
-| `AppKitDemo/AppKitDemoApp.swift` | Edit | App entry, two-tab `ContentView`, alert banner, welcome sheet |
-| `AppKitDemo/NodeHost.swift` | Edit | Owns the node: public network only, foreground only, alert grant |
-| `AppKitDemo/WebAppScreen.swift` | Edit, split | `WebAppModel`, `WebAppScreen`, `LoadingView` |
-| `AppKitDemo/WebAppView.swift` | New (split out) | `WebAppView` and its `Coordinator` |
-| `AppKitDemo/AlertShim.swift` | New (split out) | The `Notification` shim script |
-| `AppKitDemo/WebApps.swift` | New | `DemoWebApp` (moved from `AppResources.swift`) |
-| `AppKitDemo/AppInfo.swift` | New | Short name, full name, terms URL, support URL |
-| `AppKitDemo/LoadMessages.swift` | New | Plain-language loading and error messages |
-| `AppKitDemo/WelcomeScreen.swift` | New | First-start screen |
-| `AppKitDemo/Assets.xcassets/` | New | `AppIcon` |
-| `AppKitDemo/PrivacyInfo.xcprivacy` | New | Required-reason API declarations |
-| `AppKitDemo-Info.plist` | Edit | Encryption key, local network wording, file sharing removed |
-| `AppKitDemo.xcodeproj/project.pbxproj` | Edit | Icon name, iPhone only, category, display name, bundle ID, `AppKitResources` removed |
-| `ExportOptions.plist` | New | App Store Connect export settings |
-| `AppKitDemo/Harness.swift`, `ProcessClock.swift`, `NetworkPath.swift`, `NativeRoute.swift`, `NativeRouteScreen.swift`, `BridgeTestScreen.swift`, `DiagnosticsScreen.swift`, `AppResources.swift` | Delete | – |
+| Store name | Freenet AppKit | Freenet AppKit |
+| Home screen and launcher name | AppKit | AppKit |
+| Identifier (permanent once the store record exists) | Bundle ID `freenet.appkit` | Package name `freenet.appkit` |
+| Code package | Not applicable | `org.freenet.appkit.demo` (Gradle `namespace`; users never see it) |
+| Version shown to users | `MARKETING_VERSION = 0.1` in `project.pbxproj` | `versionName` `0.1`, or `VERSION_NAME=` for `scripts/bundle-android.sh` |
+| Build number (goes up on every upload) | `BUILD_NUMBER=` for `scripts/archive-ios.sh` | `VERSION_CODE=` for `scripts/bundle-android.sh` |
+| Store category | Social Networking | Communication |
+| Devices and lowest OS | iPhone, iOS 16.0 | Phones, Android 8.0 (API 26), target API 36 |
+| Price | Free | Free |
 
-The Xcode project uses a file-system synchronized group for `AppKitDemo/`. Files added to or deleted from that folder need no `project.pbxproj` edit.
+Use one build number for both platforms per release: `date +%y%m%d%H`, for example `26100109`. It always goes up and fits under Android's version code limit of 2,100,000,000.
 
-### Android app (`android/demo/`)
+"AppKit" is also the name of Apple's framework for Mac apps, and guideline 5.2.5 bars Apple product names in app names. If App Review objects, only the home screen name changes (`INFOPLIST_KEY_CFBundleDisplayName` and `app_name`). The identifier and the store name stay.
 
-| File | Change | Responsibility after the change |
+### Where things live
+
+| What | iOS | Android |
 | --- | --- | --- |
-| `src/main/java/.../MainActivity.kt` | Edit | Shell: tab bar, content, alert banner, back handling, insets, welcome |
-| `src/main/java/.../NodeHost.kt` | Edit | Owns the node: public network only, foreground only, alert grant |
-| `src/main/java/.../WebScreens.kt` | Split, then delete | – |
-| `src/main/java/.../WebAppPage.kt` | New (split out) | `WebAppPage` |
-| `src/main/java/.../LoadingView.kt` | New (split out) | `LoadingView` |
-| `src/main/java/.../AlertShim.kt` | New (split out) | The `Notification` shim and frame report scripts |
-| `src/main/java/.../WebApps.kt` | New | `DemoWebApp` (moved from `NodeHost.kt`) |
-| `src/main/java/.../AppInfo.kt` | New | Terms URL, support URL, `openExternally` with the crash fix |
-| `src/main/java/.../LoadMessages.kt` | New | Plain-language loading and error messages |
-| `src/main/java/.../TabBar.kt` | New | Bottom tab bar with icons and a selected state |
-| `src/main/java/.../WelcomeScreen.kt` | New | First-start screen |
-| `src/main/res/mipmap-anydpi-v26/ic_launcher.xml` | New | Adaptive icon |
-| `src/main/res/drawable/ic_launcher_foreground.xml`, `ic_tab_river.xml`, `ic_tab_atlas.xml` | New | Vector art |
-| `src/main/res/values/colors.xml`, `strings.xml` | New | Icon background colour, `app_name`, `app_full_name` |
-| `src/main/AndroidManifest.xml` | Edit | Icon, label, `profileable` removed, back callback opt-in |
-| `build.gradle.kts` | Edit | Upload signing, `buildConfig`, version code from the command line |
-| `proguard-rules.pro` | Edit | Harness keep rule removed |
-| `src/main/java/.../Harness.kt`, `NativeRoute.kt` | Delete | – |
-| `android/keystore.properties.example` | New | Template for the upload key settings |
+| Project | `ios/AppKitDemo.xcodeproj`, scheme `AppKitDemo` | `android/`, module `:demo` |
+| App entry and shell | `ios/AppKitDemo/AppKitDemoApp.swift` | `android/demo/src/main/java/org/freenet/appkit/demo/MainActivity.kt` |
+| Node lifecycle | `NodeHost.swift` | `NodeHost.kt` |
+| Web view | `WebAppScreen.swift`, `WebAppView.swift`, `AlertShim.swift` | `WebAppPage.kt`, `AlertShim.kt`, `ReconnectOverlay.kt` |
+| Loading view and messages | `LoadingView.swift`, `LoadMessages.swift` | `LoadingView.kt`, `LoadMessages.kt` |
+| Welcome screen | `WelcomeScreen.swift` | `WelcomeScreen.kt` |
+| Names and links | `AppInfo.swift`, and `INFOPLIST_KEY_*` build settings in `project.pbxproj` | `AppInfo.kt`, `res/values/strings.xml` |
+| Privacy and store keys | `ios/AppKitDemo/PrivacyInfo.xcprivacy`, `project.pbxproj` | `android/demo/build.gradle.kts`, `src/main/AndroidManifest.xml` |
+| Icon | `ios/AppKitDemo/Assets.xcassets/AppIcon.appiconset/` | `res/mipmap-anydpi-v26/ic_launcher.xml`, `res/drawable/ic_launcher_foreground.xml` |
+| Export and signing settings | `ios/ExportOptions.plist` (`app-store-connect`, `export`; the script copies it to `build/ios/ExportOptions.plist` with the team ID) | `android/keystore.properties` (not in git), from `android/keystore.properties.example` |
+| Store package script | `scripts/archive-ios.sh` | `scripts/bundle-android.sh` |
+| Store package | `build/ios/export/AppKitDemo.ipa` | `android/demo/build/outputs/bundle/release/demo-release.aab` |
+| Store icon art | `art/icon-1024.png` | `art/icon-play-512.png` |
 
-### Repository
+Shared files:
 
-| Path | Change |
+| What | Path |
 | --- | --- |
-| `harness/` | Delete. `build-ios-app.sh` and `build-android-app.sh` move to `scripts/` first |
-| `scripts/generate-fixtures.sh`, `scripts/fetch-webapps.sh`, `scripts/prepare-resources.sh` | Delete |
-| `fixtures/`, `web/bridge-test/` | Delete |
-| `scripts/check-store-build.sh` | New: checks a built store package for every item in this plan |
-| `scripts/archive-ios.sh` | New: archive and export for App Store Connect |
-| `scripts/bundle-android.sh` | New: signed AAB for Play |
-| `art/icon-1024.png`, `art/icon-play-512.png` | New |
-| `docs/review-notes.md` | New: text for App Review notes and Play testing instructions |
-| `README.md`, `.gitignore` | Edit |
-| `results/`, `docs/` (other files) | Unchanged: the record of 1.1 Mobile feasibility and supported profiles |
+| Rust library builds | `scripts/build-ios.sh`, `scripts/build-android.sh` |
+| App builds for the simulator, a phone or the emulator | `scripts/build-ios-app.sh`, `scripts/build-android-app.sh` |
+| Review text | `docs/review-notes.md` |
+| Store listing text and images (Part 1) | `store/` |
 
-The Swift package (`Sources/FreenetAppKit/`) and the Kotlin library (`android/appkit/`) stay as they are.
+The Xcode project uses a file-system synchronized group for `ios/AppKitDemo/`, so files added there need no `project.pbxproj` edit.
+
+### Secrets
+
+| Secret | Where it goes | Kept in |
+| --- | --- | --- |
+| Apple ID and two-factor login of the account holder | Xcode → Settings → Accounts | The project's password manager |
+| App Store Connect API key (`AuthKey_<KEYID>.p8`, key ID, issuer ID) | `~/.appstoreconnect/private_keys/` on the build Mac | Password manager; Apple lets you download the `.p8` once |
+| Android upload keystore (`upload.keystore`) and its two passwords | `android/upload.keystore` (git ignores `*.keystore`) and `android/keystore.properties` | Password manager, plus a second copy of the keystore file |
+| Play app signing key | Google holds it | Not applicable |
+
+### Placeholders to replace
+
+| Placeholder | File | Replace with |
+| --- | --- | --- |
+| `https://freenet.org/terms` | `AppInfo.swift`, `AppInfo.kt` | The live terms page (Task 1.2) |
+| `https://freenet.org/support` | `AppInfo.swift`, `AppInfo.kt` | The live support page (Task 1.2) |
+| `DEVELOPMENT_TEAM = 995A4BQX6K` (the free personal team, uncommitted in the working tree) | `project.pbxproj` | The paid team's ID (Task 3.1) |
+| `$(DEVELOPMENT_TEAM)` | `ios/ExportOptions.plist` | Keep it: `scripts/archive-ios.sh` fills it in |
+| `<VIDEO_LINK>`, `<SUPPORT_EMAIL>` | `docs/review-notes.md` | The recording link and the support address (Task 1.5) |
+
+## Decisions to make before Part 2
+
+| Decision | Options | My recommendation |
+| --- | --- | --- |
+| Who publishes | The Freenet project's legal entity, or a person | The legal entity. The store pages show its name as the seller, and a personal Play account must run a 14-day closed test before production. Both stores need a D-U-N-S number for an organization, which can take up to two weeks, so request it first |
+| Support contact | An email address someone reads every week | A shared project address, so it survives people changing roles |
+| France | Include France or leave it out | Leave it out of the first release. Including it needs a French encryption declaration in App Store Connect |
+| Age rating | 13+, 16+ or 18+ | 18+ on both stores. River is open chat with strangers, and 18+ keeps the app out of Play's Families policy |
+| Privacy link in the app | Welcome screen only, or also a small info button on the tab bar | Add the info button. Guideline 5.1.1 asks for a privacy policy that is easy to reach inside the app, and the welcome screen shows once |
+
+---
+
+## Part 1: Prepare now
+
+Nothing in this part needs an account.
+
+### Task 1.1: Publish the web pages
+
+| Page | Contents | Used by |
+| --- | --- | --- |
+| Terms of use | Rules for posting in River; no tolerance for objectionable content or abusive users | Welcome screen, Play user-generated content policy, App Review guideline 1.2 |
+| Privacy policy | What stays on the phone; what goes to other peers (messages, public keys, IP address); no server and no analytics; delete the app to delete the data | App Store Connect, Play Console, the app |
+| Support | The support email; how to report content and users; the app works only while open; some networks block UDP | App Store Connect Support URL, Play contact details |
+| Child safety standards | How the project handles child sexual abuse material, and a contact for reports | Play, for social and chat apps |
+
+- [ ] Write and publish the four pages, for example under `https://freenet.org/appkit/`.
+- [ ] Record the four URLs in [Placeholders to replace](#placeholders-to-replace).
+
+### Task 1.2: Put the final links in the app
+
+Files: `ios/AppKitDemo/AppInfo.swift`, `ios/AppKitDemo/WelcomeScreen.swift`, `android/demo/src/main/java/org/freenet/appkit/demo/AppInfo.kt`, `android/demo/src/main/java/org/freenet/appkit/demo/WelcomeScreen.kt`
+
+- [ ] Replace `termsURL`/`termsUrl` and `supportURL`/`supportUrl` with the live URLs.
+- [ ] Add `privacyURL` (Swift) and `privacyUrl` (Kotlin).
+- [ ] On both welcome screens, change the line to "By continuing you agree to the Terms and the Privacy Policy." and link both phrases the way "Terms" is linked today: `AttributedString(markdown:)` on iOS, `linked(...)` on Android.
+- [ ] If the info button was chosen: add it to the tab bar on iOS and Android. It opens a sheet with the full name, version, and the Terms, Privacy and Support links.
+- [ ] Delete the app, then build and run both. Tap each link and check the page it opens:
+  ```bash
+  scripts/build-ios-app.sh Release simulator
+  ```
+  ```bash
+  scripts/build-android-app.sh Release
+  ```
+- [ ] Commit: `Link the live terms, privacy and support pages`.
+
+### Task 1.3: Store listing text
+
+Create `store/listing.md`:
+
+| Field | Store | Limit | Draft |
+| --- | --- | --- | --- |
+| Name | Both | 30 | Freenet AppKit |
+| Subtitle | App Store | 30 | Chat and browse on Freenet |
+| Short description | Play | 80 | River chat and the Atlas directory, on a Freenet peer that runs on your phone. |
+| Keywords | App Store | 100 | freenet,peer to peer,p2p,decentralized,chat,group chat,river,atlas,private |
+| Promotional text | App Store | 170 | Chat in River rooms and browse Atlas, served by a Freenet peer inside the app. No servers, no sign-up. |
+| Description | Both | 4000 | River and Atlas; the app runs a Freenet peer on the phone; no account; runs only while open; the first connection can take a minute; the support link |
+| Release notes | Both | 4000 on the App Store, 500 on Play | First test build |
+| Copyright | App Store | None | `2026 <publisher name>` |
+
+- [ ] Write `store/listing.md` from the table, with the full description written out.
+- [ ] Commit: `Store listing text`.
+
+### Task 1.4: Store images
+
+| Image | Store | Size | Source |
+| --- | --- | --- | --- |
+| App icon | App Store | 1024 × 1024 | The build's `AppIcon` |
+| App icon | Play | 512 × 512 PNG | `art/icon-play-512.png` |
+| Feature graphic | Play | 1024 × 500 PNG or JPEG | New `art/feature-graphic.png`: the icon's three peers on `#1A5FD0` with "Freenet AppKit" |
+| Phone screenshots | App Store | 6.9-inch, 1320 × 2868, 1 to 10 | iPhone 17 Pro Max simulator, `xcrun simctl io booted screenshot` |
+| Phone screenshots | Play | 1080 × 1920 or larger, 9:16, 2 to 8 | `Pixel_10` emulator, `adb exec-out screencap -p` |
+
+Take the same four screenshots on each platform: welcome screen, River room with messages, River room list, Atlas directory. River's no-room screen has a blank band at the top until River plan `docs/plans/ui-ux-reimplementation/21-no-room-screen-fills-panel.plan.md` ships, so take the room-list shot from inside a room until then.
+
+- [ ] Draw `art/feature-graphic.png` with the same Python drawing as `art/icon-1024.png` (see `art/README.md`).
+- [ ] Save the screenshots as `store/screenshots/ios/01-welcome.png`, `02-room.png`, `03-rooms.png`, `04-atlas.png`, and the same names under `store/screenshots/android/`.
+- [ ] Commit: `Store images`.
+
+### Task 1.5: Review recording
+
+- [ ] Record the steps in `docs/review-notes.md`: tap Continue, wait for River, create a room, send a message, open Atlas.
+  - iPhone 13 mini: QuickTime → File → New Movie Recording, with the iPhone as the camera.
+  - Android: `adb shell screenrecord /sdcard/review.mp4` on a phone or the emulator.
+- [ ] Upload both as unlisted videos.
+- [ ] In `docs/review-notes.md`, replace `<VIDEO_LINK>` and `<SUPPORT_EMAIL>`.
+- [ ] Commit: `Review notes: recording and contact`.
+
+---
+
+## Part 2: Create the accounts
+
+### Task 2.1: Apple Developer Program
+
+- [ ] Enroll at <https://developer.apple.com/programs/enroll/> as the chosen publisher (US$99 a year). An organization enrolls with its D-U-N-S number, legal name and a website on its own domain.
+- [ ] After approval, note the Team ID (10 characters, under Membership details).
+- [ ] App Store Connect → Users and Access: invite the builders with the App Manager role, and the internal testers with any role.
+- [ ] On the build Mac: Xcode → Settings → Accounts → add the Apple ID. The team must show the type "Apple Developer Program", not "Personal Team".
+- [ ] App Store Connect → Users and Access → Integrations → App Store Connect API: create a key with the App Manager role. Save `AuthKey_<KEYID>.p8` in `~/.appstoreconnect/private_keys/`, and put the file, the key ID and the issuer ID in the password manager.
+
+### Task 2.2: Google Play Console
+
+- [ ] Sign up at <https://play.google.com/console/signup> as the chosen publisher (US$25 once) and complete identity verification. An organization signs up with its D-U-N-S number.
+- [ ] Settings → Developer account → Users and permissions: invite the builders as Release managers.
+- [ ] If the account is a personal account, plan Task 4.6: 12 testers for 14 days before production.
+
+---
+
+## Part 3: iOS, to TestFlight
+
+### Task 3.1: Sign with the paid team
+
+- [ ] In `ios/AppKitDemo.xcodeproj/project.pbxproj`, set `DEVELOPMENT_TEAM` to the paid Team ID in both build configurations.
+- [ ] Commit: `iOS: sign with the Freenet AppKit team`. A Team ID is not a secret.
+
+### Task 3.2: Register the bundle ID and create the app record
+
+- [ ] developer.apple.com → Certificates, Identifiers & Profiles → Identifiers → + → App IDs → App. Description `Freenet AppKit`, explicit bundle ID `freenet.appkit`, no capabilities (the app uses no push, iCloud or App Groups).
+- [ ] App Store Connect → Apps → + → New App:
+
+  | Field | Value |
+  | --- | --- |
+  | Platform | iOS |
+  | Name | Freenet AppKit |
+  | Primary language | English (U.S.) |
+  | Bundle ID | `freenet.appkit` |
+  | SKU | `freenet-appkit` |
+  | User access | Full access |
+
+  App Store names are unique. If "Freenet AppKit" is taken, pick another store name and update `store/listing.md`, `docs/review-notes.md` and `AppInfo.fullName`/`app_full_name`.
+
+### Task 3.3: Archive and export
+
+- [ ] Build the Rust library for device and simulator:
+  ```bash
+  scripts/build-ios.sh
+  ```
+- [ ] Archive, export and check. Automatic signing creates the Apple Distribution certificate and the App Store profile on the first run:
+  ```bash
+  DEVELOPMENT_TEAM=<team id> BUILD_NUMBER=$(date +%y%m%d%H) scripts/archive-ios.sh
+  ```
+  Expected: `build/ios/export/AppKitDemo.ipa` exists, and the last line reads `all checks passed`.
+
+### Task 3.4: Upload
+
+- [ ] Upload with the API key from Task 2.1:
+  ```bash
+  xcrun altool --upload-app -f build/ios/export/AppKitDemo.ipa -t ios --apiKey <KEYID> --apiIssuer <ISSUER_ID>
+  ```
+  Transporter and Xcode Organizer (Window → Organizer → Distribute App) also upload.
+- [ ] Wait for Apple's processing email, usually 15 to 30 minutes.
+- [ ] If Apple sends `ITMS-91053`, the privacy manifest lacks a reason for an API the binary calls. List the library's calls, then add the missing category and reason to `PrivacyInfo.xcprivacy`:
+  ```bash
+  nm -u ../freenet-core/target/aarch64-apple-ios/release/libfreenet_mobile.a | grep -E '_(f?stat|lstat|fstatat|getattrlist|f?statv?fs|mach_absolute_time)$' | sort -u
+  ```
+  Run the same command after every Core update.
+
+### Task 3.5: Export compliance
+
+App Store Connect asks about encryption on the first build, because `ITSAppUsesNonExemptEncryption = YES`.
+
+- [ ] Answer that the app uses standard algorithms (X25519, AES-GCM, ChaCha20, Ed25519, BLAKE3) as well as Apple's, and whether it ships in France.
+- [ ] If France is in: upload the French encryption declaration when asked.
+- [ ] If App Store Connect shows an export compliance code: add `INFOPLIST_KEY_ITSEncryptionExportComplianceCode = <code>;` to both configurations in `project.pbxproj`, and commit `iOS: export compliance code`. Later builds then skip the questions.
+- [ ] Set a yearly reminder for the US mass-market encryption self-classification report to BIS, due by 1 February for the previous year ([Apple's export compliance page](https://developer.apple.com/documentation/security/complying-with-encryption-export-regulations)).
+
+### Task 3.6: Internal testing
+
+- [ ] TestFlight → Internal Testing → + → group `Team`, automatic distribution on. Add the internal testers.
+- [ ] Test Information: the beta app description (the first paragraph of the App Review notes) and the feedback email.
+- [ ] On the iPhone 13 mini, install TestFlight, accept the invite, install the build, and run [Part 6](#part-6-checklist-on-each-installed-test-build).
+
+### Task 3.7: External testing
+
+Start once internal testing passes.
+
+- [ ] TestFlight → External Testing → + → group `Beta`. Add the build.
+- [ ] Beta App Review Information: contact, "Sign-in required: No", and the notes from `docs/review-notes.md`.
+- [ ] Submit for Beta App Review. Apple reviews the first build of each version. After approval, turn on the public link or add testers by email.
+
+---
+
+## Part 4: Android, to Play internal testing
+
+### Task 4.1: Create the upload key
+
+- [ ] Create the keystore with Android Studio's `keytool`:
+  ```bash
+  "/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/keytool" -genkeypair -v -keystore android/upload.keystore -alias upload -keyalg RSA -keysize 4096 -validity 10000
+  ```
+- [ ] Copy `android/keystore.properties.example` to `android/keystore.properties` and fill it in:
+  ```properties
+  storeFile=upload.keystore
+  storePassword=<store password>
+  keyAlias=upload
+  keyPassword=<key password>
+  ```
+- [ ] Put the keystore file and both passwords in the password manager, and keep a second copy of the keystore. A lost upload key needs a reset through Google support.
+- [ ] Check that `git status` shows neither file.
+
+### Task 4.2: Build the signed bundle
+
+- [ ] Build the Rust libraries, then the bundle:
+  ```bash
+  scripts/build-android.sh
+  ```
+  ```bash
+  VERSION_CODE=$(date +%y%m%d%H) scripts/bundle-android.sh
+  ```
+  Expected: `android/demo/build/outputs/bundle/release/demo-release.aab`, with every check passing, "Not debug-signed" included.
+
+### Task 4.3: Create the app
+
+- [ ] Play Console → Create app:
+
+  | Field | Value |
+  | --- | --- |
+  | App name | Freenet AppKit |
+  | Default language | English (United States), en-US |
+  | App or game | App |
+  | Free or paid | Free (Play never lets a free app become paid) |
+  | Declarations | Developer Program Policies, US export laws |
+
+### Task 4.4: App content declarations
+
+Play Console → Policy and programs → App content. Internal testing runs without them; closed testing and production need them.
+
+| Declaration | Answer |
+| --- | --- |
+| Privacy policy | The URL from Task 1.1 |
+| App access | All functionality is available without special access |
+| Ads | No ads |
+| Content rating (IARC) | Social or communication app; users can talk to each other; no location sharing; no digital purchases |
+| Target audience | The age rating from [Decisions](#decisions-to-make-before-part-2) |
+| Data safety | Shared with other peers: messages, user IDs (public keys) and the IP address. State whether private rooms use end-to-end encryption. Encrypted in transit. No account; deleting the app deletes the data |
+| Government, financial, health, news | No |
+| Child safety standards | The URL from Task 1.1 and a contact for reports |
+
+### Task 4.5: Internal testing release
+
+- [ ] Test and release → Testing → Internal testing → Create new release.
+- [ ] Accept Play App Signing. Google keeps the app signing key; the upload key from Task 4.1 signs only uploads.
+- [ ] Upload `demo-release.aab`. Release name: the version code. Release notes: "First test build".
+- [ ] Testers tab: create the email list `Team` and copy the opt-in link.
+- [ ] On an Android phone with a tester account, open the opt-in link, install from Play, and run [Part 6](#part-6-checklist-on-each-installed-test-build).
+- [ ] Open Test and release → Pre-launch report and fix any crash it lists. Google runs it on real devices, Android 8 and 9 included.
+
+### Task 4.6: Closed testing
+
+Personal accounts only.
+
+- [ ] Create a closed testing track with at least 12 testers who stay opted in for 14 days in a row. Play then unlocks production.
+
+---
+
+## Part 5: Public release
+
+| Item | Where | Why |
+| --- | --- | --- |
+| Report objectionable content, block users, publish a contact | River (repo `river`) | App Review guideline 1.2 and Play's user-generated content policy |
+| The no-room screen fills the panel | River plan `docs/plans/ui-ux-reimplementation/21-no-room-screen-fills-panel.plan.md` | Every new user starts on that screen |
+| Rooms and menus add web history entries | River | The back gesture then returns to the room list |
+| Offline start | 1.2 Embedded node and mobile SDK (gateway hostnames resolved in Core's join loop) | Until it lands, starting in airplane mode shows "Freenet could not start." on both platforms |
+| App Privacy answers | App Store Connect → App Privacy | Same facts as Play's Data safety form |
+| Age rating questionnaire | App Store Connect → App Information | Answer yes to user-generated content and messaging |
+| Screenshots, description, support URL, privacy URL, copyright | Both stores | From `store/` |
+| Submit | App Store Connect → the version → Add for Review; Play Console → Production → Create release | |
+
+---
+
+## Part 6: Checklist on each installed test build
+
+Run it on the build installed from TestFlight and from the Play opt-in link.
+
+| Check | iOS | Android |
+| --- | --- | --- |
+| Icon and "AppKit" on the home screen | | |
+| Welcome screen shows once; Terms, Privacy and Support open the right pages | | |
+| River loads on Wi-Fi | | |
+| River loads on mobile data | | |
+| Atlas loads | | |
+| Create a room and send a message | | |
+| Leave for 10 s and come back: the page stays with "Reconnecting", then works | | |
+| Airplane mode after River has loaded: plain error, "Try again", "Details" | | |
+| Keyboard leaves River's message field visible (a real phone) | | |
+| A message alert on the Atlas tab opens River | | |
+| The local network prompt, if it shows, reads "Lets AppKit connect to Freenet devices on your Wi-Fi network." | | Not applicable |
 
 ## Reference
 
 | Topic | Source |
 | --- | --- |
 | Privacy manifest reasons | [Describing use of required reason API](https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api) |
-| iOS app icon | [Configuring your app icon](https://developer.apple.com/documentation/xcode/configuring-your-app-icon) |
 | Encryption export | [Complying with encryption export regulations](https://developer.apple.com/documentation/security/complying-with-encryption-export-regulations) |
 | TestFlight | [TestFlight overview](https://developer.apple.com/help/app-store-connect/test-a-beta-version/testflight-overview) |
-| Android adaptive icon | [Adaptive icons](https://developer.android.com/develop/ui/views/launch/icon_design_adaptive) |
+| App Review | [App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/) |
 | Android signing | [Sign your app](https://developer.android.com/studio/publish/app-signing) |
-| Android back | [Predictive back](https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture) |
-| Android insets | [Edge-to-edge](https://developer.android.com/develop/ui/views/layout/edge-to-edge) |
 | Play internal testing | [Set up an open, closed or internal test](https://support.google.com/googleplay/android-developer/answer/9845334) |
-
-The repository has no unit test targets. Each task checks its result with `scripts/check-store-build.sh`, a build, and a run on the iOS Simulator and the Android emulator (`Pixel_10`, API 37). End every commit message with the `Co-Authored-By` line the project uses.
-
----
-
-## Task 0: Prepare
-
-1. Tag the current commit so the 1.1 harness stays available:
-   ```bash
-   git tag plan-1.1-harness
-   ```
-2. Create the working branch:
-   ```bash
-   git switch -c store-build
-   ```
-3. Record the answers to [Decisions to confirm before Task 1](#decisions-to-confirm-before-task-1) at the top of this file.
-
-## Task 1: Store build check script
-
-`scripts/check-store-build.sh ios <path to .app>` and `scripts/check-store-build.sh android <path to .apk or .aab>` print one line per check and exit non-zero if any check fails.
-
-| Platform | Check | Command |
-| --- | --- | --- |
-| iOS | App icon compiled | `Assets.car` exists and `plutil -extract CFBundleIcons raw Info.plist` succeeds |
-| iOS | Privacy manifest present | `PrivacyInfo.xcprivacy` exists in the `.app` |
-| iOS | Encryption key set | `plutil -extract ITSAppUsesNonExemptEncryption raw Info.plist` succeeds |
-| iOS | No file sharing | `UIFileSharingEnabled` is absent |
-| iOS | iPhone only | `UIDeviceFamily` is `[1]` |
-| iOS | No harness | `strings AppKitDemo` has no `appkit.scenario` or `APPKIT_RESULT` (Swift keeps strings of 15 bytes or fewer in the code, so only the longer one is always found) |
-| Android | Launcher icon | `aapt2 dump badging` shows `application-icon` |
-| Android | Not profileable | `aapt2 dump xmltree --file AndroidManifest.xml` has no `profileable` |
-| Android | Not debug-signed | The certificate from `apksigner verify --print-certs` (APK) or `keytool -printcert -jarfile` (AAB) is not `CN=Android Debug` |
-| Android | 16 KB aligned | `zipalign -c -P 16 -v 4` passes (APK) |
-| Android | No harness | `strings` of `classes*.dex` has no `appkit.scenario` or `APPKIT_RESULT` |
-
-Steps:
-
-1. Write `scripts/check-store-build.sh` with the checks above. Use `$ANDROID_SDK_ROOT/build-tools/<latest>/` for `aapt2`, `apksigner` and `zipalign`.
-2. Build both apps with the current scripts:
-   ```bash
-   harness/build-ios-app.sh Release simulator
-   ```
-   ```bash
-   harness/build-android-app.sh Release
-   ```
-3. Run the script on both outputs and confirm every check fails except the 16 KB check:
-   ```bash
-   scripts/check-store-build.sh ios build/ios/DerivedData/Build/Products/Release-iphonesimulator/AppKitDemo.app
-   ```
-   ```bash
-   scripts/check-store-build.sh android android/demo/build/outputs/apk/release/demo-arm64-v8a-release.apk
-   ```
-4. Commit: `Add a check script for store builds`.
-
-## Task 2: Remove the harness from the iOS app
-
-1. Move `DemoWebApp` from `AppResources.swift` into a new `ios/AppKitDemo/WebApps.swift`. `DemoTab` gets two cases:
-   ```swift
-   enum DemoTab: Hashable {
-       case river, atlas
-   }
-   ```
-2. Delete `Harness.swift`, `ProcessClock.swift`, `NetworkPath.swift`, `NativeRoute.swift`, `NativeRouteScreen.swift`, `BridgeTestScreen.swift`, `DiagnosticsScreen.swift` and `AppResources.swift`.
-3. In `AppKitDemoApp.swift`:
-   - remove `ProcessClock` and `NetworkPath` from `init()` and `ProcessClock.markFirstFrame()` and `Harness.startIfRequested` from `onAppear`
-   - keep only the River and Atlas tabs:
-     ```swift
-     TabView(selection: $host.selectedTab) {
-         WebAppScreen(app: .river)
-             .tabItem { Label("River", systemImage: "bubble.left.and.bubble.right") }
-             .tag(DemoTab.river)
-         WebAppScreen(app: .atlas)
-             .tabItem { Label("Atlas", systemImage: "books.vertical") }
-             .tag(DemoTab.atlas)
-     }
-     ```
-   - remove the `harnessPrompt` branch of the `ZStack` and keep the `AlertBanner`.
-4. In `NodeHost.swift`:
-   - delete `NetworkProfile`, `profile`, `gatewayText`, `gatewayOverrides`, `backendChoice`, `apply(profile:)`, `lifecycleLog`, `log(_:)`, `preloaded`, `preloadIfLocal(_:)`, the event and lifecycle sinks and the `Keys` entries `profile`, `gateway`, `backend` and `riverQuery`
-   - replace `settings(for:)` with one public-network setting:
-     ```swift
-     private func settings() -> NodeSettings {
-         let lastPort = UInt16(clamping: defaults.integer(forKey: Keys.port))
-         return directories.settings(mode: .network, preferredWsPort: lastPort == 0 ? nil : lastPort)
-     }
-     ```
-   - in `scenePhaseChanged(_:)`, delete the harness check at the top
-   - in `waitForPeers`, drop the `profile != .local` condition
-   - in `webURL(for:)`, return `URL(string: text)` with no query.
-5. In `WebAppScreen.swift`, delete `WebViews` and `WebTimeline` and every `timeline.mark` or `WebTimeline.shared.mark` call. Delete the `host.profile == .local` branch in `prepare` and in `pageText`. Keep the `appkitFrames` handler, which ends the loading view.
-6. Split `WebAppScreen.swift`: move `WebAppView` and its `Coordinator` to `WebAppView.swift`, and `AlertShim` to `AlertShim.swift`.
-7. Build for the simulator and fix every compile error:
-   ```bash
-   harness/build-ios-app.sh Release simulator
-   ```
-8. Run on the simulator. Check that there are two tabs and that River loads from the public network.
-9. Commit: `iOS: keep only River and Atlas on the public network`.
-
-## Task 3: Remove the harness from the Android app
-
-1. Move `DemoWebApp` from `NodeHost.kt` into a new `WebApps.kt`.
-2. Delete `Harness.kt` and `NativeRoute.kt`.
-3. In `MainActivity.kt`:
-   - delete `applyLaunchExtras()` and its call. This also removes the exported-activity bug where any app could set the gateway through intent extras
-   - delete `startHarnessIfRequested()`, `harnessStarted`, `bridgeReport()`, `buildNativeScreen()`, `buildNodeScreen()`, `refreshNodeText()`, `progressRow()`, `monoText()`, `column()` and the `bridge`, `nativeView`, `nodeView`, `nodeText` and `nativeText` fields
-   - `enum class Tab(val label: String) { RIVER("River"), ATLAS("Atlas") }`
-   - `onStop()` calls `NodeHost.onBackground()` with no harness check
-   - delete the `Harness.appInitUptimeMs` and `Harness.firstFrameUptimeMs` lines.
-4. In `NodeHost.kt`:
-   - delete `NetworkProfile`, `profile`, `gatewayText`, `gatewayOverrides`, `backend`, `backendChoice`, `apply()`, `preloaded`, `preloadIfLocal()`, `lifecycleLog`, `log()`, the event and lifecycle sinks, and the whole `AppResources` object
-   - one public-network setting:
-     ```kotlin
-     private fun settings(): NodeSettings {
-         val last = prefs.getInt("lastPort", 0)
-         return directories.settings(NodeMode.NETWORK, preferredWsPort = if (last == 0) null else last.toUShort())
-     }
-     ```
-   - in `waitForPeers`, drop the `NetworkProfile.LOCAL` condition.
-5. Split `WebScreens.kt` into `WebAppPage.kt`, `LoadingView.kt` and `AlertShim.kt` (the `AlertShim` object with `FRAME_REPORT`). Move `openExternally` to `AppInfo.kt`. Delete `WebViews`, `WebTimeline`, `BridgePage`, every `WebTimeline.mark` call and the `NetworkProfile.LOCAL` branch in `prepare()` and `load()`. Then delete `WebScreens.kt`.
-6. In `proguard-rules.pro`, delete the harness keep rule and its comment.
-7. In `AndroidManifest.xml`, delete `<profileable android:shell="true" />` and its comment.
-8. Build and fix every compile error:
-   ```bash
-   harness/build-android-app.sh Release
-   ```
-9. Install on the emulator and check that there are two tabs and that River loads from the public network:
-   ```bash
-   adb install -r android/demo/build/outputs/apk/release/demo-x86_64-release.apk
-   ```
-10. Commit: `Android: keep only River and Atlas on the public network`.
-
-## Task 4: Remove harness resources and scripts
-
-1. Move the app build scripts:
-   ```bash
-   git mv harness/build-ios-app.sh scripts/build-ios-app.sh
-   ```
-   ```bash
-   git mv harness/build-android-app.sh scripts/build-android-app.sh
-   ```
-   In both, fix the `cd "$(dirname "$0")/.."` paths if needed.
-2. Delete `harness/`, `scripts/generate-fixtures.sh`, `scripts/fetch-webapps.sh`, `scripts/prepare-resources.sh`, `fixtures/` and `web/bridge-test/`.
-3. In `ios/AppKitDemo.xcodeproj/project.pbxproj`, remove the three `AppKitResources` lines: the `PBXBuildFile` (`F7E0A1B2C3D4E5F60000000C`), the `PBXFileReference` (`F7E0A1B2C3D4E5F600000006`), its entry in the main group's `children`, and its entry in the Resources build phase's `files`.
-4. Delete the local folders `ios/AppKitResources/` and `android/demo/src/main/assets/AppKitResources/`.
-5. In `.gitignore`, remove the sections "Fetched website containers", "Harness scratch" and "Generated resources". Add `android/keystore.properties` and `*.keystore`.
-6. Rewrite `README.md`:
-   - what the app is (River and Atlas on an embedded node, public network, foreground only)
-   - build steps: Rust targets, `scripts/build-ios.sh`, `scripts/build-android.sh`, `scripts/build-ios-app.sh`, `scripts/build-android-app.sh`, and the store scripts from Task 11
-   - one line: the harness and the measurement scenarios for 1.1 Mobile feasibility and supported profiles are at tag `plan-1.1-harness`, and `results/` and `docs/` hold their results
-   - remove the Bridge and Native boxes from the diagram.
-7. Build both apps with the moved scripts. Run the check script. Both "No harness" checks now pass.
-8. Commit: `Remove the harness, fixtures and bundled resources`.
-
-## Task 5: iOS store blockers
-
-1. **App icon.** Create `ios/AppKitDemo/Assets.xcassets/Contents.json` and `AppIcon.appiconset/` with one 1024 × 1024 entry:
-   ```json
-   {
-     "images": [{ "filename": "icon-1024.png", "idiom": "universal", "platform": "ios", "size": "1024x1024" }],
-     "info": { "author": "xcode", "version": 1 }
-   }
-   ```
-   Copy `art/icon-1024.png` into the set. In both build configurations in `project.pbxproj`, add `ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;`.
-2. **Privacy manifest.** Create `ios/AppKitDemo/PrivacyInfo.xcprivacy`. `libfreenet_mobile.a` calls `stat`, `fstat`, `lstat` and `fstatat` (file timestamps) and `statfs`, `fstatfs`, `statvfs` and `fstatvfs` (disk space). The app uses `UserDefaults`.
-   ```xml
-   <?xml version="1.0" encoding="UTF-8"?>
-   <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-   <plist version="1.0">
-   <dict>
-       <key>NSPrivacyTracking</key><false/>
-       <key>NSPrivacyTrackingDomains</key><array/>
-       <key>NSPrivacyCollectedDataTypes</key><array/>
-       <key>NSPrivacyAccessedAPITypes</key>
-       <array>
-           <dict>
-               <key>NSPrivacyAccessedAPIType</key><string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
-               <key>NSPrivacyAccessedAPITypeReasons</key><array><string>C617.1</string></array>
-           </dict>
-           <dict>
-               <key>NSPrivacyAccessedAPIType</key><string>NSPrivacyAccessedAPICategoryDiskSpace</string>
-               <key>NSPrivacyAccessedAPITypeReasons</key><array><string>E174.1</string></array>
-           </dict>
-           <dict>
-               <key>NSPrivacyAccessedAPIType</key><string>NSPrivacyAccessedAPICategoryUserDefaults</string>
-               <key>NSPrivacyAccessedAPITypeReasons</key><array><string>CA92.1</string></array>
-           </dict>
-       </array>
-   </dict>
-   </plist>
-   ```
-   After each Core update, list the library's symbols again and add any new category:
-   ```bash
-   nm -u ../freenet-core/target/aarch64-apple-ios/release/libfreenet_mobile.a | grep -E '_(f?stat|lstat|fstatat|getattrlist|f?statv?fs|mach_absolute_time)$' | sort -u
-   ```
-3. **Info.plist** (`ios/AppKitDemo-Info.plist`):
-   - add `ITSAppUsesNonExemptEncryption` = `true`. The node uses X25519, AES-GCM, ChaCha20, Ed25519 and BLAKE3 outside the OS. Answer the export questions for the first build in App Store Connect. If App Store Connect gives a compliance code, add it as `ITSEncryptionExportComplianceCode`
-   - delete `UIFileSharingEnabled`, `LSSupportsOpeningDocumentsInPlace` and their comment
-   - change `NSLocalNetworkUsageDescription` to: `Lets AppKit connect to Freenet devices on your Wi-Fi network.` (iOS shows it only when the node reaches a peer at a private address on the same Wi-Fi)
-4. **Project settings** (both configurations in `project.pbxproj`):
-   - `TARGETED_DEVICE_FAMILY = 1;`
-   - delete `INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad`
-   - `INFOPLIST_KEY_CFBundleDisplayName = AppKit;`
-   - `PRODUCT_BUNDLE_IDENTIFIER = freenet.appkit;`
-   - `INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";`
-5. **Web inspector in debug builds only.** In `WebAppView.swift`:
-   ```swift
-   #if DEBUG
-   if #available(iOS 16.4, *) { webView.isInspectable = true }
-   #endif
-   ```
-6. **No crash when the node's folders can't be created.** In `NodeHost.swift`, change `directories` to `NodeDirectories?` set with `try? NodeDirectories.standard()`. In `start()`, when it is `nil`, set `lastError` and return `nil`, so the loading view shows its error and the "Try again" button.
-7. Build, run the check script on the `.app`, and confirm every iOS check passes. Run on the simulator and check that the home screen shows the icon and "AppKit".
-8. Commit: `iOS: icon, privacy manifest, encryption key and iPhone only`.
-
-## Task 6: Android store blockers
-
-1. **Launcher icon.**
-   - `res/mipmap-anydpi-v26/ic_launcher.xml`:
-     ```xml
-     <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-         <background android:drawable="@color/ic_launcher_background" />
-         <foreground android:drawable="@drawable/ic_launcher_foreground" />
-         <monochrome android:drawable="@drawable/ic_launcher_foreground" />
-     </adaptive-icon>
-     ```
-   - `res/drawable/ic_launcher_foreground.xml`: the icon art as a 108 dp vector with the art inside the central 72 dp
-   - `res/values/colors.xml`: `ic_launcher_background`
-   - `res/values/strings.xml`: `app_name` = `AppKit`, `app_full_name` = `Freenet AppKit`
-   - in `build.gradle.kts`, `applicationId = "freenet.appkit"`
-   - in `AndroidManifest.xml` on `<application>`: `android:icon="@mipmap/ic_launcher"`, `android:roundIcon="@mipmap/ic_launcher"`, `android:label="@string/app_name"`
-   - export `art/icon-play-512.png` for the Play listing:
-     ```bash
-     sips -z 512 512 art/icon-1024.png --out art/icon-play-512.png
-     ```
-2. **Upload signing** in `android/demo/build.gradle.kts`:
-   ```kotlin
-   val keystoreProps = rootProject.file("keystore.properties").takeIf { it.exists() }?.let { file ->
-       java.util.Properties().apply { file.inputStream().use { load(it) } }
-   }
-
-   android {
-       signingConfigs {
-           if (keystoreProps != null) create("upload") {
-               storeFile = rootProject.file(keystoreProps.getProperty("storeFile"))
-               storePassword = keystoreProps.getProperty("storePassword")
-               keyAlias = keystoreProps.getProperty("keyAlias")
-               keyPassword = keystoreProps.getProperty("keyPassword")
-           }
-       }
-       buildTypes {
-           release {
-               signingConfig = signingConfigs.findByName("upload") ?: signingConfigs.getByName("debug")
-           }
-       }
-   }
-   ```
-   Add `android/keystore.properties.example` with the four keys and no values. Create the upload key with `keytool -genkeypair -v -keystore upload.keystore -alias upload -keyalg RSA -keysize 4096 -validity 10000`. Keep the key and its passwords in the project's password manager, never in git.
-3. **Version code from the command line.** In `defaultConfig`:
-   ```kotlin
-   versionCode = (project.findProperty("versionCode") as String?)?.toInt() ?: 1
-   versionName = (project.findProperty("versionName") as String?) ?: "0.1"
-   ```
-4. **BuildConfig.** Add `buildFeatures { buildConfig = true }` to `android { }`.
-5. **Web inspector in debug builds only.** In `WebAppPage.kt`, replace `WebView.setWebContentsDebuggingEnabled(true)` with:
-   ```kotlin
-   if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
-   ```
-6. **No crash on links with no handler.** In `AppInfo.kt`:
-   ```kotlin
-   fun openExternally(context: Context, uri: Uri) {
-       try {
-           context.startActivity(Intent(Intent.ACTION_VIEW, uri))
-       } catch (e: ActivityNotFoundException) {
-           Toast.makeText(context, "No app can open this link", Toast.LENGTH_SHORT).show()
-       }
-   }
-   ```
-   In `WebAppPage.onCreateWindow`, call `openExternally(context, target)` instead of `context.startActivity(...)`. Open only `http`, `https` and `mailto` links and ignore other schemes.
-7. Build, run the check script on the APK, and confirm every Android check passes, with "Not debug-signed" passing once `keystore.properties` exists. On the emulator, check the launcher icon and name.
-8. Commit: `Android: icon, upload signing and debug-only web inspector`.
-
-## Task 7: Navigation
-
-### Android tab bar
-
-1. Create `res/drawable/ic_tab_river.xml` and `ic_tab_atlas.xml`: 24 dp vectors, chat bubbles and books, matching the iOS SF Symbols.
-2. Create `TabBar.kt`: a horizontal `LinearLayout` with one item per tab. Each item:
-   - is a vertical icon and label, at least 56 dp high
-   - takes the theme's `colorAccent` when selected and `textColorSecondary` when not
-   - sets `isSelected` and `contentDescription` (`"River, tab 1 of 2"`), so TalkBack reads it
-   - calls `onSelect(tab)` on tap.
-3. In `MainActivity.buildShell()`, replace the row of `Button`s with `TabBar`. In `select(tab)`, update the tab bar's selected item.
-
-### Android insets
-
-1. The app targets API 36, so Android 15 and later draw it edge to edge. Remove `fitsSystemWindows = true` from the root. Pad the root for the system bars and the keyboard:
-   ```kotlin
-   root.setOnApplyWindowInsetsListener { v, insets ->
-       val bars = insets.getInsets(WindowInsets.Type.systemBars() or WindowInsets.Type.ime())
-       v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
-       WindowInsets.CONSUMED
-   }
-   ```
-   On API 26 to 29, use `insets.systemWindowInsetLeft`, `Top`, `Right` and `Bottom` instead.
-2. On the emulator, open River, tap the message field and check that the keyboard does not cover it.
-
-### Back navigation
-
-1. **Android.**
-   - add `android:enableOnBackInvokedCallback="true"` to `<application>`
-   - `WebAppPage` exposes `canGoBack()` and `goBack()` on its current `WebView`, and calls a `onHistoryChanged` callback from `WebViewClient.doUpdateVisitedHistory`
-   - in `MainActivity`, register an `OnBackInvokedCallback` (API 33 and later) only while the current page `canGoBack()`, and unregister it when it can't. The system's own back-to-home then runs when there is nothing to go back to
-   - for API 26 to 32, override `onBackPressed()`: go back in the page if it can, otherwise call `super.onBackPressed()`.
-2. **iOS.** In `WebAppView.makeUIView`, set `webView.allowsBackForwardNavigationGestures = true`.
-3. Check on both: open a room in River, go back with the back gesture, and River shows the room list.
-4. Commit: `Tab bar, insets and back navigation`.
-
-## Task 8: Plain loading and error messages
-
-1. Create `LoadMessages.swift` and `LoadMessages.kt` with the same text:
-
-   | State | Title | Detail (hidden behind "Details") |
-   | --- | --- | --- |
-   | Starting | "Starting Freenet" | – |
-   | Waiting for a peer, first 10 s | "Connecting to the Freenet network" | – |
-   | Waiting for a peer, after 10 s | "Connecting to the Freenet network. The first connection can take up to a minute." | – |
-   | Fetching the web app | "Downloading River" / "Downloading Atlas" | – |
-   | Starting the web app | "Opening River" / "Opening Atlas" | – |
-   | Node did not start | "Freenet could not start." | `lastError` |
-   | No peer answered | "Freenet could not reach the network. Check your internet connection. Some Wi-Fi networks block Freenet's traffic; mobile data may work." | `lastError` |
-   | Page failed | "River could not open." | the WebKit or WebView error |
-
-2. `LoadingView` on both platforms gets a "Details" button under the error. It shows the detail text in a small monospaced font, selectable, so testers can copy it into a report.
-3. Replace every string in `WebAppModel.prepare`, `WebAppModel.pageText` (iOS) and `WebAppPage.prepare`, `WebAppPage.load` and `WebAppPage.loadFailed` (Android) with the `LoadMessages` values. Start a 10 s timer when the peer wait begins, to switch to the longer text.
-4. Check on both: turn networking off (Simulator: Network Link Conditioner, 100% loss. Emulator: `adb shell svc wifi disable` and `adb shell svc data disable`), open River, and wait for the "could not reach" message, the "Try again" button and the "Details" button.
-5. Commit: `Plain loading and error messages`.
-
-## Task 9: Keep the page on screen while reconnecting
-
-The node stops when the app goes to the background and starts a new session when it returns, so each web app loads again. The page the user saw stays on screen until the new one has drawn.
-
-```mermaid
-sequenceDiagram
-  participant U as User
-  participant S as WebAppScreen / WebAppPage
-  participant N as NodeHost
-  U->>S: returns to the app
-  S->>S: keep the last page, dim it, show "Reconnecting" pill, block taps
-  S->>N: start(), waitForPeers()
-  N-->>S: new session URL
-  S->>S: load the new page behind the old one
-  S->>S: new page painted: swap, remove pill
-```
-
-1. **iOS.**
-   - add `case reconnecting` to `PageState`
-   - in `WebAppModel.prepare`, when `page == .shown` (a page was already on screen), keep `url` as it is, set `page = .reconnecting`, and set `url` to the new session's URL only after `waitForPeers` succeeds
-   - in `WebAppScreen`, for `.reconnecting`, show a small top-aligned capsule with a `ProgressView` and "Reconnecting" in place of the full-screen `LoadingView`. Apply `.allowsHitTesting(false)` and `.opacity(0.6)` to the web view
-   - `WebAppView.updateUIView` loads the new URL into the same `WKWebView`. WebKit keeps the old page on screen until the new one has drawn, and the `painted` message sets `page = .shown`
-   - if the reconnect fails, show the full-screen error from Task 8.
-2. **Android.**
-   - in `WebAppPage.prepare`, when a page was shown, keep the current `WebView`, add a small "Reconnecting" pill on top of it, and add a transparent view on top that takes all taps
-   - `load(url)` creates the new `WebView` at index 0, behind the old one. In `reveal()`, remove and destroy the old `WebView` and the pill
-   - if the reconnect fails, destroy the old `WebView` and show the full-screen error from Task 8.
-3. Check on both: open River and wait for it to load, switch to another app for 10 s, and come back. River's last screen stays visible with the "Reconnecting" pill, then becomes interactive with no blank screen in between.
-4. Commit: `Keep the page on screen while reconnecting`.
-
-## Task 10: Welcome screen and app name in prompts
-
-1. Create `AppInfo.swift` and `AppInfo.kt` with `shortName` (`AppKit`, read from the bundle or `applicationInfo.loadLabel`), `fullName` (`Freenet AppKit`), `termsURL` and `supportURL`.
-2. Create `WelcomeScreen.swift` and `WelcomeScreen.kt`. It shows once, on first start, over everything:
-   - the icon and "Freenet AppKit"
-   - three short lines: "Chat with River and browse Atlas, served by Freenet running on your phone." / "Freenet connects directly to other people's devices. It runs only while this app is open." / "What you post is shared with other people on the network."
-   - "By continuing you agree to the Terms." with "Terms" linked to `termsURL`, and a "Support" link to `supportURL`
-   - a "Continue" button that stores `welcomeSeen = true` (`UserDefaults` / `SharedPreferences`).
-   The node starts only after "Continue", so the local network prompt on iOS appears after the welcome screen.
-3. iOS: present it with `.fullScreenCover` from `ContentView` while `welcomeSeen` is false. Android: `MainActivity` shows `WelcomeScreen.view` in place of the shell until "Continue".
-4. In the alert permission prompts, replace "AppKit Demo" with `AppInfo.shortName`: `WebAppView.Coordinator.askPermission` (iOS) and `WebAppPage.askPermission` (Android).
-5. Check on both: delete the app, install it again, and see the welcome screen once. After "Continue", River loads. Start the app again and the welcome screen does not show.
-6. Commit: `Welcome screen with terms and support links`.
-
-## Task 11: Store packaging scripts
-
-1. **iOS.** Create `ios/ExportOptions.plist`:
-   ```xml
-   <dict>
-       <key>method</key><string>app-store-connect</string>
-       <key>destination</key><string>upload</string>
-       <key>signingStyle</key><string>automatic</string>
-       <key>teamID</key><string>$(DEVELOPMENT_TEAM)</string>
-   </dict>
-   ```
-   Create `scripts/archive-ios.sh`. It needs `DEVELOPMENT_TEAM` and `BUILD_NUMBER`, which must go up on every upload:
-   ```bash
-   xcodebuild -project ios/AppKitDemo.xcodeproj -scheme AppKitDemo -configuration Release \
-     -destination 'generic/platform=iOS' -archivePath build/ios/AppKitDemo.xcarchive \
-     DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
-     -allowProvisioningUpdates archive
-   xcodebuild -exportArchive -archivePath build/ios/AppKitDemo.xcarchive \
-     -exportOptionsPlist ios/ExportOptions.plist -exportPath build/ios/export -allowProvisioningUpdates
-   ```
-   Then it runs `scripts/check-store-build.sh ios build/ios/AppKitDemo.xcarchive/Products/Applications/AppKitDemo.app`. Write `teamID` into the plist from `DEVELOPMENT_TEAM` with `plutil -replace` before the export.
-2. **Android.** Create `scripts/bundle-android.sh`. It needs `VERSION_CODE`:
-   ```bash
-   ./gradlew --no-configuration-cache -q :demo:bundleRelease -PversionCode="$VERSION_CODE"
-   ```
-   Then it runs `scripts/check-store-build.sh android android/demo/build/outputs/bundle/release/demo-release.aab`. It stops if `android/keystore.properties` is missing.
-3. Run both scripts. Every check passes.
-4. Commit: `Scripts for App Store Connect and Play uploads`.
-
-## Task 12: Review notes and first uploads
-
-1. Write `docs/review-notes.md` with two sections of paste-ready text:
-   - **App Review notes (App Store Connect → App Review Information).** What the app does. That it runs a Freenet peer inside the app and reaches other peers over UDP. That the first connection can take up to a minute, and networks that block UDP show the "could not reach" message. That no sign-in is needed. The steps to create a River room and send a message. A link to a screen recording of those steps on an iPhone and on an Android phone. The support contact.
-   - **Play testing instructions (Play Console → App content → App access).** The same text.
-2. Record the screen recordings on the iPhone 13 mini and on the Android emulator.
-3. iOS: create the app record in App Store Connect with the name "Freenet AppKit" and bundle ID `freenet.appkit`, then upload `build/ios/export/AppKitDemo.ipa` with Xcode Organizer or `xcrun altool --upload-app`. In App Store Connect, answer the encryption questions, add the team as internal testers, and install from TestFlight on the iPhone.
-4. Android: create the app in Play Console with the name "Freenet AppKit", turn on Play App Signing, upload the AAB to the internal testing track, add testers by email, and install from the Play opt-in link on a device or the emulator with the Play Store.
-5. On each installed store build, go through this list:
-
-   | Check | iOS | Android |
-   | --- | --- | --- |
-   | Icon and name on the home screen | | |
-   | Welcome screen once, links open | | |
-   | River loads on Wi-Fi and on mobile data | | |
-   | Atlas loads | | |
-   | Back gesture inside River | | |
-   | Leave for 10 s and return: page stays, "Reconnecting", then usable | | |
-   | Airplane mode: plain error, "Try again", "Details" | | |
-   | Message alert while on the Atlas tab opens River | | |
-   | Keyboard does not cover River's message field | | |
-
-6. Commit: `Review notes for App Review and Play`.
+| Play user-generated content | [User-generated content policy](https://support.google.com/googleplay/android-developer/answer/9876937) |
+| Store policy review of this app | [Distribution review](distribution-review.md) |
