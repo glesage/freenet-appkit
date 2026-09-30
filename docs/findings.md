@@ -42,15 +42,26 @@ The second change is in the freenet-core working tree as provisional iOS default
 
 ### Recommendation: Core re-reads the memory address after each guest call
 
-A reservation is address space, and each running contract or delegate instance takes a full 256 MiB of it however little memory it uses. The 2 GiB bound therefore limits how many instances run at once (about 8). Stored data lives in the node's store on disk and is measured by the `storage` scenario.
+A reservation is address space, not RAM. Each contract or delegate instance has one linear memory, and today it reserves the full 256 MiB for it up front, even when the contract uses about 1 MiB. The phone runs out of address space because many instances each hold 256 MiB: every call creates a new instance, and old instances keep their reservation until the Store is replaced. The 2 GiB bound therefore limits how many instances run at once (about 8). Stored data lives in the node's store on disk and is measured by the `storage` scenario.
 
-Core looks up the memory address before a guest call and reads the result through it afterwards. In `run_validate_state` (`crates/core/src/wasm_runtime/contract.rs`) it looks up the address at line 132, runs the contract at line 141 and reads the result at line 154. Host functions that the guest calls already look up the address again (`refresh_mem_addr_from_caller` in `engine/wasmtime_engine.rs`).
+The recommended fix changes how much address space each instance claims up front. Each instance keeps one memory with the same 256 MiB limit:
+
+| | Today | With the fix |
+| --- | --- | --- |
+| Address space claimed per instance | 256 MiB, up front | What the contract uses, plus a little room to grow |
+| A contract that grows past that | Grows in place, inside its 256 MiB | wasmtime moves the memory to a bigger block and copies it. Core looks up the new address |
+| Largest memory per contract | 256 MiB | 256 MiB |
+| Instances that fit on the iPhone | About 22 at once | Hundreds, each taking only what it uses |
+
+For this to work, Core looks up the memory address again after each contract and delegate call. Today it looks up the address before the call and reads the result through it afterwards. In `run_validate_state` (`crates/core/src/wasm_runtime/contract.rs`) it looks up the address at line 132, runs the contract at line 141 and reads the result at line 154. Host functions that the guest calls already look up the address again (`refresh_mem_addr_from_caller` in `engine/wasmtime_engine.rs`).
 
 | Option | Effect |
 | --- | --- |
 | **Core looks up the memory address again after each contract and delegate call (recommended)** | Memory can move, so each reservation shrinks to what the instance uses, on every platform. iOS then uses the same Store replacement as other platforms. Each growth copies the memory |
 | Apple's extended virtual addressing entitlement | Raises the iOS limit; reservations still pile up. Adds an entitlement for App Review to check |
 | A lower memory cap on iOS | More instances fit; a contract that needs more memory fails only on iOS |
+
+256 MiB per contract covers the contracts measured here, which use about 1 MiB. A contract that needs more is served by raising Core's memory cap, which applies to every platform. On a phone that larger memory is also real RAM, and iOS and Android close apps that use too much, so such a contract belongs on desktop nodes.
 
 The recommended change fixes the cause in Core. To confirm it on the iPhone, re-run the 300-contract and 200-update runs with the "declared memory plus 1 MiB" setting from the table above and Core's default Store replacement. The fix is confirmed when both runs pass.
 
