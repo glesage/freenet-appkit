@@ -147,12 +147,12 @@ The repository has no unit test targets. Each task checks its result with `scrip
 | iOS | Encryption key set | `plutil -extract ITSAppUsesNonExemptEncryption raw Info.plist` succeeds |
 | iOS | No file sharing | `UIFileSharingEnabled` is absent |
 | iOS | iPhone only | `UIDeviceFamily` is `[1]` |
-| iOS | No harness | `strings AppKitDemo \| grep -c 'appkit.scenario'` is 0 |
+| iOS | No harness | `strings AppKitDemo` has no `appkit.scenario` or `APPKIT_RESULT` (Swift keeps strings of 15 bytes or fewer in the code, so only the longer one is always found) |
 | Android | Launcher icon | `aapt2 dump badging` shows `application-icon` |
 | Android | Not profileable | `aapt2 dump xmltree --file AndroidManifest.xml` has no `profileable` |
 | Android | Not debug-signed | The certificate from `apksigner verify --print-certs` (APK) or `keytool -printcert -jarfile` (AAB) is not `CN=Android Debug` |
 | Android | 16 KB aligned | `zipalign -c -P 16 -v 4` passes (APK) |
-| Android | No harness | `unzip -p <apk> 'classes*.dex' \| strings \| grep -c 'appkit.scenario'` is 0 |
+| Android | No harness | `strings` of `classes*.dex` has no `appkit.scenario` or `APPKIT_RESULT` |
 
 Steps:
 
