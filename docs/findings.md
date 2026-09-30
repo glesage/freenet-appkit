@@ -4,7 +4,7 @@ What the 1.1 Mobile feasibility and supported profiles runs turned up, as of 202
 
 | # | Finding | Acts next |
 | --- | --- | --- |
-| 1 | [The iPhone refused Core's Wasm memory reservations](#the-iphone-refused-cores-wasm-memory-reservations) | freenet-core, 1.2 Embedded node and mobile SDK |
+| 1 | [The iPhone refused Core's Wasm memory reservations](#the-iphone-refused-cores-wasm-memory-reservations) | freenet-core (recommended fix), 1.2 Embedded node and mobile SDK |
 | 2 | [The node cannot start offline in network mode](#the-node-cannot-start-offline-in-network-mode) | freenet-core, 1.2 Embedded node and mobile SDK |
 | 3 | [The node does not move to cellular on its own](#the-node-does-not-move-to-cellular-on-its-own) | 1.2 Embedded node and mobile SDK |
 | 4 | [Phones are full peers on the public network](#phones-are-full-peers-on-the-public-network) | 1.8 Thin-peer role and cellular data budgets |
@@ -38,7 +38,21 @@ Two ways out were tried on the phone:
 The second change is in the freenet-core working tree as provisional iOS defaults (`STORE_REFRESH_THRESHOLD` and `DEFAULT_RUNTIME_POOL_SIZE_CAP`). It bounds live reservations near 2 GiB.
 
 - Evidence: `results/2026-09-30-ios-device-iphone-13-mini-256mib-reservation` (the default: 22 contracts, throughput failed), the crash report from the phone, and `results/2026-09-30-ios-device-iphone-13-mini` (the provisional limits).
-- Next: 1.2 Embedded node and mobile SDK sets the final limits from these runs. The lasting fix is upstream: once Core's host code re-reads the memory base after each guest call, a small reservation becomes safe and iOS no longer needs frequent Store replacement. The extended-virtual-addressing entitlement is the other lever for store builds.
+- Next: 1.2 Embedded node and mobile SDK keeps the provisional limits until the upstream fix below lands, then sets the final limits from a new run.
+
+### Recommendation: Core re-reads the memory address after each guest call
+
+A reservation is address space, and each running contract or delegate instance takes a full 256 MiB of it however little memory it uses. The 2 GiB bound therefore limits how many instances run at once (about 8). Stored data lives in the node's store on disk and is measured by the `storage` scenario.
+
+Core looks up the memory address before a guest call and reads the result through it afterwards. In `run_validate_state` (`crates/core/src/wasm_runtime/contract.rs`) it looks up the address at line 132, runs the contract at line 141 and reads the result at line 154. Host functions that the guest calls already look up the address again (`refresh_mem_addr_from_caller` in `engine/wasmtime_engine.rs`).
+
+| Option | Effect |
+| --- | --- |
+| **Core looks up the memory address again after each contract and delegate call (recommended)** | Memory can move, so each reservation shrinks to what the instance uses, on every platform. iOS then uses the same Store replacement as other platforms. Each growth copies the memory |
+| Apple's extended virtual addressing entitlement | Raises the iOS limit; reservations still pile up. Adds an entitlement for App Review to check |
+| A lower memory cap on iOS | More instances fit; a contract that needs more memory fails only on iOS |
+
+The recommended change fixes the cause in Core. To confirm it on the iPhone, re-run the 300-contract and 200-update runs with the "declared memory plus 1 MiB" setting from the table above and Core's default Store replacement. The fix is confirmed when both runs pass.
 
 ## The node cannot start offline in network mode
 
