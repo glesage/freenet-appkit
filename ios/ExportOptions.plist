@@ -4,8 +4,9 @@
 <dict>
 	<key>method</key>
 	<string>app-store-connect</string>
+	<!-- export writes build/ios/export/AppKitDemo.ipa for Xcode Organizer or altool to upload. -->
 	<key>destination</key>
-	<string>upload</string>
+	<string>export</string>
 	<key>signingStyle</key>
 	<string>automatic</string>
 	<!-- scripts/archive-ios.sh writes DEVELOPMENT_TEAM here in a copy. -->
