@@ -6,6 +6,18 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 
+/** The app's names and the links the welcome screen shows. */
+object AppInfo {
+    val termsUrl: Uri = Uri.parse("https://freenet.org/terms")
+    val supportUrl: Uri = Uri.parse("https://freenet.org/support")
+
+    /** The launcher label, `AppKit`, used in prompts. */
+    fun shortName(context: Context) = context.applicationInfo.loadLabel(context.packageManager).toString()
+
+    /** `Freenet AppKit`, the welcome screen title and store listing name. */
+    fun fullName(context: Context) = context.getString(R.string.app_full_name)
+}
+
 /** The schemes [openExternally] hands to other apps. */
 private val externalSchemes = setOf("http", "https", "mailto")
 

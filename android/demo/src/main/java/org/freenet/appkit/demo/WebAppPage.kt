@@ -278,7 +278,7 @@ class WebAppPage(private val context: Context, val app: DemoWebApp) {
         }
         AlertDialog.Builder(context)
             .setTitle("Show message alerts from ${app.title}?")
-            .setMessage("Alerts appear only while AppKit Demo is open.")
+            .setMessage("Alerts appear only while ${AppInfo.shortName(context)} is open.")
             .setNegativeButton("Don't allow") { _, _ -> answer(AlertGrant.DENIED) }
             .setPositiveButton("Allow") { _, _ -> answer(AlertGrant.GRANTED) }
             .show()

@@ -22,7 +22,8 @@ class MainActivity : Activity() {
         ATLAS("Atlas", R.drawable.ic_tab_atlas),
     }
 
-    private lateinit var root: View
+    private lateinit var root: FrameLayout
+    private var shell: View? = null
     private lateinit var content: FrameLayout
     private lateinit var banner: TextView
     private lateinit var tabBar: TabBar
@@ -48,18 +49,35 @@ class MainActivity : Activity() {
         river.onHistoryChanged = { updateBackCallback() }
         atlas.onHistoryChanged = { updateBackCallback() }
         actionBar?.hide()
-        root = buildShell()
+        root = FrameLayout(this).apply { setBackgroundColor(themeBackground()) }
         setContentView(root)
         SystemBars.apply(this, root)
         NodeHost.alertPresenter = { alert -> showAlert(alert) }
         NodeHost.onChange(sessionListener)
+        if (WelcomeScreen.isSeen(this)) {
+            showShell()
+        } else {
+            // The node starts only once the user has read the welcome screen.
+            val welcome = WelcomeScreen(this) {
+                root.removeAllViews()
+                showShell()
+                NodeHost.onForeground()
+            }
+            root.addView(welcome.view)
+        }
+    }
+
+    private fun showShell() {
+        val view = buildShell()
+        shell = view
+        root.addView(view)
         content.post { select(Tab.RIVER) }
     }
 
     // The node runs only while the app is in the foreground.
     override fun onStart() {
         super.onStart()
-        NodeHost.onForeground()
+        if (shell != null) NodeHost.onForeground()
     }
 
     override fun onStop() {
@@ -120,10 +138,7 @@ class MainActivity : Activity() {
     // --- Layout ---------------------------------------------------------
 
     private fun buildShell(): View {
-        val root = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setBackgroundColor(themeBackground())
-        }
+        val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         val stack = FrameLayout(this)
         content = FrameLayout(this)
         stack.addView(content)
