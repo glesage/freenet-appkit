@@ -8,12 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		F7E0A1B2C3D4E5F60000000B /* FreenetAppKit in Frameworks */ = {isa = PBXBuildFile; productRef = F7E0A1B2C3D4E5F600000014 /* FreenetAppKit */; };
-		F7E0A1B2C3D4E5F60000000C /* AppKitResources in Resources */ = {isa = PBXBuildFile; fileRef = F7E0A1B2C3D4E5F600000006 /* AppKitResources */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F7E0A1B2C3D4E5F600000004 /* AppKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F7E0A1B2C3D4E5F600000006 /* AppKitResources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AppKitResources; sourceTree = "<group>"; };
 		F7E0A1B2C3D4E5F600000015 /* AppKitDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppKitDemo-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -41,7 +39,6 @@
 			isa = PBXGroup;
 			children = (
 				F7E0A1B2C3D4E5F600000005 /* AppKitDemo */,
-				F7E0A1B2C3D4E5F600000006 /* AppKitResources */,
 				F7E0A1B2C3D4E5F600000015 /* AppKitDemo-Info.plist */,
 				F7E0A1B2C3D4E5F600000003 /* Products */,
 			);
@@ -123,7 +120,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7E0A1B2C3D4E5F60000000C /* AppKitResources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
