@@ -8,6 +8,8 @@ import WebKit
 struct WebAppView: UIViewRepresentable {
     let app: DemoWebApp
     let url: URL
+    /// Changes on every load the model asks for, so the same URL loads again
+    /// in a new node session.
     let generation: Int
     let model: WebAppModel
     @EnvironmentObject var host: NodeHost
@@ -132,7 +134,8 @@ struct WebAppView: UIViewRepresentable {
         func startLoad() {
             appFrameSeen = false
             fallback?.cancel()
-            model?.page = .fetching
+            // A reconnect keeps the old page on screen until the new one draws.
+            if model?.page != .reconnecting { model?.page = .fetching }
         }
 
         private func show() {
