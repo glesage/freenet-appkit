@@ -34,6 +34,8 @@ struct WebAppView: UIViewRepresentable {
         #if DEBUG
         if #available(iOS 16.4, *) { webView.isInspectable = true }
         #endif
+        // Swipe from the left edge goes back in the web app's history.
+        webView.allowsBackForwardNavigationGestures = true
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
         context.coordinator.attach(webView)
