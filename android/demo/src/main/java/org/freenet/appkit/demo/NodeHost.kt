@@ -36,7 +36,7 @@ enum class NetworkProfile(val key: String, val label: String) {
     PUBLIC("public", "Public network");
 
     companion object {
-        fun of(key: String?) = entries.firstOrNull { it.key == key } ?: LOCAL
+        fun of(key: String?) = entries.firstOrNull { it.key == key } ?: PUBLIC
     }
 }
 

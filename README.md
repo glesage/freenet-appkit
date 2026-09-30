@@ -49,7 +49,7 @@ Both apps have the same five screens.
 
 The node runs only while the app is in the foreground. It stops when the app moves to the background and starts a fresh session when the app returns. Message alerts appear only while the app is open.
 
-Three network profiles:
+Three network profiles. The apps start on Public until you pick another one on the Node screen:
 
 | Profile | The node | River and Atlas come from |
 | --- | --- | --- |

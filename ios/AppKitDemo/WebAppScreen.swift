@@ -112,6 +112,8 @@ struct WebAppView: UIViewRepresentable {
             source: AlertShim.script(permission: host.alertGrant.rawValue),
             injectionTime: .atDocumentStart, forMainFrameOnly: true))
         controller.addUserScript(WKUserScript(
+            source: Coordinator.viewportScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true))
+        controller.addUserScript(WKUserScript(
             source: Coordinator.frameReportScript, injectionTime: .atDocumentEnd, forMainFrameOnly: false))
         controller.add(context.coordinator, name: "appkitAlerts")
         controller.add(context.coordinator, name: "appkitFrames")
@@ -143,6 +145,21 @@ struct WebAppView: UIViewRepresentable {
         weak var webView: WKWebView?
         var loaded: (url: URL?, generation: Int) = (nil, -1)
         private var titleObservation: NSKeyValueObservation?
+
+        /// WebKit zooms in when a text field with a font under 16 px takes
+        /// focus, and stays zoomed. A maximum scale of 1 on the shell page
+        /// stops that zoom; pinch zoom still works.
+        static let viewportScript = """
+        (function () {
+          var meta = document.querySelector('meta[name=viewport]');
+          if (!meta) {
+            meta = document.createElement('meta');
+            meta.name = 'viewport';
+            document.head.appendChild(meta);
+          }
+          meta.content = 'width=device-width, initial-scale=1, maximum-scale=1';
+        })();
+        """
 
         /// Every frame reports when its document is ready, so the harness can
         /// time the shell page and the app frame separately.

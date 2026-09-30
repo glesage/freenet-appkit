@@ -78,11 +78,14 @@ final class NodeHost: ObservableObject {
         static let alerts = "appkit.alerts"
         static let backend = "appkit.backend"
         static let port = "appkit.lastPort"
+        /// Launch argument only: a query string for River's first load, for
+        /// example `invitation=<code>`.
+        static let riverQuery = "appkit.riverQuery"
     }
 
     private init() {
         directories = try! NodeDirectories.standard()
-        profile = NetworkProfile(rawValue: defaults.string(forKey: Keys.profile) ?? "") ?? .local
+        profile = NetworkProfile(rawValue: defaults.string(forKey: Keys.profile) ?? "") ?? .publicNetwork
         gatewayText = defaults.string(forKey: Keys.gateway) ?? ""
         alertGrant = AlertGrant(rawValue: defaults.string(forKey: Keys.alerts) ?? "") ?? .notAsked
     }
@@ -278,6 +281,9 @@ final class NodeHost: ObservableObject {
 
     func webURL(for app: DemoWebApp) -> URL? {
         guard let node, let text = try? node.webUrl(contractId: app.instanceId) else { return nil }
+        if app == .river, let query = defaults.string(forKey: Keys.riverQuery), !query.isEmpty {
+            return URL(string: text + "?" + query)
+        }
         return URL(string: text)
     }
 
