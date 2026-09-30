@@ -316,7 +316,7 @@ Steps:
 3. **Info.plist** (`ios/AppKitDemo-Info.plist`):
    - add `ITSAppUsesNonExemptEncryption` = `true`. The node uses X25519, AES-GCM, ChaCha20, Ed25519 and BLAKE3 outside the OS. Answer the export questions for the first build in App Store Connect. If App Store Connect gives a compliance code, add it as `ITSEncryptionExportComplianceCode`
    - delete `UIFileSharingEnabled`, `LSSupportsOpeningDocumentsInPlace` and their comment
-   - change `NSLocalNetworkUsageDescription` to: `Freenet connects directly to other Freenet peers on your Wi-Fi network.`
+   - change `NSLocalNetworkUsageDescription` to: `Lets AppKit connect to Freenet devices on your Wi-Fi network.` (iOS shows it only when the node reaches a peer at a private address on the same Wi-Fi)
 4. **Project settings** (both configurations in `project.pbxproj`):
    - `TARGETED_DEVICE_FAMILY = 1;`
    - delete `INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad`
