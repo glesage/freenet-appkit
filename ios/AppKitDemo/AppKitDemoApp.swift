@@ -40,6 +40,9 @@ struct ContentView: View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: host.alert?.id)
+        .fullScreenCover(isPresented: .constant(!host.welcomeSeen)) {
+            WelcomeScreen { host.welcomeSeen = true }
+        }
     }
 }
 

@@ -241,7 +241,7 @@ struct WebAppView: UIViewRepresentable {
             }
             let prompt = UIAlertController(
                 title: "Show message alerts from \(app.name)?",
-                message: "Alerts appear only while AppKit Demo is open.",
+                message: "Alerts appear only while \(AppInfo.shortName) is open.",
                 preferredStyle: .alert)
             prompt.addAction(UIAlertAction(title: "Don't Allow", style: .cancel) { [weak self] _ in
                 self?.host.alertGrant = .denied

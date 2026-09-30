@@ -100,7 +100,8 @@ struct WebAppScreen: View {
                 LoadingView(status: model.status, retry: retry)
             }
         }
-        .task(id: host.sessionGeneration) {
+        .task(id: host.welcomeSeen ? host.sessionGeneration : -1) {
+            guard host.welcomeSeen else { return }
             await model.prepare(app: app, host: host)
         }
     }

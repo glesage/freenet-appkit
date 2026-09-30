@@ -32,6 +32,11 @@ final class NodeHost: ObservableObject {
     @Published var alertGrant: AlertGrant {
         didSet { defaults.set(alertGrant.rawValue, forKey: Keys.alerts) }
     }
+    /// The user has tapped "Continue" on the welcome screen. The node starts
+    /// only after that, so the local network prompt comes after the welcome.
+    @Published var welcomeSeen: Bool {
+        didSet { defaults.set(welcomeSeen, forKey: Keys.welcomeSeen) }
+    }
 
     private(set) var node: MobileNode?
     /// `nil` when the node's folders could not be created; `start()` then
@@ -43,11 +48,13 @@ final class NodeHost: ObservableObject {
     enum Keys {
         static let alerts = "appkit.alerts"
         static let port = "appkit.lastPort"
+        static let welcomeSeen = "appkit.welcomeSeen"
     }
 
     private init() {
         directories = try? NodeDirectories.standard()
         alertGrant = AlertGrant(rawValue: defaults.string(forKey: Keys.alerts) ?? "") ?? .notAsked
+        welcomeSeen = defaults.bool(forKey: Keys.welcomeSeen)
     }
 
     // MARK: Settings
@@ -117,6 +124,7 @@ final class NodeHost: ObservableObject {
                 app.endBackgroundTask(task)
             }
         case .active:
+            guard welcomeSeen else { return }
             Task {
                 let wasRunning = self.info != nil
                 await self.start()
