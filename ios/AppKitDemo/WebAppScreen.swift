@@ -14,35 +14,43 @@ enum PageState: Equatable {
 @MainActor
 final class WebAppModel: ObservableObject {
     @Published var url: URL?
-    @Published var phase = "Starting the node"
+    /// What the loading view shows until the node serves the page.
+    @Published var status = LoadStatus(title: LoadMessages.starting)
     @Published var page: PageState = .fetching
 
     func prepare(app: DemoWebApp, host: NodeHost) async {
         url = nil
-        phase = "Starting the node"
+        status = LoadStatus(title: LoadMessages.starting)
         guard await host.start() != nil else {
-            phase = "The node did not start.\n\(host.lastError ?? "")"
+            status = .error(LoadMessages.notStarted, detail: host.lastError)
             return
         }
-        phase = "Waiting for a peer"
-        guard await host.waitForPeers() else {
-            phase = "No peer answered.\n\(host.lastError ?? "")"
+        status = LoadStatus(title: LoadMessages.connecting)
+        let slow = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: LoadMessages.slowAfterSeconds * 1_000_000_000)
+            guard !Task.isCancelled, let self, self.status.title == LoadMessages.connecting else { return }
+            self.status = LoadStatus(title: LoadMessages.connectingSlow)
+        }
+        let joined = await host.waitForPeers()
+        slow.cancel()
+        guard joined else {
+            status = .error(LoadMessages.unreachable, detail: host.lastError)
             return
         }
         page = .fetching
         url = host.webURL(for: app)
     }
 
-    func pageText(app: DemoWebApp, host: NodeHost) -> String {
+    func pageStatus(app: DemoWebApp) -> LoadStatus {
         switch page {
         case .fetching:
-            return "Fetching \(app.name) from the network"
+            return LoadStatus(title: LoadMessages.downloading(app))
         case .starting:
-            return "Starting \(app.name)"
+            return LoadStatus(title: LoadMessages.opening(app))
         case .shown:
-            return ""
+            return LoadStatus(title: "")
         case .failed(let message):
-            return "\(app.name) did not load.\n\(message)"
+            return .error(LoadMessages.pageFailed(app), detail: message)
         }
     }
 }
@@ -58,40 +66,18 @@ struct WebAppScreen: View {
                 WebAppView(app: app, url: url, generation: host.sessionGeneration, model: model)
                     .ignoresSafeArea(edges: .bottom)
                 if model.page != .shown {
-                    LoadingView(
-                        text: model.pageText(app: app, host: host),
-                        failed: model.page != .fetching && model.page != .starting,
-                        retry: { Task { await model.prepare(app: app, host: host) } })
+                    LoadingView(status: model.pageStatus(app: app), retry: retry)
                 }
             } else {
-                LoadingView(text: model.phase, failed: false, retry: nil)
+                LoadingView(status: model.status, retry: retry)
             }
         }
         .task(id: host.sessionGeneration) {
             await model.prepare(app: app, host: host)
         }
     }
-}
 
-/// A spinner and a line of text over the whole screen, or the error and a
-/// retry button once loading failed.
-struct LoadingView: View {
-    let text: String
-    let failed: Bool
-    let retry: (() -> Void)?
-
-    var body: some View {
-        VStack(spacing: 12) {
-            if !failed { ProgressView() }
-            Text(text)
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-                .padding(.horizontal)
-            if failed, let retry {
-                Button("Try again", action: retry).buttonStyle(.bordered)
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(uiColor: .systemBackground))
+    private func retry() {
+        Task { await model.prepare(app: app, host: host) }
     }
 }
