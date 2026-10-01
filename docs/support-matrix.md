@@ -61,7 +61,7 @@ freenet-core changes this plan adds (commits `f5d32b58` and `576f5445`):
 
 ## Protocol compatibility
 
-River's and Atlas's web clients use freenet-stdlib 0.8.5; Core `main` uses 0.12.1. Both web apps load and render against Core 0.12.1 through the node's native (bincode) encoding, and the contract request encodings they use are unchanged between the two versions. No adapter is needed for these routes. The shared fixtures pin the 0.12.1 request bytes, so a later stdlib change that moves a byte fails the device runs.
+River's and Atlas's web clients use freenet-stdlib 0.8.5, and Core 0.2.139 builds on freenet-stdlib 0.12.1. Both web apps load and render against Core 0.2.139 through the node's native (bincode) encoding, and the contract request encodings they use are unchanged between the two versions. No adapter is needed for these routes. The shared fixtures pin the 0.12.1 request bytes, so a later stdlib change that moves a byte fails the device runs.
 
 ## Operations
 

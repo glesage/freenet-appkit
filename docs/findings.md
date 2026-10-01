@@ -90,7 +90,7 @@ A fresh start on cellular does work. With Wi-Fi off, the node started in 3.1 s a
 
 ## Phones are full peers on the public network
 
-On Wi-Fi the iPhone's node reached 27 peers within two minutes and moved 7.2 MB up and 6.4 MB down in that time, about 60 KiB/s each way. The emulator showed the same pattern (22 peers, about 22 KiB/s). Idle runs with one or two peers used under 1.3 KiB/s each way.
+On Wi-Fi the iPhone's node reached 27 peers within two minutes and moved 7.2 MB up and 6.4 MB down in that time, about 60 KiB/s each way. The emulator showed the same pattern (22 peers, about 22 KiB/s). Idle runs used 0.6 KiB/s up and 0.7 KiB/s down on the iPhone (2 peers), 0.8 and 0.7 KiB/s on the Simulator (1 peer), and 1.4 KiB/s up and 1.1 KiB/s down on the emulator (1 peer).
 
 - Evidence: `offline_start` and `transition` before the network change on the iPhone; `watch-wifi-toggle` on the emulator; `watch` runs.
 - Why it matters: cellular data and battery.
