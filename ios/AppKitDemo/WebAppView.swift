@@ -50,7 +50,7 @@ struct WebAppView: UIViewRepresentable {
         context.coordinator.attach(webView)
         context.coordinator.loaded = (url, generation)
         context.coordinator.session = session
-        webView.load(URLRequest(url: url))
+        context.coordinator.load(url, in: webView)
         return webView
     }
 
@@ -59,7 +59,7 @@ struct WebAppView: UIViewRepresentable {
             context.coordinator.loaded = (url, generation)
             context.coordinator.session = session
             context.coordinator.startLoad()
-            webView.load(URLRequest(url: url))
+            context.coordinator.load(url, in: webView)
         }
         context.coordinator.closeStalePrompt()
     }
@@ -163,6 +163,22 @@ struct WebAppView: UIViewRepresentable {
             guard let model, model.page != .shown else { return }
             if case .failed = model.page { return }
             model.page = .shown
+        }
+
+        /// Give the web view this session's embedder secret as a cookie, then
+        /// load. The node answers the shell page and the app's own requests
+        /// only with it; HttpOnly keeps it from page scripts.
+        func load(_ url: URL, in webView: WKWebView) {
+            guard let secret = host.info?.embedderSecret, session == host.info?.session,
+                  let cookie = HTTPCookie(properties: [
+                      .name: "freenet-embedder", .value: secret, .domain: url.host ?? "127.0.0.1",
+                      .path: "/", .sameSitePolicy: HTTPCookieStringPolicy.sameSiteStrict,
+                      HTTPCookiePropertyKey("HttpOnly"): "TRUE",
+                  ])
+            else { return }
+            webView.configuration.websiteDataStore.httpCookieStore.setCookie(cookie) { [weak webView] in
+                webView?.load(URLRequest(url: url))
+            }
         }
 
         func attach(_ webView: WKWebView) {

@@ -65,6 +65,9 @@ object NodeHost {
      */
     var sessionGeneration = 0
         private set
+    /** Increases whenever a start fails, so a waiting page shows the error. */
+    var failedStarts = 0
+        private set
     /** The device has a usable network. */
     var networkAvailable = true
         private set
@@ -195,6 +198,7 @@ object NodeHost {
                 if (wantsNode == running) break
                 if (wantsNode) {
                     if (startNode() == null) {
+                        failedStarts += 1
                         changed()
                         break
                     }

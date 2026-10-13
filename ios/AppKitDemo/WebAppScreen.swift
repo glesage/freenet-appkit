@@ -115,7 +115,7 @@ struct WebAppScreen: View {
                 LoadingView(status: model.status, retry: retry)
             }
         }
-        .task(id: host.welcomeSeen ? host.sessionGeneration : -1) {
+        .task(id: host.welcomeSeen ? "\(host.sessionGeneration)-\(host.failedStarts)" : "") {
             guard host.welcomeSeen else { return }
             await model.prepare(app: app, host: host)
         }

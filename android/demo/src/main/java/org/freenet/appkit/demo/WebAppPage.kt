@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Message
 import android.view.Gravity
 import android.widget.TextView
+import android.webkit.CookieManager
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -311,7 +312,12 @@ class WebAppPage(private val context: Context, val app: HostedApp) {
         failed = false
         if (previous == null) loading.loading(LoadMessages.downloading(app))
         webView = web
-        web.loadUrl(url)
+        // The node answers the shell page and the app's own requests only
+        // with this session's embedder secret; HttpOnly keeps it from scripts.
+        val secret = NodeHost.info?.embedderSecret ?: return
+        CookieManager.getInstance().setCookie(origin, "freenet-embedder=$secret; Path=/; SameSite=Strict; HttpOnly") {
+            if (webView === web) web.loadUrl(url)
+        }
     }
 
     companion object {

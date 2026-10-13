@@ -2726,6 +2726,13 @@ public struct NodeInfo: Equatable, Hashable {
      */
     public var discardedConfig: Bool
     /**
+     * This session's embedder secret. The client API answers only callers
+     * that present it: the SDK sends it as a header, and the host's web view
+     * holds it as the cookie `freenet-embedder` for `http_base` before it
+     * loads a page. A new secret is made for every session.
+     */
+    public var embedderSecret: String
+    /**
      * Legacy telemetry in the resolved config. Always false.
      */
     public var telemetryEnabled: Bool
@@ -2748,6 +2755,12 @@ public struct NodeInfo: Equatable, Hashable {
          * A stale persisted config was removed before this start.
          */discardedConfig: Bool, 
         /**
+         * This session's embedder secret. The client API answers only callers
+         * that present it: the SDK sends it as a header, and the host's web view
+         * holds it as the cookie `freenet-embedder` for `http_base` before it
+         * loads a page. A new secret is made for every session.
+         */embedderSecret: String, 
+        /**
          * Legacy telemetry in the resolved config. Always false.
          */telemetryEnabled: Bool, 
         /**
@@ -2761,6 +2774,7 @@ public struct NodeInfo: Equatable, Hashable {
         self.session = session
         self.dataDir = dataDir
         self.discardedConfig = discardedConfig
+        self.embedderSecret = embedderSecret
         self.telemetryEnabled = telemetryEnabled
         self.otelEnabled = otelEnabled
         self.timings = timings
@@ -2790,6 +2804,7 @@ public struct FfiConverterTypeNodeInfo: FfiConverterRustBuffer {
                 session: FfiConverterUInt64.read(from: &buf), 
                 dataDir: FfiConverterString.read(from: &buf), 
                 discardedConfig: FfiConverterBool.read(from: &buf), 
+                embedderSecret: FfiConverterString.read(from: &buf), 
                 telemetryEnabled: FfiConverterBool.read(from: &buf), 
                 otelEnabled: FfiConverterBool.read(from: &buf), 
                 timings: FfiConverterTypeStartTimings.read(from: &buf)
@@ -2805,6 +2820,7 @@ public struct FfiConverterTypeNodeInfo: FfiConverterRustBuffer {
         FfiConverterUInt64.write(value.session, into: &buf)
         FfiConverterString.write(value.dataDir, into: &buf)
         FfiConverterBool.write(value.discardedConfig, into: &buf)
+        FfiConverterString.write(value.embedderSecret, into: &buf)
         FfiConverterBool.write(value.telemetryEnabled, into: &buf)
         FfiConverterBool.write(value.otelEnabled, into: &buf)
         FfiConverterTypeStartTimings.write(value.timings, into: &buf)

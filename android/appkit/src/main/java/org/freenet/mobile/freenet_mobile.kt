@@ -4508,6 +4508,14 @@ data class NodeInfo (
     var `discardedConfig`: kotlin.Boolean
     , 
     /**
+     * This session's embedder secret. The client API answers only callers
+     * that present it: the SDK sends it as a header, and the host's web view
+     * holds it as the cookie `freenet-embedder` for `http_base` before it
+     * loads a page. A new secret is made for every session.
+     */
+    var `embedderSecret`: kotlin.String
+    , 
+    /**
      * Legacy telemetry in the resolved config. Always false.
      */
     var `telemetryEnabled`: kotlin.Boolean
@@ -4542,6 +4550,7 @@ public object FfiConverterTypeNodeInfo: FfiConverterRustBuffer<NodeInfo> {
             FfiConverterULong.read(buf),
             FfiConverterString.read(buf),
             FfiConverterBoolean.read(buf),
+            FfiConverterString.read(buf),
             FfiConverterBoolean.read(buf),
             FfiConverterBoolean.read(buf),
             FfiConverterTypeStartTimings.read(buf),
@@ -4557,6 +4566,7 @@ public object FfiConverterTypeNodeInfo: FfiConverterRustBuffer<NodeInfo> {
             FfiConverterULong.allocationSize(value.`session`) +
             FfiConverterString.allocationSize(value.`dataDir`) +
             FfiConverterBoolean.allocationSize(value.`discardedConfig`) +
+            FfiConverterString.allocationSize(value.`embedderSecret`) +
             FfiConverterBoolean.allocationSize(value.`telemetryEnabled`) +
             FfiConverterBoolean.allocationSize(value.`otelEnabled`) +
             FfiConverterTypeStartTimings.allocationSize(value.`timings`)
@@ -4571,6 +4581,7 @@ public object FfiConverterTypeNodeInfo: FfiConverterRustBuffer<NodeInfo> {
             FfiConverterULong.write(value.`session`, buf)
             FfiConverterString.write(value.`dataDir`, buf)
             FfiConverterBoolean.write(value.`discardedConfig`, buf)
+            FfiConverterString.write(value.`embedderSecret`, buf)
             FfiConverterBoolean.write(value.`telemetryEnabled`, buf)
             FfiConverterBoolean.write(value.`otelEnabled`, buf)
             FfiConverterTypeStartTimings.write(value.`timings`, buf)

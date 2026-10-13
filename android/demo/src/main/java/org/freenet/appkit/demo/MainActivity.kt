@@ -27,9 +27,11 @@ class MainActivity : Activity() {
     private var backCallback: Any? = null
     private var sessionGeneration = 0
     /** A session started or ended: the page reloads or holds for the next one. */
+    private var failedStarts = 0
     private val sessionListener: () -> Unit = {
-        if (NodeHost.sessionGeneration != sessionGeneration) {
+        if (NodeHost.sessionGeneration != sessionGeneration || NodeHost.failedStarts != failedStarts) {
             sessionGeneration = NodeHost.sessionGeneration
+            failedStarts = NodeHost.failedStarts
             current?.show()
         }
         current?.networkChanged()

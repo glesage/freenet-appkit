@@ -35,6 +35,8 @@ final class NodeHost: ObservableObject {
     /// Increases whenever a session ends, so web views reload with new
     /// authority and prompts from the old session are closed.
     @Published private(set) var sessionGeneration = 0
+    /// Increases whenever a start fails, so a waiting page shows the error.
+    @Published private(set) var failedStarts = 0
     /// The device has a usable network path.
     @Published private(set) var networkAvailable = true
     @Published var alert: InAppAlert?
@@ -161,7 +163,10 @@ final class NodeHost: ObservableObject {
                 let running = self.info != nil
                 if want == running { break }
                 if want {
-                    if await self.startNode() == nil { break }
+                    if await self.startNode() == nil {
+                        self.failedStarts += 1
+                        break
+                    }
                     self.sessionGeneration += 1
                 } else {
                     await self.stopNode()
