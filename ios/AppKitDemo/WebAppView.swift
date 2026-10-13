@@ -2,15 +2,22 @@ import SwiftUI
 import UIKit
 import WebKit
 
-/// River or Atlas, served by the embedded node. A main-frame script gives the
+/// The hosted app, served by the embedded node. A main-frame script gives the
 /// node's shell page a `Notification` that shows in-app alerts while the app
 /// is open.
+///
+/// Every bridge message is checked before it acts: it must come from this web
+/// view, from the frame and origin its handler serves, within the size limit,
+/// during the session the page was loaded for, and with the permission it
+/// needs. Prompts close when their session ends and their answers are dropped.
 struct WebAppView: UIViewRepresentable {
-    let app: DemoWebApp
+    let app: HostedApp
     let url: URL
     /// Changes on every load the model asks for, so the same URL loads again
     /// in a new node session.
     let generation: Int
+    /// The node session `url` belongs to.
+    let session: UInt64?
     let model: WebAppModel
     @EnvironmentObject var host: NodeHost
 
@@ -41,30 +48,43 @@ struct WebAppView: UIViewRepresentable {
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
         context.coordinator.attach(webView)
-        webView.load(URLRequest(url: url))
         context.coordinator.loaded = (url, generation)
+        context.coordinator.session = session
+        webView.load(URLRequest(url: url))
         return webView
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
         if context.coordinator.loaded.url != url || context.coordinator.loaded.generation != generation {
             context.coordinator.loaded = (url, generation)
+            context.coordinator.session = session
             context.coordinator.startLoad()
             webView.load(URLRequest(url: url))
         }
+        context.coordinator.closeStalePrompt()
     }
 
     static func dismantleUIView(_ webView: WKWebView, coordinator: Coordinator) {
+        coordinator.closePrompt()
         webView.configuration.userContentController.removeAllScriptMessageHandlers()
     }
 
     @MainActor
     final class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
-        let app: DemoWebApp
+        let app: HostedApp
         let host: NodeHost
         weak var model: WebAppModel?
         weak var webView: WKWebView?
         var loaded: (url: URL?, generation: Int) = (nil, -1)
+        /// The node session the loaded page belongs to.
+        var session: UInt64?
+        /// The permission prompt on screen, and the session that asked.
+        private var prompt: (controller: UIAlertController, session: UInt64?)?
+
+        /// Largest bridge message accepted, in bytes of its JSON form.
+        static let maxMessageBytes = 8 * 1024
+        static let maxTitleLength = 200
+        static let maxBodyLength = 1_000
         private var appFrameSeen = false
         private var fallback: Task<Void, Never>?
 
@@ -125,7 +145,7 @@ struct WebAppView: UIViewRepresentable {
         })();
         """
 
-        init(app: DemoWebApp, host: NodeHost, model: WebAppModel) {
+        init(app: HostedApp, host: NodeHost, model: WebAppModel) {
             self.app = app
             self.host = host
             self.model = model
@@ -182,26 +202,77 @@ struct WebAppView: UIViewRepresentable {
             }
         }
 
-        /// Links that open a new window: loopback pages stay in this view,
-        /// other sites go to the system browser.
+        /// The current session's origin, the only one pages load from.
+        private func isCurrentOrigin(_ url: URL?) -> Bool {
+            guard let url, let origin = host.origin, session == host.info?.session else { return false }
+            return url.scheme == "http" && url.host == origin.host && url.port == origin.port
+        }
+
+        /// Open a link outside the app: web links only, user-initiated, and
+        /// only for the current session.
+        private func openExternally(_ url: URL, action: WKNavigationAction) {
+            guard ["http", "https"].contains(url.scheme?.lowercased() ?? ""),
+                  action.navigationType == .linkActivated || action.navigationType == .other,
+                  session == host.info?.session
+            else { return }
+            UIApplication.shared.open(url)
+        }
+
+        /// Main-frame navigations stay on the session's origin; web links go to
+        /// the system browser and everything else is refused. Frames load as
+        /// the page asks, inside WebKit's own rules.
+        func webView(
+            _ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
+            decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void
+        ) {
+            guard navigationAction.targetFrame?.isMainFrame ?? true, let url = navigationAction.request.url else {
+                decisionHandler(.allow)
+                return
+            }
+            if isCurrentOrigin(url) || url.absoluteString == "about:blank" {
+                decisionHandler(.allow)
+            } else {
+                openExternally(url, action: navigationAction)
+                decisionHandler(.cancel)
+            }
+        }
+
+        /// Links that open a new window: the session's pages stay in this
+        /// view, web links go to the system browser.
         func webView(
             _ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration,
             for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures
         ) -> WKWebView? {
             if let url = navigationAction.request.url {
-                if url.host == "127.0.0.1" || url.host == "localhost" {
+                if isCurrentOrigin(url) {
                     webView.load(URLRequest(url: url))
                 } else {
-                    UIApplication.shared.open(url)
+                    openExternally(url, action: navigationAction)
                 }
             }
             return nil
         }
 
+        /// Whether `message` may act: this web view, the current session, the
+        /// size limit and, for alerts, the main frame on the session's origin.
+        private func admits(_ message: WKScriptMessage, body: [String: Any]) -> Bool {
+            guard message.webView === webView, session != nil, session == host.info?.session else { return false }
+            guard let bytes = try? JSONSerialization.data(withJSONObject: body),
+                  bytes.count <= Self.maxMessageBytes
+            else { return false }
+            if message.name == "appkitAlerts" {
+                let origin = message.frameInfo.securityOrigin
+                guard message.frameInfo.isMainFrame, let current = host.origin,
+                      origin.protocol == "http", origin.host == current.host, origin.port == current.port
+                else { return false }
+            }
+            return true
+        }
+
         func userContentController(
             _ userContentController: WKUserContentController, didReceive message: WKScriptMessage
         ) {
-            guard let body = message.body as? [String: Any] else { return }
+            guard let body = message.body as? [String: Any], admits(message, body: body) else { return }
             switch message.name {
             case "appkitFrames":
                 let top = body["top"] as? Bool ?? false
@@ -222,12 +293,15 @@ struct WebAppView: UIViewRepresentable {
             case "permission":
                 askPermission()
             case "show":
-                let id = body["id"] as? String ?? ""
-                let alert = InAppAlert(
-                    title: body["title"] as? String ?? app.name,
-                    body: body["body"] as? String ?? "",
-                    tab: app.tab,
-                    open: { [weak self] in self?.openAlert(id) })
+                guard host.alertGrant == .granted else { return }
+                let id = String((body["id"] as? String ?? "").filter(\.isNumber).prefix(16))
+                let title = String((body["title"] as? String ?? app.name).prefix(Self.maxTitleLength))
+                let text = String((body["body"] as? String ?? "").prefix(Self.maxBodyLength))
+                let session = self.session
+                let alert = InAppAlert(title: title, body: text) { [weak self] in
+                    guard let self, self.session == session, session == self.host.info?.session else { return }
+                    self.openAlert(id)
+                }
                 host.present(alert)
             default:
                 break
@@ -239,22 +313,39 @@ struct WebAppView: UIViewRepresentable {
                 answer(host.alertGrant.rawValue)
                 return
             }
-            let prompt = UIAlertController(
+            guard prompt == nil else { return }
+            let session = self.session
+            let controller = UIAlertController(
                 title: "Show message alerts from \(app.name)?",
                 message: "Alerts appear only while \(AppInfo.shortName) is open.",
                 preferredStyle: .alert)
-            prompt.addAction(UIAlertAction(title: "Don't Allow", style: .cancel) { [weak self] _ in
-                self?.host.alertGrant = .denied
-                self?.answer("denied")
-            })
-            prompt.addAction(UIAlertAction(title: "Allow", style: .default) { [weak self] _ in
-                self?.host.alertGrant = .granted
-                self?.answer("granted")
-            })
+            // The answer counts only if the session that asked is still current.
+            let decide = { [weak self] (grant: AlertGrant) in
+                guard let self else { return }
+                self.prompt = nil
+                guard self.session == session, session == self.host.info?.session else { return }
+                self.host.alertGrant = grant
+                self.answer(grant.rawValue)
+            }
+            controller.addAction(UIAlertAction(title: "Don't Allow", style: .cancel) { _ in decide(.denied) })
+            controller.addAction(UIAlertAction(title: "Allow", style: .default) { _ in decide(.granted) })
+            prompt = (controller, session)
             UIApplication.shared.connectedScenes
                 .compactMap { ($0 as? UIWindowScene)?.keyWindow?.rootViewController }
                 .first?
-                .present(prompt, animated: true)
+                .present(controller, animated: true)
+        }
+
+        /// Close a prompt whose session has ended; its answer is dropped.
+        func closeStalePrompt() {
+            if let prompt, prompt.session != host.info?.session || prompt.session != session {
+                closePrompt()
+            }
+        }
+
+        func closePrompt() {
+            prompt?.controller.dismiss(animated: false)
+            prompt = nil
         }
 
         private func answer(_ permission: String) {
@@ -264,8 +355,7 @@ struct WebAppView: UIViewRepresentable {
         /// The user tapped an alert: bring the app forward and let the web app
         /// route to the conversation, which reads verified state from the node.
         private func openAlert(_ id: String) {
-            let safe = id.filter(\.isNumber)
-            webView?.evaluateJavaScript("window.__appkitAlertClick && window.__appkitAlertClick('\(safe)')")
+            webView?.evaluateJavaScript("window.__appkitAlertClick && window.__appkitAlertClick('\(id)')")
         }
     }
 }

@@ -625,6 +625,9 @@ fileprivate struct FfiConverterData: FfiConverterRustBuffer {
 
 /**
  * Receives a subscription's updates, in the order the node sent them.
+ *
+ * Called on a blocking runtime thread, one call at a time per listener.
+ * Implementations hand the update to the platform's own executor.
  */
 public protocol ContractListener: AnyObject, Sendable {
     
@@ -635,6 +638,9 @@ public protocol ContractListener: AnyObject, Sendable {
 }
 /**
  * Receives a subscription's updates, in the order the node sent them.
+ *
+ * Called on a blocking runtime thread, one call at a time per listener.
+ * Implementations hand the update to the platform's own executor.
  */
 open class ContractListenerImpl: ContractListener, @unchecked Sendable {
     fileprivate let handle: UInt64
@@ -893,7 +899,10 @@ public protocol MobileNodeProtocol: AnyObject, Sendable {
     func status()  -> NodeStatus
     
     /**
-     * Stop the node. Stopping a stopped node does nothing.
+     * Stop the node within one deadline: drain, node exit (aborted when
+     * late) and client API port release. Fails with `IncompleteShutdown`
+     * when the node had to be aborted or the port was still held; the node
+     * is stopped either way. Stopping a stopped node does nothing.
      */
     func stop() async throws 
     
@@ -1050,7 +1059,10 @@ open func status() -> NodeStatus  {
 }
     
     /**
-     * Stop the node. Stopping a stopped node does nothing.
+     * Stop the node within one deadline: drain, node exit (aborted when
+     * late) and client API port release. Fails with `IncompleteShutdown`
+     * when the node had to be aborted or the port was still held; the node
+     * is stopped either way. Stopping a stopped node does nothing.
      */
 open func stop()async throws   {
     return
@@ -1165,7 +1177,8 @@ public protocol NodeClientProtocol: AnyObject, Sendable {
     
     /**
      * Subscribe to a contract's updates. `listener` receives them until
-     * `unsubscribe` or until the connection closes.
+     * `unsubscribe`, until the connection closes, or until a restore after a
+     * reset fails.
      */
     func subscribe(instanceId: String, listener: ContractListener, timeoutMs: UInt64?) async throws  -> OpTiming
     
@@ -1276,7 +1289,8 @@ open func put(code: Data, parameters: Data, state: Data, subscribe: Bool, timeou
     
     /**
      * Subscribe to a contract's updates. `listener` receives them until
-     * `unsubscribe` or until the connection closes.
+     * `unsubscribe`, until the connection closes, or until a restore after a
+     * reset fails.
      */
 open func subscribe(instanceId: String, listener: ContractListener, timeoutMs: UInt64?)async throws  -> OpTiming  {
     return
@@ -2711,6 +2725,14 @@ public struct NodeInfo: Equatable, Hashable {
      * A stale persisted config was removed before this start.
      */
     public var discardedConfig: Bool
+    /**
+     * Legacy telemetry in the resolved config. Always false.
+     */
+    public var telemetryEnabled: Bool
+    /**
+     * The OpenTelemetry exporter in the resolved config. Always false.
+     */
+    public var otelEnabled: Bool
     public var timings: StartTimings
 
     // Default memberwise initializers are never public by default, so we
@@ -2724,7 +2746,13 @@ public struct NodeInfo: Equatable, Hashable {
          */wsUrl: String, mode: NodeMode, wasmBackend: WasmBackendChoice, session: UInt64, dataDir: String, 
         /**
          * A stale persisted config was removed before this start.
-         */discardedConfig: Bool, timings: StartTimings) {
+         */discardedConfig: Bool, 
+        /**
+         * Legacy telemetry in the resolved config. Always false.
+         */telemetryEnabled: Bool, 
+        /**
+         * The OpenTelemetry exporter in the resolved config. Always false.
+         */otelEnabled: Bool, timings: StartTimings) {
         self.wsPort = wsPort
         self.httpBase = httpBase
         self.wsUrl = wsUrl
@@ -2733,6 +2761,8 @@ public struct NodeInfo: Equatable, Hashable {
         self.session = session
         self.dataDir = dataDir
         self.discardedConfig = discardedConfig
+        self.telemetryEnabled = telemetryEnabled
+        self.otelEnabled = otelEnabled
         self.timings = timings
     }
 
@@ -2760,6 +2790,8 @@ public struct FfiConverterTypeNodeInfo: FfiConverterRustBuffer {
                 session: FfiConverterUInt64.read(from: &buf), 
                 dataDir: FfiConverterString.read(from: &buf), 
                 discardedConfig: FfiConverterBool.read(from: &buf), 
+                telemetryEnabled: FfiConverterBool.read(from: &buf), 
+                otelEnabled: FfiConverterBool.read(from: &buf), 
                 timings: FfiConverterTypeStartTimings.read(from: &buf)
         )
     }
@@ -2773,6 +2805,8 @@ public struct FfiConverterTypeNodeInfo: FfiConverterRustBuffer {
         FfiConverterUInt64.write(value.session, into: &buf)
         FfiConverterString.write(value.dataDir, into: &buf)
         FfiConverterBool.write(value.discardedConfig, into: &buf)
+        FfiConverterBool.write(value.telemetryEnabled, into: &buf)
+        FfiConverterBool.write(value.otelEnabled, into: &buf)
         FfiConverterTypeStartTimings.write(value.timings, into: &buf)
     }
 }
@@ -3506,6 +3540,17 @@ public enum ClientErrorKind: Equatable, Hashable {
      */
     case operationFailed
     /**
+     * A put or update was sent and no definite reply came back: the time
+     * limit passed, the connection closed or the reply named another
+     * contract. The node may still apply it; keep the exact operation and
+     * reconcile it against the contract's state.
+     */
+    case uncertainWrite
+    /**
+     * A read's reply named a different contract than the request.
+     */
+    case identityMismatch
+    /**
      * Anything else, with the node's message.
      */
     case other
@@ -3550,7 +3595,11 @@ public struct FfiConverterTypeClientErrorKind: FfiConverterRustBuffer {
         
         case 10: return .operationFailed
         
-        case 11: return .other
+        case 11: return .uncertainWrite
+        
+        case 12: return .identityMismatch
+        
+        case 13: return .other
         
         default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -3600,8 +3649,16 @@ public struct FfiConverterTypeClientErrorKind: FfiConverterRustBuffer {
             writeInt(&buf, Int32(10))
         
         
-        case .other:
+        case .uncertainWrite:
             writeInt(&buf, Int32(11))
+        
+        
+        case .identityMismatch:
+            writeInt(&buf, Int32(12))
+        
+        
+        case .other:
+            writeInt(&buf, Int32(13))
         
         }
     }
@@ -3724,6 +3781,14 @@ enum MobileError: Swift.Error, Equatable, Hashable, Foundation.LocalizedError {
     )
     case BackendUnavailable(backend: String
     )
+    /**
+     * The node is stopped, but releasing its resources was not verified by
+     * the stop deadline. `node_exited` is false when the node had to be
+     * aborted; `port_released` is false when the client API port was still
+     * held. The next start retries while the store is still locked.
+     */
+    case IncompleteShutdown(nodeExited: Bool, portReleased: Bool, elapsedMs: UInt64
+    )
     case Internal(reason: String
     )
 
@@ -3781,7 +3846,12 @@ public struct FfiConverterTypeMobileError: FfiConverterRustBuffer {
         case 9: return .BackendUnavailable(
             backend: try FfiConverterString.read(from: &buf)
             )
-        case 10: return .Internal(
+        case 10: return .IncompleteShutdown(
+            nodeExited: try FfiConverterBool.read(from: &buf), 
+            portReleased: try FfiConverterBool.read(from: &buf), 
+            elapsedMs: try FfiConverterUInt64.read(from: &buf)
+            )
+        case 11: return .Internal(
             reason: try FfiConverterString.read(from: &buf)
             )
 
@@ -3841,8 +3911,15 @@ public struct FfiConverterTypeMobileError: FfiConverterRustBuffer {
             FfiConverterString.write(backend, into: &buf)
             
         
-        case let .Internal(reason):
+        case let .IncompleteShutdown(nodeExited,portReleased,elapsedMs):
             writeInt(&buf, Int32(10))
+            FfiConverterBool.write(nodeExited, into: &buf)
+            FfiConverterBool.write(portReleased, into: &buf)
+            FfiConverterUInt64.write(elapsedMs, into: &buf)
+            
+        
+        case let .Internal(reason):
+            writeInt(&buf, Int32(11))
             FfiConverterString.write(reason, into: &buf)
             
         }
@@ -5107,7 +5184,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_freenet_mobile_checksum_method_nodeclient_put() != 34114) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_freenet_mobile_checksum_method_nodeclient_subscribe() != 37908) {
+    if (uniffi_freenet_mobile_checksum_method_nodeclient_subscribe() != 59915) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_freenet_mobile_checksum_method_nodeclient_unsubscribe() != 35739) {
@@ -5137,7 +5214,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_freenet_mobile_checksum_method_mobilenode_status() != 8456) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_freenet_mobile_checksum_method_mobilenode_stop() != 28822) {
+    if (uniffi_freenet_mobile_checksum_method_mobilenode_stop() != 42255) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_freenet_mobile_checksum_method_mobilenode_wait_for_peers() != 61689) {

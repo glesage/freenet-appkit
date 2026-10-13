@@ -62,23 +62,35 @@ class WebBundleServer(private val bundle: WebBundle) {
 class WebBridgeHost(val bridge: WebBridge) {
     companion object {
         const val PORT_NAME = "freenetHostPort"
+
+        /** Largest message accepted, in characters. */
+        const val MAX_MESSAGE_CHARS = 256 * 1024
     }
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private var reply: JavaScriptReplyProxy? = null
+    private var generation = 0
+    private var closed = false
 
-    /** Install the bridge on [webView] for pages from [origin]. */
+    /**
+     * Install the bridge on [webView] for pages from [origin]. Only messages
+     * from that web view's main frame, on [origin] and within
+     * [MAX_MESSAGE_CHARS], reach the bridge.
+     */
     @SuppressLint("RequiresFeature")
     fun install(webView: WebView, origin: String) {
         require(WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
             "this WebView cannot carry bridge messages"
         }
-        WebViewCompat.addWebMessageListener(webView, PORT_NAME, setOf(origin)) { _, message, _, _, proxy ->
-            reply = proxy
+        WebViewCompat.addWebMessageListener(webView, PORT_NAME, setOf(origin)) { view, message, source, isMainFrame, proxy ->
             val text = message.data ?: return@addWebMessageListener
+            if (closed || view !== webView || !isMainFrame || text.length > MAX_MESSAGE_CHARS) return@addWebMessageListener
+            if (source.toString().trimEnd('/') != origin.trimEnd('/')) return@addWebMessageListener
+            reply = proxy
+            val sent = generation
             scope.launch {
                 val answer = bridge.handle(text)
-                proxy.postMessage(answer)
+                if (!closed && generation == sent) proxy.postMessage(answer)
             }
         }
         if (WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)) {
@@ -88,10 +100,13 @@ class WebBridgeHost(val bridge: WebBridge) {
 
     /** Send an event to the page, once it has sent its first message. */
     fun deliver(json: String) {
-        scope.launch { reply?.postMessage(json) }
+        scope.launch { if (!closed) reply?.postMessage(json) }
     }
 
+    /** End this session: refuse further messages and drop pending replies. */
     fun close() {
+        closed = true
+        generation += 1
         reply = null
     }
 }

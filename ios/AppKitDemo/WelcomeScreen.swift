@@ -27,7 +27,7 @@ struct WelcomeScreen: View {
                         .multilineTextAlignment(.center)
                         .accessibilityAddTraits(.isHeader)
                     VStack(alignment: .leading, spacing: 14) {
-                        Text("Chat with River and browse Atlas, served by Freenet running on your phone.")
+                        Text("\(HostedApp.current.name), served by Freenet running on your phone.")
                         Text("Freenet connects directly to other people's devices. It runs only while this app is open.")
                         Text("What you post is shared with other people on the network.")
                     }

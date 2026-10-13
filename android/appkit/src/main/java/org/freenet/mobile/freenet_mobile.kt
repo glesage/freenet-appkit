@@ -1207,7 +1207,7 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
     if ((lib.uniffi_freenet_mobile_checksum_method_nodeclient_put() and 0xFFFF) != 34114) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_freenet_mobile_checksum_method_nodeclient_subscribe() and 0xFFFF) != 37908) {
+    if ((lib.uniffi_freenet_mobile_checksum_method_nodeclient_subscribe() and 0xFFFF) != 59915) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_freenet_mobile_checksum_method_nodeclient_unsubscribe() and 0xFFFF) != 35739) {
@@ -1237,7 +1237,7 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
     if ((lib.uniffi_freenet_mobile_checksum_method_mobilenode_status() and 0xFFFF) != 8456) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_freenet_mobile_checksum_method_mobilenode_stop() and 0xFFFF) != 28822) {
+    if ((lib.uniffi_freenet_mobile_checksum_method_mobilenode_stop() and 0xFFFF) != 42255) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_freenet_mobile_checksum_method_mobilenode_wait_for_peers() and 0xFFFF) != 61689) {
@@ -1779,6 +1779,9 @@ public object FfiConverterByteArray: FfiConverterRustBuffer<ByteArray> {
 
 /**
  * Receives a subscription's updates, in the order the node sent them.
+ *
+ * Called on a blocking runtime thread, one call at a time per listener.
+ * Implementations hand the update to the platform's own executor.
  */
 public interface ContractListener {
     
@@ -1791,6 +1794,9 @@ public interface ContractListener {
 
 /**
  * Receives a subscription's updates, in the order the node sent them.
+ *
+ * Called on a blocking runtime thread, one call at a time per listener.
+ * Implementations hand the update to the platform's own executor.
  */
 open class ContractListenerImpl: Disposable, AutoCloseable, ContractListener
 {
@@ -2151,7 +2157,10 @@ public interface MobileNodeInterface {
     fun `status`(): NodeStatus
     
     /**
-     * Stop the node. Stopping a stopped node does nothing.
+     * Stop the node within one deadline: drain, node exit (aborted when
+     * late) and client API port release. Fails with `IncompleteShutdown`
+     * when the node had to be aborted or the port was still held; the node
+     * is stopped either way. Stopping a stopped node does nothing.
      */
     suspend fun `stop`()
     
@@ -2385,7 +2394,10 @@ open class MobileNode: Disposable, AutoCloseable, MobileNodeInterface
 
     
     /**
-     * Stop the node. Stopping a stopped node does nothing.
+     * Stop the node within one deadline: drain, node exit (aborted when
+     * late) and client API port release. Fails with `IncompleteShutdown`
+     * when the node had to be aborted or the port was still held; the node
+     * is stopped either way. Stopping a stopped node does nothing.
      */
     @Throws(MobileException::class)
     @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
@@ -2601,7 +2613,8 @@ public interface NodeClientInterface {
     
     /**
      * Subscribe to a contract's updates. `listener` receives them until
-     * `unsubscribe` or until the connection closes.
+     * `unsubscribe`, until the connection closes, or until a restore after a
+     * reset fails.
      */
     suspend fun `subscribe`(`instanceId`: kotlin.String, `listener`: ContractListener, `timeoutMs`: kotlin.ULong?): OpTiming
     
@@ -2782,7 +2795,8 @@ open class NodeClient: Disposable, AutoCloseable, NodeClientInterface
     
     /**
      * Subscribe to a contract's updates. `listener` receives them until
-     * `unsubscribe` or until the connection closes.
+     * `unsubscribe`, until the connection closes, or until a restore after a
+     * reset fails.
      */
     @Throws(MobileException::class)
     @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
@@ -4493,6 +4507,16 @@ data class NodeInfo (
      */
     var `discardedConfig`: kotlin.Boolean
     , 
+    /**
+     * Legacy telemetry in the resolved config. Always false.
+     */
+    var `telemetryEnabled`: kotlin.Boolean
+    , 
+    /**
+     * The OpenTelemetry exporter in the resolved config. Always false.
+     */
+    var `otelEnabled`: kotlin.Boolean
+    , 
     var `timings`: StartTimings
     
 ){
@@ -4518,6 +4542,8 @@ public object FfiConverterTypeNodeInfo: FfiConverterRustBuffer<NodeInfo> {
             FfiConverterULong.read(buf),
             FfiConverterString.read(buf),
             FfiConverterBoolean.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterBoolean.read(buf),
             FfiConverterTypeStartTimings.read(buf),
         )
     }
@@ -4531,6 +4557,8 @@ public object FfiConverterTypeNodeInfo: FfiConverterRustBuffer<NodeInfo> {
             FfiConverterULong.allocationSize(value.`session`) +
             FfiConverterString.allocationSize(value.`dataDir`) +
             FfiConverterBoolean.allocationSize(value.`discardedConfig`) +
+            FfiConverterBoolean.allocationSize(value.`telemetryEnabled`) +
+            FfiConverterBoolean.allocationSize(value.`otelEnabled`) +
             FfiConverterTypeStartTimings.allocationSize(value.`timings`)
     )
 
@@ -4543,6 +4571,8 @@ public object FfiConverterTypeNodeInfo: FfiConverterRustBuffer<NodeInfo> {
             FfiConverterULong.write(value.`session`, buf)
             FfiConverterString.write(value.`dataDir`, buf)
             FfiConverterBoolean.write(value.`discardedConfig`, buf)
+            FfiConverterBoolean.write(value.`telemetryEnabled`, buf)
+            FfiConverterBoolean.write(value.`otelEnabled`, buf)
             FfiConverterTypeStartTimings.write(value.`timings`, buf)
     }
 }
@@ -5099,6 +5129,17 @@ enum class ClientErrorKind {
      */
     OPERATION_FAILED,
     /**
+     * A put or update was sent and no definite reply came back: the time
+     * limit passed, the connection closed or the reply named another
+     * contract. The node may still apply it; keep the exact operation and
+     * reconcile it against the contract's state.
+     */
+    UNCERTAIN_WRITE,
+    /**
+     * A read's reply named a different contract than the request.
+     */
+    IDENTITY_MISMATCH,
+    /**
      * Anything else, with the node's message.
      */
     OTHER;
@@ -5253,6 +5294,24 @@ sealed class MobileException: kotlin.Exception() {
             get() = "backend=${ `backend` }"
     }
     
+    /**
+     * The node is stopped, but releasing its resources was not verified by
+     * the stop deadline. `node_exited` is false when the node had to be
+     * aborted; `port_released` is false when the client API port was still
+     * held. The next start retries while the store is still locked.
+     */
+    class IncompleteShutdown(
+        
+        val `nodeExited`: kotlin.Boolean, 
+        
+        val `portReleased`: kotlin.Boolean, 
+        
+        val `elapsedMs`: kotlin.ULong
+        ) : MobileException() {
+        override val message
+            get() = "nodeExited=${ `nodeExited` }, portReleased=${ `portReleased` }, elapsedMs=${ `elapsedMs` }"
+    }
+    
     class Internal(
         
         val `reason`: kotlin.String
@@ -5306,7 +5365,12 @@ public object FfiConverterTypeMobileError : FfiConverterRustBuffer<MobileExcepti
             9 -> MobileException.BackendUnavailable(
                 FfiConverterString.read(buf),
                 )
-            10 -> MobileException.Internal(
+            10 -> MobileException.IncompleteShutdown(
+                FfiConverterBoolean.read(buf),
+                FfiConverterBoolean.read(buf),
+                FfiConverterULong.read(buf),
+                )
+            11 -> MobileException.Internal(
                 FfiConverterString.read(buf),
                 )
             else -> throw RuntimeException("invalid error enum value, something is very wrong!!")
@@ -5359,6 +5423,13 @@ public object FfiConverterTypeMobileError : FfiConverterRustBuffer<MobileExcepti
                 // Add the size for the Int that specifies the variant plus the size needed for all fields
                 4UL
                 + FfiConverterString.allocationSize(value.`backend`)
+            )
+            is MobileException.IncompleteShutdown -> (
+                // Add the size for the Int that specifies the variant plus the size needed for all fields
+                4UL
+                + FfiConverterBoolean.allocationSize(value.`nodeExited`)
+                + FfiConverterBoolean.allocationSize(value.`portReleased`)
+                + FfiConverterULong.allocationSize(value.`elapsedMs`)
             )
             is MobileException.Internal -> (
                 // Add the size for the Int that specifies the variant plus the size needed for all fields
@@ -5415,8 +5486,15 @@ public object FfiConverterTypeMobileError : FfiConverterRustBuffer<MobileExcepti
                 FfiConverterString.write(value.`backend`, buf)
                 Unit
             }
-            is MobileException.Internal -> {
+            is MobileException.IncompleteShutdown -> {
                 buf.putInt(10)
+                FfiConverterBoolean.write(value.`nodeExited`, buf)
+                FfiConverterBoolean.write(value.`portReleased`, buf)
+                FfiConverterULong.write(value.`elapsedMs`, buf)
+                Unit
+            }
+            is MobileException.Internal -> {
+                buf.putInt(11)
                 FfiConverterString.write(value.`reason`, buf)
                 Unit
             }

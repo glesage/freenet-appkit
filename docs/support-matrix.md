@@ -38,7 +38,7 @@ On iOS and Android, wasmtime installs no process-wide signal or Mach exception h
 | UniFFI | 0.32.2 | Swift module `FreenetMobile`, Kotlin package `org.freenet.mobile` |
 | Rust | 1.94.0 | freenet-core's `rust-toolchain.toml` |
 | Xcode | 27.0 (27A266a), iOS 27.0 SDK | Deployment target iOS 16.0 |
-| Android | NDK r29 (29.0.14206865), AGP 9.1.1, Kotlin 2.3.21, Gradle 9.4.1 | compileSdk and targetSdk 36, minSdk 26 |
+| Android | NDK r29 (29.0.14206865), AGP 9.1.1, Kotlin 2.3.21, Gradle 9.4.1 | compileSdk and targetSdk 36, minSdk 28 |
 | Android libraries | JNA 5.17.0, androidx.webkit 1.15.0, kotlinx-coroutines 1.10.2 | |
 | River website container | `raAqMhMG7KUpXBU2SxgCQ3Vh4PYjttxdSWd9ftV7RLv`, state SHA-256 `a925be93…` | Pinned in `fixtures/webapps.json`; fetched from the network on 2026-09-30 |
 | River contracts | River `main` at `a7edaba3`: `ui/public/contracts/room_contract.wasm` | Compiled in the conformance run |
@@ -117,7 +117,7 @@ This is a proposal for the plan owner to approve, based on the iPhone 13 mini, S
 | Profile | Proposal |
 | --- | --- |
 | River WebView on iOS | iOS 16 and later, arm64 devices, Pulley, with the provisional Store limits until Core's host code tolerates moving memory |
-| River WebView on Android | Android 8 (API 26) and later. arm64-v8a with Cranelift, pending the store-policy decision in the [distribution review](distribution-review.md); armeabi-v7a with Pulley; x86_64 for emulators |
+| River WebView on Android | Android 9 (API 28) and later. Pulley on arm64-v8a, armeabi-v7a and x86_64 (emulators) |
 | Custom Swift/Kotlin | Put, get, update and subscribe on the same targets. Delegate calls come with 1.2 Embedded node and mobile SDK |
 | Network | Network mode through the public gateway index or gateway overrides. Phones run as full peers until 1.8 Thin-peer role and cellular data budgets lands, which matters on cellular (see [findings](findings.md#phones-are-full-peers-on-the-public-network)) |
 

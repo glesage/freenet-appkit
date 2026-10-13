@@ -36,6 +36,12 @@ harness_markers='appkit\.scenario|APPKIT_RESULT'
 # Count lines of stdin that contain a harness marker; prints 0 for none.
 count_harness() { grep -cE -- "$harness_markers" || true; }
 
+# The release profile both platforms ship: iOS 16, Android API 28, one hosted
+# app per installation.
+ios_min_os="16.0"
+android_min_sdk=28
+hosted_apps="river|atlas"
+
 check_ios() {
   local app="$1"
   local plist="$app/Info.plist"
@@ -66,6 +72,22 @@ check_ios() {
     fail "No file sharing" "UIFileSharingEnabled is set"
   else
     pass "No file sharing" "UIFileSharingEnabled is absent"
+  fi
+
+  local min_os
+  min_os="$(plutil -extract MinimumOSVersion raw "$plist" 2>/dev/null || true)"
+  if [ "$min_os" = "$ios_min_os" ]; then
+    pass "Lowest iOS" "MinimumOSVersion = $min_os"
+  else
+    fail "Lowest iOS" "MinimumOSVersion = ${min_os:-missing}, want $ios_min_os"
+  fi
+
+  local hosted
+  hosted="$(plutil -extract AppKitApplication raw "$plist" 2>/dev/null || true)"
+  if grep -qxE "$hosted_apps" <<<"$hosted"; then
+    pass "One hosted app" "AppKitApplication = $hosted ($(plutil -extract CFBundleIdentifier raw "$plist"))"
+  else
+    fail "One hosted app" "AppKitApplication = ${hosted:-missing}"
   fi
 
   local family
@@ -121,6 +143,31 @@ check_signing() {
   fi
 }
 
+# The embedded node for every ABI a store delivers, each with 16 KB ELF
+# segment alignment for Android 15 page sizes.
+check_native_libs() {
+  local file="$1" prefix="$2" abi tmp readelf align
+  readelf="$(ls "${ANDROID_NDK_ROOT:-${ANDROID_SDK_ROOT:-$HOME/Library/Android/sdk}/ndk/29.0.14206865}"/toolchains/llvm/prebuilt/*/bin/llvm-readelf 2>/dev/null | head -n 1)"
+  tmp="$(mktemp -d)"
+  for abi in arm64-v8a armeabi-v7a x86_64; do
+    if ! unzip -p "$file" "$prefix/$abi/libfreenet_mobile.so" >"$tmp/$abi.so" 2>/dev/null || [ ! -s "$tmp/$abi.so" ]; then
+      fail "Native library $abi" "no $prefix/$abi/libfreenet_mobile.so"
+      continue
+    fi
+    if [ -z "$readelf" ]; then
+      skip "Native library $abi" "present; llvm-readelf not found for the alignment check"
+      continue
+    fi
+    align="$("$readelf" -lW "$tmp/$abi.so" | awk '$1 == "LOAD" { print $NF }' | sort -u | tr '\n' ' ')"
+    if grep -qE '^(0x4000 ?)+$' <<<"$align"; then
+      pass "Native library $abi" "LOAD segments aligned to 16 KB"
+    else
+      fail "Native library $abi" "LOAD segment alignment ${align:-unknown}, want 0x4000"
+    fi
+  done
+  rm -rf "$tmp"
+}
+
 check_dex() {
   local file="$1" pattern="$2" hits
   if ! unzip -l "$file" "$pattern" >/dev/null 2>&1; then
@@ -156,6 +203,16 @@ check_apk() {
   else
     pass "Not profileable" "no profileable in manifest"
   fi
+
+  local min_sdk
+  min_sdk="$(sed -nE "s/^(min)?[sS]dkVersion:'([0-9]+)'.*/\2/p" <<<"$badging" | head -n 1)"
+  if [ "$min_sdk" = "$android_min_sdk" ]; then
+    pass "Lowest Android" "minSdkVersion = $min_sdk"
+  else
+    fail "Lowest Android" "minSdkVersion = ${min_sdk:-missing}, want $android_min_sdk"
+  fi
+
+  check_native_libs "$apk" lib
 
   check_signing "$apk"
 
@@ -203,6 +260,8 @@ check_aab() {
       pass "Not profileable" "no profileable in proto manifest (strings, no bundletool)"
     fi
   fi
+
+  check_native_libs "$aab" base/lib
 
   check_signing "$aab"
 

@@ -15,9 +15,12 @@ object LoadMessages {
     /** How long the peer wait shows [CONNECTING] before [CONNECTING_SLOW]. */
     const val SLOW_CONNECT_MS = 10_000L
 
-    fun downloading(app: DemoWebApp) = "Downloading ${app.title}"
+    fun downloading(app: HostedApp) = "Downloading ${app.title}"
 
-    fun opening(app: DemoWebApp) = "Opening ${app.title}"
+    fun opening(app: HostedApp) = "Opening ${app.title}"
 
-    fun pageFailed(app: DemoWebApp) = "${app.title} could not open."
+    fun pageFailed(app: HostedApp) = "${app.title} could not open."
+
+    /** Over the page while the device has no network. */
+    const val OFFLINE = "Offline"
 }

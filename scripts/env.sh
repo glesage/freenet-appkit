@@ -17,7 +17,7 @@ export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$FREENET_CORE_DIR/target}"
 
 # Lowest OS versions the libraries are built for.
 export IPHONEOS_DEPLOYMENT_TARGET="${IPHONEOS_DEPLOYMENT_TARGET:-16.0}"
-export ANDROID_API_LEVEL="${ANDROID_API_LEVEL:-26}"
+export ANDROID_API_LEVEL="${ANDROID_API_LEVEL:-28}"
 
 profile_flag() {
   if [ "$PROFILE" = "release" ]; then echo "--release"; fi

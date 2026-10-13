@@ -190,10 +190,13 @@
 				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "AppKitDemo-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = AppKit;
+				APPKIT_APPLICATION = river;
+				APPKIT_BUNDLE_SUFFIX = "";
+				APPKIT_DISPLAY_NAME = River;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APPKIT_DISPLAY_NAME)";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Lets AppKit connect to Freenet devices on your Wi-Fi network.";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Lets $(APPKIT_DISPLAY_NAME) connect to Freenet devices on your Wi-Fi network.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -203,7 +206,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = freenet.appkit;
+				PRODUCT_BUNDLE_IDENTIFIER = "freenet.appkit$(APPKIT_BUNDLE_SUFFIX)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -221,10 +224,13 @@
 				ENABLE_PREVIEWS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "AppKitDemo-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = AppKit;
+				APPKIT_APPLICATION = river;
+				APPKIT_BUNDLE_SUFFIX = "";
+				APPKIT_DISPLAY_NAME = River;
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APPKIT_DISPLAY_NAME)";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Lets AppKit connect to Freenet devices on your Wi-Fi network.";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Lets $(APPKIT_DISPLAY_NAME) connect to Freenet devices on your Wi-Fi network.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -234,7 +240,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = freenet.appkit;
+				PRODUCT_BUNDLE_IDENTIFIER = "freenet.appkit$(APPKIT_BUNDLE_SUFFIX)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;

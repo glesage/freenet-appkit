@@ -15,39 +15,31 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 
-/** The app shell: River and Atlas tabs over the embedded node. */
+/** The app shell: the hosted app's page over the embedded node. */
 class MainActivity : Activity() {
-    enum class Tab(val label: String, val icon: Int) {
-        RIVER("River", R.drawable.ic_tab_river),
-        ATLAS("Atlas", R.drawable.ic_tab_atlas),
-    }
-
     private lateinit var root: FrameLayout
     private var shell: View? = null
     private lateinit var content: FrameLayout
     private lateinit var banner: TextView
-    private lateinit var tabBar: TabBar
-    private lateinit var river: WebAppPage
-    private lateinit var atlas: WebAppPage
-    private var current: WebAppPage? = null
+    private lateinit var page: WebAppPage
+    private val current: WebAppPage? get() = if (::page.isInitialized) page else null
     /** Goes back in the page. Registered only while the page can go back. */
     private var backCallback: Any? = null
     private var sessionGeneration = 0
-    /** A new node session serves the apps at new URLs: reload the tab on screen. */
+    /** A session started or ended: the page reloads or holds for the next one. */
     private val sessionListener: () -> Unit = {
         if (NodeHost.sessionGeneration != sessionGeneration) {
             sessionGeneration = NodeHost.sessionGeneration
             current?.show()
         }
+        current?.networkChanged()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NodeHost.init(this)
-        river = WebAppPage(this, DemoWebApp.RIVER)
-        atlas = WebAppPage(this, DemoWebApp.ATLAS)
-        river.onHistoryChanged = { updateBackCallback() }
-        atlas.onHistoryChanged = { updateBackCallback() }
+        page = WebAppPage(this, NodeHost.app)
+        page.onHistoryChanged = { updateBackCallback() }
         actionBar?.hide()
         root = FrameLayout(this).apply { setBackgroundColor(themeBackground()) }
         setContentView(root)
@@ -61,7 +53,7 @@ class MainActivity : Activity() {
             val welcome = WelcomeScreen(this) {
                 root.removeAllViews()
                 showShell()
-                NodeHost.onForeground()
+                NodeHost.onWelcomeSeen()
             }
             root.addView(welcome.view)
         }
@@ -71,13 +63,13 @@ class MainActivity : Activity() {
         val view = buildShell()
         shell = view
         root.addView(view)
-        content.post { select(Tab.RIVER) }
+        content.post { attachPage() }
     }
 
     // The node runs only while the app is in the foreground.
     override fun onStart() {
         super.onStart()
-        if (shell != null) NodeHost.onForeground()
+        NodeHost.onForeground()
     }
 
     override fun onStop() {
@@ -96,17 +88,11 @@ class MainActivity : Activity() {
         SystemBars.updateIconColours(this, root)
     }
 
-    fun select(tab: Tab) {
+    private fun attachPage() {
         content.removeAllViews()
-        val page = when (tab) {
-            Tab.RIVER -> river
-            Tab.ATLAS -> atlas
-        }
-        current = page
         page.show()
         (page.view.parent as? ViewGroup)?.removeView(page.view)
         content.addView(page.view, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-        tabBar.select(tab)
         updateBackCallback()
     }
 
@@ -154,8 +140,6 @@ class MainActivity : Activity() {
             setMargins(24, 24, 24, 0)
         })
         root.addView(stack, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
-        tabBar = TabBar(this, Tab.entries) { select(it) }
-        root.addView(tabBar.view)
         return root
     }
 
@@ -172,7 +156,6 @@ class MainActivity : Activity() {
         banner.visibility = View.VISIBLE
         banner.setOnClickListener {
             banner.visibility = View.GONE
-            select(if (alert.app == DemoWebApp.RIVER) Tab.RIVER else Tab.ATLAS)
             alert.open()
         }
         banner.postDelayed({ banner.visibility = View.GONE }, 8000)

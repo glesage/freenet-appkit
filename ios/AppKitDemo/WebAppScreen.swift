@@ -24,32 +24,46 @@ final class WebAppModel: ObservableObject {
     /// when the new session serves the same URL.
     @Published private(set) var loadID = 0
 
-    func prepare(app: DemoWebApp, host: NodeHost) async {
+    /// The node session the page on screen was loaded for.
+    private(set) var loadedSession: UInt64?
+
+    func prepare(app: HostedApp, host: NodeHost) async {
         let reconnecting = url != nil && (page == .shown || page == .reconnecting)
+        // In the background the page stays, its session already ended; the
+        // next session loads it again.
+        guard host.wantsNode else {
+            if reconnecting { page = .reconnecting }
+            return
+        }
         if reconnecting {
             page = .reconnecting
         } else {
             url = nil
         }
         status = LoadStatus(title: LoadMessages.starting)
-        guard await host.start() != nil else {
-            fail(.error(LoadMessages.notStarted, detail: host.lastError))
+        guard let info = await host.session() else {
+            if host.wantsNode { fail(.error(LoadMessages.notStarted, detail: host.lastError)) }
             return
         }
-        status = LoadStatus(title: LoadMessages.connecting)
-        let slow = Task { [weak self] in
-            try? await Task.sleep(nanoseconds: LoadMessages.slowAfterSeconds * 1_000_000_000)
-            guard !Task.isCancelled, let self, self.status.title == LoadMessages.connecting else { return }
-            self.status = LoadStatus(title: LoadMessages.connectingSlow)
+        // A saved page opens before the node joins the network.
+        if !host.hasSavedPage {
+            status = LoadStatus(title: LoadMessages.connecting)
+            let slow = Task { [weak self] in
+                try? await Task.sleep(nanoseconds: LoadMessages.slowAfterSeconds * 1_000_000_000)
+                guard !Task.isCancelled, let self, self.status.title == LoadMessages.connecting else { return }
+                self.status = LoadStatus(title: LoadMessages.connectingSlow)
+            }
+            let joined = await host.waitForPeers()
+            slow.cancel()
+            guard joined else {
+                fail(.error(LoadMessages.unreachable, detail: host.lastError))
+                return
+            }
         }
-        let joined = await host.waitForPeers()
-        slow.cancel()
-        guard joined else {
-            fail(.error(LoadMessages.unreachable, detail: host.lastError))
-            return
-        }
+        guard host.info?.session == info.session else { return }
         if !reconnecting { page = .fetching }
-        url = host.webURL(for: app)
+        loadedSession = info.session
+        url = host.webURL()
         loadID += 1
     }
 
@@ -60,7 +74,7 @@ final class WebAppModel: ObservableObject {
         status = error
     }
 
-    func pageStatus(app: DemoWebApp) -> LoadStatus {
+    func pageStatus(app: HostedApp) -> LoadStatus {
         switch page {
         case .fetching:
             return LoadStatus(title: LoadMessages.downloading(app))
@@ -75,14 +89,15 @@ final class WebAppModel: ObservableObject {
 }
 
 struct WebAppScreen: View {
-    let app: DemoWebApp
+    let app: HostedApp
     @EnvironmentObject var host: NodeHost
     @StateObject private var model = WebAppModel()
 
     var body: some View {
         ZStack {
             if let url = model.url {
-                WebAppView(app: app, url: url, generation: model.loadID, model: model)
+                WebAppView(
+                    app: app, url: url, generation: model.loadID, session: model.loadedSession, model: model)
                     .ignoresSafeArea(edges: .bottom)
                     .allowsHitTesting(model.page != .reconnecting)
                     .opacity(model.page == .reconnecting ? 0.6 : 1)
@@ -104,10 +119,28 @@ struct WebAppScreen: View {
             guard host.welcomeSeen else { return }
             await model.prepare(app: app, host: host)
         }
+        .overlay(alignment: .bottom) {
+            if !host.networkAvailable && model.page == .shown {
+                OfflinePill().padding(.bottom, 12)
+            }
+        }
     }
 
     private func retry() {
         Task { await model.prepare(app: app, host: host) }
+    }
+}
+
+/// Shown over the page while the device has no network. Saved content stays
+/// readable; changes reach the network when it returns.
+struct OfflinePill: View {
+    var body: some View {
+        Label("Offline", systemImage: "wifi.slash")
+            .font(.subheadline)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .background(.regularMaterial, in: Capsule())
+            .accessibilityElement(children: .combine)
     }
 }
 

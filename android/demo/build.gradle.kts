@@ -19,7 +19,7 @@ android {
 
     defaultConfig {
         applicationId = "freenet.appkit"
-        minSdk = 26
+        minSdk = 28
         targetSdk = 36
         // Every Play upload needs a higher version code: -PversionCode=<n>.
         versionCode = (project.findProperty("versionCode") as String?)?.toInt() ?: 1
@@ -37,6 +37,21 @@ android {
             reset()
             include("arm64-v8a", "x86_64", "armeabi-v7a")
             isUniversalApk = true
+        }
+    }
+
+    // One installation hosts one app: each flavor has its own application ID,
+    // files, web data and consent records.
+    flavorDimensions += "app"
+    productFlavors {
+        create("river") {
+            dimension = "app"
+            buildConfigField("String", "APPKIT_APPLICATION", "\"river\"")
+        }
+        create("atlas") {
+            dimension = "app"
+            applicationIdSuffix = ".atlas"
+            buildConfigField("String", "APPKIT_APPLICATION", "\"atlas\"")
         }
     }
 

@@ -21,14 +21,7 @@ struct ContentView: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            TabView(selection: $host.selectedTab) {
-                WebAppScreen(app: .river)
-                    .tabItem { Label("River", systemImage: "bubble.left.and.bubble.right") }
-                    .tag(DemoTab.river)
-                WebAppScreen(app: .atlas)
-                    .tabItem { Label("Atlas", systemImage: "books.vertical") }
-                    .tag(DemoTab.atlas)
-            }
+            WebAppScreen(app: host.app)
             if let alert = host.alert {
                 AlertBanner(alert: alert) {
                     host.openAlert(alert)

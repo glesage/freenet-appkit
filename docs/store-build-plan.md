@@ -1,6 +1,6 @@
 # Store build plan
 
-This plan ships Freenet AppKit from branch `store-build` to TestFlight and Google Play internal testing, and then to the App Store and Google Play.
+This plan ships the River installation of Freenet AppKit from branch `store-build` to controlled test delivery (TestFlight and Google Play internal testing), and then to the App Store and Google Play. The Atlas installation (`freenet.appkit.atlas`) is for testing only and never reaches a store.
 
 ```mermaid
 flowchart LR
@@ -17,7 +17,7 @@ flowchart LR
 flowchart LR
   subgraph app["iOS app / Android app"]
     welcome["Welcome screen<br/>(first start only)"]
-    tabs["Tab bar: River, Atlas"]
+    tabs["River, the one hosted app"]
     web["WKWebView / WebView"]
     host["NodeHost<br/>(foreground only, public network)"]
   end
@@ -28,9 +28,11 @@ flowchart LR
 
 | Feature | iOS | Android |
 | --- | --- | --- |
-| Screens | Welcome screen once, then River and Atlas tabs | Same, with a bottom tab bar (icons, selected state, TalkBack labels) |
+| Screens | Welcome screen once, then River | Same |
+| Installation scope | One hosted app: its own node folder (`freenet-river`), web data, preferences and consent | Same, as the `river` product flavor |
+| Wasm backend | Pulley, checked at every start | Pulley on every ABI, checked at every start |
 | Network | Public network only | Same |
-| Node lifecycle | Runs while the app is open; the page stays on screen with a "Reconnecting" pill when the app returns | Same |
+| Node lifecycle | One reconciler runs while the app is open; the page stays on screen with a "Reconnecting" pill when the app returns and an "Offline" pill without network | Same |
 | Loading and errors | Plain messages from `LoadMessages.swift`, with "Try again" and "Details" | Same, from `LoadMessages.kt` |
 | Back | Swipe back through web view history | Back button and gesture through web view history, then home |
 | Icon | `AppIcon` asset catalog | Adaptive icon with a monochrome layer |
@@ -49,10 +51,14 @@ The measurement harness for 1.1 Mobile feasibility and supported profiles is at 
 | iOS | Privacy manifest present | `PrivacyInfo.xcprivacy` is in the `.app` |
 | iOS | Encryption key set | `Info.plist` has `ITSAppUsesNonExemptEncryption` |
 | iOS | No file sharing | `Info.plist` has no `UIFileSharingEnabled` |
+| iOS | Lowest iOS | `MinimumOSVersion` is `16.0` |
+| iOS | One hosted app | `AppKitApplication` is `river` or `atlas` |
 | iOS | iPhone only | `UIDeviceFamily` is `[1]` |
 | iOS, Android | No harness | The binary or `classes*.dex` has no `appkit.scenario` or `APPKIT_RESULT` |
 | Android | Launcher icon | `aapt2 dump badging` shows `application-icon` |
 | Android | Not profileable | The manifest has no `profileable` |
+| Android | Lowest Android | `minSdkVersion` is 28 |
+| Android | Native library per ABI | `libfreenet_mobile.so` for arm64-v8a, armeabi-v7a and x86_64, each with 16 KB `LOAD` segment alignment (`llvm-readelf`) |
 | Android | Not debug-signed | The signing certificate is not `CN=Android Debug` |
 | Android | 16 KB aligned | `zipalign -c -P 16` passes (APK only; Play aligns the APKs it builds from an AAB) |
 
@@ -65,18 +71,19 @@ Today every iOS check passes, and every Android check passes except "Not debug-s
 | Item | iOS | Android |
 | --- | --- | --- |
 | Store name | Freenet AppKit | Freenet AppKit |
-| Home screen and launcher name | AppKit | AppKit |
+| Home screen and launcher name | River | River |
 | Identifier (permanent once the store record exists) | Bundle ID `freenet.appkit` | Package name `freenet.appkit` |
+| Atlas test installation | Bundle ID `freenet.appkit.atlas`, `APP=atlas` | Package name `freenet.appkit.atlas`, `atlas` flavor |
 | Code package | Not applicable | `org.freenet.appkit.demo` (Gradle `namespace`; users never see it) |
 | Version shown to users | `MARKETING_VERSION = 0.1` in `project.pbxproj` | `versionName` `0.1`, or `VERSION_NAME=` for `scripts/bundle-android.sh` |
 | Build number (goes up on every upload) | `BUILD_NUMBER=` for `scripts/archive-ios.sh` | `VERSION_CODE=` for `scripts/bundle-android.sh` |
 | Store category | Social Networking | Communication |
-| Devices and lowest OS | iPhone, iOS 16.0 | Phones, Android 8.0 (API 26), target API 36 |
+| Devices and lowest OS | iPhone, iOS 16.0 | Phones, Android 9 (API 28), target API 36 |
 | Price | Free | Free |
 
 Use one build number for both platforms per release: `date +%y%m%d%H`, for example `26100109`. It always goes up and fits under Android's version code limit of 2,100,000,000.
 
-"AppKit" is also the name of Apple's framework for Mac apps, and guideline 5.2.5 bars Apple product names in app names. If App Review objects, only the home screen name changes (`INFOPLIST_KEY_CFBundleDisplayName` and `app_name`). The identifier and the store name stay.
+The home screen name comes from `APPKIT_DISPLAY_NAME` on iOS and the flavor's `app_name` on Android. The identifier and the store name stay.
 
 ### Where things live
 
@@ -134,7 +141,7 @@ The Xcode project uses a file-system synchronized group for `ios/AppKitDemo/`, s
 | Support contact | An email address someone reads every week | A shared project address, so it survives people changing roles |
 | France | Include France or leave it out | Leave it out of the first release. Including it needs a French encryption declaration in App Store Connect |
 | Age rating | 13+, 16+ or 18+ | 18+ on both stores. River is open chat with strangers, and 18+ keeps the app out of Play's Families policy |
-| Privacy link in the app | Welcome screen only, or also a small info button on the tab bar | Add the info button. Guideline 5.1.1 asks for a privacy policy that is easy to reach inside the app, and the welcome screen shows once |
+| Privacy link in the app | Welcome screen only, or also a small info button over the page | Add the info button. Guideline 5.1.1 asks for a privacy policy that is easy to reach inside the app, and the welcome screen shows once |
 
 ---
 
@@ -161,7 +168,7 @@ Files: `ios/AppKitDemo/AppInfo.swift`, `ios/AppKitDemo/WelcomeScreen.swift`, `an
 - [ ] Replace `termsURL`/`termsUrl` and `supportURL`/`supportUrl` with the live URLs.
 - [ ] Add `privacyURL` (Swift) and `privacyUrl` (Kotlin).
 - [ ] On both welcome screens, change the line to "By continuing you agree to the Terms and the Privacy Policy." and link both phrases the way "Terms" is linked today: `AttributedString(markdown:)` on iOS, `linked(...)` on Android.
-- [ ] If the info button was chosen: add it to the tab bar on iOS and Android. It opens a sheet with the full name, version, and the Terms, Privacy and Support links.
+- [ ] If the info button was chosen: add it over the page on iOS and Android. It opens a sheet with the full name, version, and the Terms, Privacy and Support links.
 - [ ] Delete the app, then build and run both. Tap each link and check the page it opens:
   ```bash
   scripts/build-ios-app.sh Release simulator
@@ -371,7 +378,7 @@ Play Console → Policy and programs → App content. Internal testing runs with
 - [ ] Upload `demo-release.aab`. Release name: the version code. Release notes: "First test build".
 - [ ] Testers tab: create the email list `Team` and copy the opt-in link.
 - [ ] On an Android phone with a tester account, open the opt-in link, install from Play, and run [Part 6](#part-6-checklist-on-each-installed-test-build).
-- [ ] Open Test and release → Pre-launch report and fix any crash it lists. Google runs it on real devices, Android 8 and 9 included.
+- [ ] Open Test and release → Pre-launch report and fix any crash it lists. Google runs it on real devices, Android 9 included.
 
 ### Task 4.6: Closed testing
 

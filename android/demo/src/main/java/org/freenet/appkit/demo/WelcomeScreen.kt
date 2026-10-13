@@ -97,13 +97,13 @@ class WelcomeScreen(private val context: Context, onContinue: () -> Unit) {
 
     companion object {
         private val LINES = listOf(
-            "Chat with River and browse Atlas, served by Freenet running on your phone.",
+            "${HostedApp.current.title}, served by Freenet running on your phone.",
             "Freenet connects directly to other people's devices. It runs only while this app is open.",
             "What you post is shared with other people on the network.",
         )
         private const val KEY = "welcomeSeen"
 
-        private fun prefs(context: Context) = context.getSharedPreferences("appkit", Context.MODE_PRIVATE)
+        private fun prefs(context: Context) = context.getSharedPreferences(HostedApp.current.preferences, Context.MODE_PRIVATE)
 
         fun isSeen(context: Context) = prefs(context).getBoolean(KEY, false)
 

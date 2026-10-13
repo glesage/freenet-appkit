@@ -14,9 +14,9 @@ enum LoadMessages {
         "Freenet could not reach the network. Check your internet connection. "
         + "Some Wi-Fi networks block Freenet's traffic; mobile data may work."
 
-    static func downloading(_ app: DemoWebApp) -> String { "Downloading \(app.name)" }
-    static func opening(_ app: DemoWebApp) -> String { "Opening \(app.name)" }
-    static func pageFailed(_ app: DemoWebApp) -> String { "\(app.name) could not open." }
+    static func downloading(_ app: HostedApp) -> String { "Downloading \(app.name)" }
+    static func opening(_ app: HostedApp) -> String { "Opening \(app.name)" }
+    static func pageFailed(_ app: HostedApp) -> String { "\(app.name) could not open." }
 }
 
 /// What the loading view shows: a title, and for errors the technical detail
